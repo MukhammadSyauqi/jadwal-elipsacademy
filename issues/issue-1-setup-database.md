@@ -56,8 +56,8 @@ Password user harus di-hash.
 - Relasi model: `PRD & DESIGN.md/Database.md` section 20
 
 ## Acceptance Criteria
-- [ ] `php artisan migrate` berhasil tanpa error
-- [ ] Semua 5 tabel terbentuk dengan field, type, dan constraint yang benar
-- [ ] Foreign key `jadwal` → `cabang`, `program`, `tentor` berjalan
-- [ ] `php artisan db:seed` mengisi data contoh
-- [ ] Model dan relasi bisa diuji via `php artisan tinker`
+- [x] `php artisan migrate` berhasil tanpa error
+- [x] Semua 5 tabel terbentuk dengan field, type, dan constraint yang benar
+- [x] Foreign key `jadwal` → `cabang`, `program`, `tentor` berjalan
+- [x] `php artisan db:seed` mengisi data contoh
+- [x] Model dan relasi bisa diuji via `php artisan tinker`
