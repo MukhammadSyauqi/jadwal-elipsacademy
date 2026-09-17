@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container-lowest":"#ffffff","canvas-pure":"#FFFFFF","inverse-surface":"#303032","secondary-fixed":"#ffdcc5","surface-bright":"#fcf8fb","ink-subtle":"#86868B","schedule-conflict":"#EF4444","on-background":"#1b1b1d","surface-variant":"#e4e2e4","schedule-pending":"#6366F1","inverse-primary":"#ffb77c","on-tertiary-fixed-variant":"#474649","primary-fixed":"#ffdcc2","outline":"#887364","error-container":"#ffdad6","accent-focus":"#F59E0B","surface":"#fcf8fb","on-tertiary-fixed":"#1b1b1d","tertiary-container":"#a8a6a8","on-tertiary":"#ffffff","secondary-container":"#fc8f34","divider-soft":"#F0F0F0","on-secondary-fixed":"#301400","on-surface":"#1b1b1d","accent-subtle":"#FEF3C7","schedule-verified":"#10B981","inverse-on-surface":"#f3f0f2","surface-pearl":"#FAFAFC","on-secondary-fixed-variant":"#713700","tertiary-fixed":"#e4e2e4","on-primary":"#ffffff","primary-container":"#f28e2b","primary-fixed-dim":"#ffb77c","surface-container-high":"#eae7ea","on-surface-variant":"#554336","surface-container-highest":"#e4e2e4","tertiary":"#5f5e60","on-error-container":"#93000a","ink-body":"#1D1D1F","ink-muted":"#6E6E73","canvas-parchment":"#F5F5F7","error":"#ba1a1a","hairline":"#E0E0E0","surface-dim":"#dcd9dc","surface-container-low":"#f6f3f5","on-tertiary-container":"#3c3c3e","primary":"#904d00","on-primary-fixed":"#2e1500","on-primary-fixed-variant":"#6d3900","background":"#fcf8fb","surface-tint":"#904d00","secondary":"#944a00","tertiary-fixed-dim":"#c8c6c8","surface-container":"#f0edef","on-error":"#ffffff","on-primary-container":"#5e3000","outline-variant":"#dbc2b0","secondary-fixed-dim":"#ffb783","on-secondary":"#ffffff","on-secondary-container":"#663100"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin-mobile":"1rem","space-md":"1rem","gutter-timetable":"0.5rem","space-sm":"0.75rem","margin-wide":"3rem","space-xl":"2rem","margin":"1.5rem","space-lg":"1.5rem","space-xs":"0.5rem","space-2xl":"3rem","space-xxs":"0.25rem","gutter":"1rem"},"fontFamily":{"headline-sm":["Inter"],"label-timetable-time":["Inter"],"headline-md":["Inter"],"display-hero-mobile":["Inter"],"label-capsule":["Inter"],"body-subtle":["Inter"],"headline-lg":["Inter"],"micro-caption":["Inter"],"headline-lg-mobile":["Inter"],"title-card":["Inter"],"body-strong":["Inter"],"body-default":["Inter"],"display-hero":["Inter"]},"fontSize":{"headline-sm":["20px",{"lineHeight":"26px","letterSpacing":"-0.011em","fontWeight":"600"}],"label-timetable-time":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"-0.014em","fontWeight":"600"}],"display-hero-mobile":["32px",{"lineHeight":"38px","letterSpacing":"-0.019em","fontWeight":"600"}],"label-capsule":["13px",{"lineHeight":"16px","letterSpacing":"-0.004em","fontWeight":"500"}],"body-subtle":["14px",{"lineHeight":"20px","letterSpacing":"-0.006em","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"-0.019em","fontWeight":"600"}],"micro-caption":["10px",{"lineHeight":"12px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.016em","fontWeight":"600"}],"title-card":["17px",{"lineHeight":"22px","letterSpacing":"-0.016em","fontWeight":"600"}],"body-strong":["15px",{"lineHeight":"22px","letterSpacing":"-0.008em","fontWeight":"600"}],"body-default":["15px",{"lineHeight":"22px","letterSpacing":"-0.008em","fontWeight":"400"}],"display-hero":["48px",{"lineHeight":"52px","letterSpacing":"-0.022em","fontWeight":"600"}]}}}}</script></head><body class="bg-canvas-parchment font-body-default text-ink-body antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-canvas-pure shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-xs"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-canvas-pure font-headline-sm text-headline-sm font-bold">E</div><div class="flex flex-col leading-none"><span class="font-headline-sm text-title-card text-ink-body tracking-tight">Elips Academy</span><span class="font-micro-caption text-micro-caption text-ink-muted tracking-wider uppercase">Course Scheduler</span></div></div><div class="px-space-md py-space-xs"><div class="px-space-sm py-space-xxs rounded-full bg-surface-container-low flex items-center justify-between text-ink-muted"><span class="font-micro-caption text-micro-caption uppercase tracking-wider font-semibold text-primary">Cabang</span><span class="font-label-capsule text-label-capsule text-ink-body font-medium">Buduran & Candi</span></div></div><nav class="flex flex-col gap-space-xxs px-space-sm mt-space-sm" data-active-classes="bg-accent-subtle text-primary font-body-strong"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg transition-colors bg-accent-subtle text-primary font-body-strong" data-path="jadwal-kelas" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Jadwal Kelas</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="cabang" href="#"><span class="material-symbols-outlined text-[20px]">apartment</span><span>Cabang</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="program-kursus" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span>Program Kursus</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="tentor" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Tentor</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="akun-pengguna" href="#"><span class="material-symbols-outlined text-[20px]">manage_accounts</span><span>Akun Pengguna</span></a></nav></div><div class="p-space-md flex flex-col gap-space-xs"><div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-schedule-verified text-[18px]">verified</span><span class="font-label-capsule text-label-capsule text-ink-body">Sistem Sinkron</span></div><span class="font-micro-caption text-micro-caption text-ink-muted">v1.2</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-canvas-pure/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-space-xxs rounded-full bg-surface-container-low text-ink-muted"><span class="material-symbols-outlined text-primary text-[18px]">store</span><span class="font-body-subtle text-body-subtle text-ink-body font-medium">Cabang Utama: Buduran</span></div></div><div class="flex items-center gap-space-md"><span class="inline-flex items-center px-space-sm py-space-xxs rounded-full bg-accent-subtle text-primary font-label-capsule text-label-capsule font-semibold">Superadmin</span><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-xs text-ink-body"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XR66GZNVYBQ97gVVX9d49mMIlRDZJTai3KUcBT6CbyAj64_9GQdCUMEETpL8y3VnudYjmmJw0yGtbDoaKB3EJIqQyTbahU4tFagZr-M8qT0osUA2s8H_fhO5sAF-sUWTsg1OUKf2sjUHHDoLNCGf7nNxN5g1TfzHYXTCds3N0yJ-n9kBkZbzOkO4eALmVpQSJXzgx3KiniLKtZsgoSO5EVg671lExBvP6Kw2LWJ127ZukD_qT-v4WEMUetzz4otCO7HMUZ-BdrKw"/><div class="flex flex-col leading-none text-left"><span class="font-body-strong text-body-subtle text-ink-body">Elips Admin</span><span class="font-micro-caption text-micro-caption text-ink-muted">admin@elips.id</span></div></div></div></header><main class="w-full pt-16 px-space-xl bg-canvas-parchment"><div class="flex flex-col w-full pb-space-2xl">
+<!-- Interactive Navigation Sync (Sets 'Program Kursus' as active in sidebar) -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const activeNavClasses = ["bg-accent-subtle", "text-primary", "font-body-strong"];
+      const defaultNavClasses = ["text-on-surface-variant", "font-body-default"];
+      const navLinks = document.querySelectorAll("aside nav a");
+      navLinks.forEach(link => {
+        if (link.getAttribute("data-path") === "program-kursus") {
+          link.classList.add(...activeNavClasses);
+          link.classList.remove(...defaultNavClasses);
+          const icon = link.querySelector(".material-symbols-outlined");
+          if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+        } else {
+          link.classList.remove(...activeNavClasses);
+          link.classList.add(...defaultNavClasses);
+        }
+      });
+    });
+  </script>
+<!-- Top Page Header & Context Breadcrumb -->
+<header class="flex flex-col gap-space-xs mb-space-xl">
+<div class="flex items-center gap-space-xs text-micro-caption font-micro-caption tracking-wider uppercase text-ink-muted">
+<span>ELIPS MASTER</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary font-body-strong">KURIKULUM & PROGRAM KURSUS</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-space-md">
+<div class="flex flex-col">
+<h1 class="font-headline-lg text-headline-lg text-ink-body tracking-tight">Manajemen Program Kursus</h1>
+<p class="font-body-subtle text-body-subtle text-ink-muted mt-space-xxs max-w-2xl">
+          Kelola kurikulum, kategori keahlian, alokasi modul silabus, dan pemetaan jadwal kelas aktif Elips Academy di seluruh cabang.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-canvas-pure text-ink-body font-label-capsule text-label-capsule shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">file_download</span>
+<span>Ekspor Silabus</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary-container text-on-primary font-label-capsule text-label-capsule shadow-sm hover:brightness-105 active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Tambah Program Baru</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Top Metrics Bar (4 Apple-style Minimal Cards) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
+<!-- Stat 1 -->
+<div class="p-space-lg rounded-xl bg-canvas-pure shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase text-ink-muted tracking-wider">Total Program</span>
+<div class="w-7 h-7 rounded-full bg-accent-subtle flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body">5</span>
+<span class="font-body-subtle text-body-subtle text-ink-muted">Program Terdaftar</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-xxs text-micro-caption font-micro-caption text-ink-subtle">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+<span>4 Aktif</span>
+<span class="text-surface-variant">•</span>
+<span>1 Diarsipkan</span>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="p-space-lg rounded-xl bg-canvas-pure shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase text-ink-muted tracking-wider">Kategori Bidang</span>
+<div class="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-ink-body">
+<span class="material-symbols-outlined text-[16px]">category</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body">4</span>
+<span class="font-body-subtle text-body-subtle text-ink-muted">Bidang Kejuruan</span>
+</div>
+<div class="mt-space-xs text-micro-caption font-micro-caption text-ink-subtle truncate">
+        Office, Dev, Design, Data
+      </div>
+</div>
+<!-- Stat 3 -->
+<div class="p-space-lg rounded-xl bg-canvas-pure shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase text-ink-muted tracking-wider">Jadwal Terhubung</span>
+<div class="w-7 h-7 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body">24</span>
+<span class="font-body-subtle text-body-subtle text-ink-muted">Sesi Pekan Ini</span>
+</div>
+<div class="mt-space-xs text-micro-caption font-micro-caption text-ink-subtle">
+        Cabang Buduran (16) & Candi (8)
+      </div>
+</div>
+<!-- Stat 4 -->
+<div class="p-space-lg rounded-xl bg-canvas-pure shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase text-ink-muted tracking-wider">Proteksi Relasi</span>
+<div class="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-schedule-verified">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-title-card text-title-card text-schedule-verified">Terkunci Aman</span>
+</div>
+<div class="mt-space-xs text-micro-caption font-micro-caption text-ink-subtle flex items-center gap-space-xxs">
+<span class="material-symbols-outlined text-[13px] text-schedule-verified">lock</span>
+<span>PRD 14.2: Foreign Key Restrict</span>
+</div>
+</div>
+</section>
+<!-- Filter & Search Toolbar Ribbon -->
+<section class="p-space-sm rounded-xl bg-canvas-pure shadow-sm mb-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex flex-1 items-center gap-space-xs">
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-ink-subtle">search</span>
+<input class="w-full h-10 pl-9 pr-space-md rounded-full bg-surface-container-low text-ink-body font-body-subtle text-body-subtle placeholder:text-ink-subtle focus:bg-canvas-pure focus:outline-none transition-colors" id="course-search-input" placeholder="Cari nama program, kategori, modul..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs overflow-x-auto py-space-xxs">
+<div class="relative">
+<select class="h-10 px-space-md rounded-full bg-surface-container-low text-ink-body font-label-capsule text-label-capsule appearance-none pr-8 cursor-pointer focus:outline-none hover:bg-surface-container-high transition-colors" id="category-filter">
+<option value="all">Semua Kategori</option>
+<option value="programming">Web & Programming</option>
+<option value="office">Microsoft Office</option>
+<option value="design">Graphic & UI/UX</option>
+<option value="data">Data Science</option>
+<option value="marketing">Digital Marketing</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[16px] text-ink-muted pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="h-10 px-space-md rounded-full bg-surface-container-low text-ink-body font-label-capsule text-label-capsule appearance-none pr-8 cursor-pointer focus:outline-none hover:bg-surface-container-high transition-colors" id="status-filter">
+<option value="all">Semua Status</option>
+<option value="active">Aktif</option>
+<option value="archived">Nonaktif</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[16px] text-ink-muted pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Layout Switcher & Refresh Action -->
+<div class="flex items-center gap-space-xs self-end md:self-auto">
+<div class="flex items-center p-0.5 rounded-full bg-surface-container-low">
+<button aria-label="Tampilan Tabel" class="w-8 h-8 rounded-full flex items-center justify-center bg-canvas-pure text-ink-body shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+</button>
+<button aria-label="Tampilan Grid" class="w-8 h-8 rounded-full flex items-center justify-center text-ink-muted hover:text-ink-body transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+</button>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-ink-muted hover:text-ink-body hover:bg-surface-container-high transition-colors" title="Muat Ulang" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+</section>
+<!-- Two-Column Asymmetric Layout (Master List 65% + Inspector Panel 35%) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Master List Table (8 of 12 cols = 66.6%) -->
+<section class="lg:col-span-8 flex flex-col gap-space-md">
+<div class="bg-canvas-pure rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-md bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">layers</span>
+<span class="font-title-card text-title-card text-ink-body">Katalog Kurikulum & Program</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Tabel SQL: `program` (InnoDB)</span>
+</div>
+<!-- Table View -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-ink-muted font-micro-caption text-micro-caption uppercase tracking-wider">
+<th class="py-space-sm px-space-md font-medium">Program Kursus</th>
+<th class="py-space-sm px-space-md font-medium">Kategori</th>
+<th class="py-space-sm px-space-md font-medium">Modul Silabus</th>
+<th class="py-space-sm px-space-md font-medium">Jadwal Terhubung</th>
+<th class="py-space-sm px-space-md font-medium">Status</th>
+<th class="py-space-sm px-space-md font-medium text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- Program 1 (Active Selected State) -->
+<tr class="program-row bg-accent-subtle/30 hover:bg-accent-subtle/50 transition-colors cursor-pointer" data-program="dev-001">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-schedule-pending/10 text-schedule-pending flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">code</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Web Programming</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">PRG-DEV-001 • Andi Pratama</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-schedule-pending/10 text-schedule-pending font-label-capsule text-micro-caption font-semibold">
+                    Programming
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-subtle text-body-subtle text-ink-body font-medium">24 Pertemuan</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">HTML, CSS, JS, Laravel, SQL</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xxs text-primary font-body-strong text-body-subtle">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>10 Sesi Aktif</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xxs">
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-primary hover:bg-surface-container-low transition-colors" title="Lihat Silabus" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-body hover:bg-surface-container-low transition-colors" title="Edit Program" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-subtle cursor-not-allowed" title="Terkunci Relasi" type="button">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Program 2 -->
+<tr class="program-row bg-canvas-pure hover:bg-surface-container-low/50 transition-colors cursor-pointer" data-program="ofc-001">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-schedule-verified/10 text-schedule-verified flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">table_view</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Microsoft Office Executive</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">PRG-OFC-001 • Budi Santoso</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+                    Office
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-subtle text-body-subtle text-ink-body font-medium">12 Pertemuan</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">Word, Excel Advance, PPT</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xxs text-primary font-body-strong text-body-subtle">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>8 Sesi Aktif</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xxs">
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-primary hover:bg-surface-container-low transition-colors" title="Lihat Silabus" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-body hover:bg-surface-container-low transition-colors" title="Edit Program" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-subtle cursor-not-allowed" title="Terkunci Relasi" type="button">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Program 3 -->
+<tr class="program-row bg-canvas-pure hover:bg-surface-container-low/50 transition-colors cursor-pointer" data-program="dsg-001">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-accent-focus/10 text-accent-focus flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Graphic & UI/UX Design</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">PRG-DSG-001 • Rina Marlina</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-accent-focus/10 text-accent-focus font-label-capsule text-micro-caption font-semibold">
+                    Design
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-subtle text-body-subtle text-ink-body font-medium">16 Pertemuan</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">Photoshop, Illustrator, Figma</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xxs text-primary font-body-strong text-body-subtle">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>6 Sesi Aktif</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xxs">
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-primary hover:bg-surface-container-low transition-colors" title="Lihat Silabus" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-body hover:bg-surface-container-low transition-colors" title="Edit Program" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-subtle cursor-not-allowed" title="Terkunci Relasi" type="button">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Program 4 -->
+<tr class="program-row bg-canvas-pure hover:bg-surface-container-low/50 transition-colors cursor-pointer" data-program="dta-001">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Python Data Science Fundamentals</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">PRG-DTA-001 • Andi Pratama</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-primary/10 text-primary font-label-capsule text-micro-caption font-semibold">
+                    Data
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-subtle text-body-subtle text-ink-body font-medium">18 Pertemuan</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">Python, Pandas, Data Viz</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xxs text-ink-muted font-body-default text-body-subtle">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>0 Sesi (Baru)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xxs">
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-primary hover:bg-surface-container-low transition-colors" title="Lihat Silabus" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-muted hover:text-ink-body hover:bg-surface-container-low transition-colors" title="Edit Program" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-error hover:bg-error-container/30 transition-colors" title="Nonaktifkan" type="button">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Program 5 (Archived) -->
+<tr class="program-row bg-surface-container-low/40 hover:bg-surface-container-low/70 transition-colors cursor-pointer opacity-75" data-program="mkt-000">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-ink-subtle/10 text-ink-muted flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-muted line-through">Digital Marketing Legacy</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">PRG-MKT-000 • Nonaktif</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-space-xs py-0.5 rounded-full bg-surface-variant text-ink-muted font-label-capsule text-micro-caption font-medium">
+                    Marketing
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-subtle text-body-subtle text-ink-muted">8 Pertemuan</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">Meta Ads, SEO Dasar (2023)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xxs text-ink-muted font-body-default text-body-subtle">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>34 Sesi Lampau</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-surface-variant text-ink-muted font-label-capsule text-micro-caption font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-ink-subtle"></span>
+                    Nonaktif
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xxs">
+<button class="p-1.5 rounded-lg text-schedule-verified hover:bg-schedule-verified/10 transition-colors" title="Pulihkan / Aktifkan" type="button">
+<span class="material-symbols-outlined text-[18px]">restore</span>
+</button>
+<button class="p-1.5 rounded-lg text-ink-subtle cursor-not-allowed" title="Terkunci Relasi Riwayat" type="button">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination Notice -->
+<div class="p-space-md bg-canvas-pure flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption text-ink-muted">Menampilkan 5 dari 5 data master kursus terdaftar</span>
+<div class="flex items-center gap-space-xs text-micro-caption font-micro-caption text-ink-subtle">
+<span class="material-symbols-outlined text-[14px]">info</span>
+<span>Semua ID terindeks secara otomatis pada skema `program.id`</span>
+</div>
+</div>
+</div>
+<!-- Syllabus Progress Chart Visual Card -->
+<div class="p-space-lg rounded-xl bg-canvas-pure shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">donut_large</span>
+<span class="font-title-card text-title-card text-ink-body">Proporsi Beban Sesi per Kategori Kurikulum</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Total 24 Sesi / Pekan</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-sm pt-space-xs">
+<!-- Item 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-schedule-pending font-medium">Programming</span>
+<span class="font-body-strong text-body-strong text-ink-body">41.6%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden">
+<div class="h-full bg-schedule-pending rounded-full" style="width: 41.6%;"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">10 Sesi Aktif</span>
+</div>
+<!-- Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-schedule-verified font-medium">Office Exec</span>
+<span class="font-body-strong text-body-strong text-ink-body">33.3%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden">
+<div class="h-full bg-schedule-verified rounded-full" style="width: 33.3%;"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">8 Sesi Aktif</span>
+</div>
+<!-- Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-accent-focus font-medium">Design UI/UX</span>
+<span class="font-body-strong text-body-strong text-ink-body">25.0%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden">
+<div class="h-full bg-accent-focus rounded-full" style="width: 25%;"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">6 Sesi Aktif</span>
+</div>
+<!-- Item 4 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-primary font-medium">Data Science</span>
+<span class="font-body-strong text-body-strong text-ink-body">0.0%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 0%;"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Pendaftaran Terbuka</span>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Inspector Detail Panel (4 of 12 cols = 33.3%) -->
+<aside class="lg:col-span-4 flex flex-col gap-space-md sticky top-20">
+<!-- Selected Program Card Details -->
+<div class="bg-canvas-pure rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<!-- Header Details -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-schedule-pending/10 text-schedule-pending flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px]">code</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-capsule text-micro-caption px-space-xs py-0.5 rounded-full bg-schedule-pending/10 text-schedule-pending font-semibold">Programming</span>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">PRG-DEV-001</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-ink-body mt-0.5">Web Programming</h2>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-micro-caption font-semibold">
+            Aktif
+          </span>
+</div>
+<!-- Instructor Lead In Charge -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<img class="w-9 h-9 rounded-full object-cover" data-alt="Close-up professional studio portrait of Andi Pratama, lead instructor at Elips Academy, smiling wearing tech company hoodie against soft parchment studio backdrop with subtle warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe1Yo22iCXd7mzuygiVduxklbOQszoOtttcjB6RvjJ_-AdgEqtCIXmnYZEQzfINfr3LPumek8P5_hnmZ_SHB6mGf6CWnqoqbCx6HvomWA2Jo_Z_PXnMEIu5pO4DYiMAkHn4SDzSgIQVwWKoECOJWwD1hEO0hGaVG9s-10c-16MyxuzsmoLI2_3mk3hhs3Gf-p5zzDsC92m5QDmnnDcoscMM2C_FfF092w5S7DzXmCEjvmRADGRKIgH"/>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-subtle text-ink-body">Andi Pratama, S.Kom</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Lead Instructor & Curriculum Owner</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-canvas-pure flex items-center justify-center text-ink-muted hover:text-primary transition-colors shadow-sm" title="Hubungi Tentor" type="button">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+</button>
+</div>
+<!-- Syllabus Breakdown & Modules -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-subtle text-ink-body">Rincian Modul Silabus</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">24 Sesi Tatap Muka</span>
+</div>
+<div class="flex flex-col gap-space-xxs text-body-subtle font-body-subtle">
+<div class="p-space-xs rounded bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-canvas-pure flex items-center justify-center text-micro-caption font-micro-caption text-ink-muted shadow-sm">1</span>
+<span>Fundamental HTML5, Semantics & CSS3 Modern</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">4 Sesi</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-canvas-pure flex items-center justify-center text-micro-caption font-micro-caption text-ink-muted shadow-sm">2</span>
+<span>JavaScript ES6+ & Asynchronous Fetch API</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">6 Sesi</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-canvas-pure flex items-center justify-center text-micro-caption font-micro-caption text-ink-muted shadow-sm">3</span>
+<span>Backend MVC PHP Laravel & RESTful API Architecture</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">8 Sesi</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-5 h-5 rounded-full bg-canvas-pure flex items-center justify-center text-micro-caption font-micro-caption text-ink-muted shadow-sm">4</span>
+<span>Relational Database MySQL & Cloud Deployment</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-subtle">6 Sesi</span>
+</div>
+</div>
+</div>
+<!-- Upcoming Active Scheduled Batches using this Program -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-subtle text-ink-body">Jadwal Kelas Berjalan</span>
+<span class="font-label-capsule text-micro-caption text-primary font-semibold">10 Sesi Terjadwal</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Active Schedule 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/80 flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-subtle text-ink-body">WP-001 (Reguler Pagi)</span>
+<span class="font-micro-caption text-micro-caption px-space-xs py-0.5 rounded bg-accent-subtle text-primary font-medium">Senin & Rabu</span>
+</div>
+<div class="flex items-center justify-between text-micro-caption font-micro-caption text-ink-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">store</span>
+<span>Buduran • Lab Komputer A</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>08:30 - 10:30 WIB</span>
+</span>
+</div>
+</div>
+<!-- Active Schedule 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/80 flex flex-col gap-space-xxs">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-subtle text-ink-body">WP-002 (Eksekutif Malam)</span>
+<span class="font-micro-caption text-micro-caption px-space-xs py-0.5 rounded bg-surface-variant text-ink-body font-medium">Selasa & Kamis</span>
+</div>
+<div class="flex items-center justify-between text-micro-caption font-micro-caption text-ink-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary">store</span>
+<span>Candi • Ruang Studio 2</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>18:30 - 20:30 WIB</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Actions Inside Panel -->
+<div class="grid grid-cols-2 gap-space-xs mt-space-xs">
+<button class="px-space-sm py-2 rounded-full bg-surface-container-low text-ink-body font-label-capsule text-label-capsule hover:bg-surface-container-high transition-colors flex items-center justify-center gap-space-xxs" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>Ubah Silabus</span>
+</button>
+<button class="px-space-sm py-2 rounded-full bg-primary-container text-on-primary font-label-capsule text-label-capsule hover:brightness-105 transition-all flex items-center justify-center gap-space-xxs" type="button">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span>Atur Jadwal</span>
+</button>
+</div>
+</div>
+<!-- PRD 14.2 Relational Guard Banner -->
+<div class="p-space-md rounded-xl bg-accent-subtle/40 border-l-4 border-primary shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-primary font-body-strong text-body-subtle">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Aturan Integritas PRD 14.2 Aktif</span>
+</div>
+<p class="font-body-subtle text-micro-caption text-ink-body leading-relaxed">
+          Program kursus yang sudah memiliki jadwal terkait (relasi <code class="bg-canvas-pure px-1 py-0.5 rounded text-primary font-mono">jadwal.program_id</code>) terlindungi dari penghapusan fisik. Operasi yang diizinkan hanya pengarsipan (<span class="font-semibold text-ink-body">soft-delete status nonaktif</span>) demi menjaga catatan historis sertifikat siswa.
+        </p>
+</div>
+</aside>
+</div>
+<!-- Bottom Data Schema & Verification Note Bar -->
+<section class="mt-space-2xl pt-space-md border-t border-hairline flex flex-col sm:flex-row items-center justify-between text-micro-caption font-micro-caption text-ink-muted gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-schedule-verified"></span>
+<span>Database Driver: MySQL 8.0 InnoDB Foreign Key Cascading: <strong class="text-ink-body">RESTRICT ON DELETE</strong></span>
+</div>
+<div class="flex items-center gap-space-md">
+<span>Elips Academy Course Scheduler System</span>
+<span>Versi Silabus 2025.1</span>
+</div>
+</section>
+</div></main></div></body></html>

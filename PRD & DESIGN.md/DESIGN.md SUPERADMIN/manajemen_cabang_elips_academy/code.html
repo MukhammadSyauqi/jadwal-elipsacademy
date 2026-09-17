@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container-lowest":"#ffffff","canvas-pure":"#FFFFFF","inverse-surface":"#303032","secondary-fixed":"#ffdcc5","surface-bright":"#fcf8fb","ink-subtle":"#86868B","schedule-conflict":"#EF4444","on-background":"#1b1b1d","surface-variant":"#e4e2e4","schedule-pending":"#6366F1","inverse-primary":"#ffb77c","on-tertiary-fixed-variant":"#474649","primary-fixed":"#ffdcc2","outline":"#887364","error-container":"#ffdad6","accent-focus":"#F59E0B","surface":"#fcf8fb","on-tertiary-fixed":"#1b1b1d","tertiary-container":"#a8a6a8","on-tertiary":"#ffffff","secondary-container":"#fc8f34","divider-soft":"#F0F0F0","on-secondary-fixed":"#301400","on-surface":"#1b1b1d","accent-subtle":"#FEF3C7","schedule-verified":"#10B981","inverse-on-surface":"#f3f0f2","surface-pearl":"#FAFAFC","on-secondary-fixed-variant":"#713700","tertiary-fixed":"#e4e2e4","on-primary":"#ffffff","primary-container":"#f28e2b","primary-fixed-dim":"#ffb77c","surface-container-high":"#eae7ea","on-surface-variant":"#554336","surface-container-highest":"#e4e2e4","tertiary":"#5f5e60","on-error-container":"#93000a","ink-body":"#1D1D1F","ink-muted":"#6E6E73","canvas-parchment":"#F5F5F7","error":"#ba1a1a","hairline":"#E0E0E0","surface-dim":"#dcd9dc","surface-container-low":"#f6f3f5","on-tertiary-container":"#3c3c3e","primary":"#904d00","on-primary-fixed":"#2e1500","on-primary-fixed-variant":"#6d3900","background":"#fcf8fb","surface-tint":"#904d00","secondary":"#944a00","tertiary-fixed-dim":"#c8c6c8","surface-container":"#f0edef","on-error":"#ffffff","on-primary-container":"#5e3000","outline-variant":"#dbc2b0","secondary-fixed-dim":"#ffb783","on-secondary":"#ffffff","on-secondary-container":"#663100"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin-mobile":"1rem","space-md":"1rem","gutter-timetable":"0.5rem","space-sm":"0.75rem","margin-wide":"3rem","space-xl":"2rem","margin":"1.5rem","space-lg":"1.5rem","space-xs":"0.5rem","space-2xl":"3rem","space-xxs":"0.25rem","gutter":"1rem"},"fontFamily":{"headline-sm":["Inter"],"label-timetable-time":["Inter"],"headline-md":["Inter"],"display-hero-mobile":["Inter"],"label-capsule":["Inter"],"body-subtle":["Inter"],"headline-lg":["Inter"],"micro-caption":["Inter"],"headline-lg-mobile":["Inter"],"title-card":["Inter"],"body-strong":["Inter"],"body-default":["Inter"],"display-hero":["Inter"]},"fontSize":{"headline-sm":["20px",{"lineHeight":"26px","letterSpacing":"-0.011em","fontWeight":"600"}],"label-timetable-time":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"-0.014em","fontWeight":"600"}],"display-hero-mobile":["32px",{"lineHeight":"38px","letterSpacing":"-0.019em","fontWeight":"600"}],"label-capsule":["13px",{"lineHeight":"16px","letterSpacing":"-0.004em","fontWeight":"500"}],"body-subtle":["14px",{"lineHeight":"20px","letterSpacing":"-0.006em","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"-0.019em","fontWeight":"600"}],"micro-caption":["10px",{"lineHeight":"12px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.016em","fontWeight":"600"}],"title-card":["17px",{"lineHeight":"22px","letterSpacing":"-0.016em","fontWeight":"600"}],"body-strong":["15px",{"lineHeight":"22px","letterSpacing":"-0.008em","fontWeight":"600"}],"body-default":["15px",{"lineHeight":"22px","letterSpacing":"-0.008em","fontWeight":"400"}],"display-hero":["48px",{"lineHeight":"52px","letterSpacing":"-0.022em","fontWeight":"600"}]}}}}</script></head><body class="bg-canvas-parchment font-body-default text-ink-body antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-canvas-pure shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-xs"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-canvas-pure font-headline-sm text-headline-sm font-bold">E</div><div class="flex flex-col leading-none"><span class="font-headline-sm text-title-card text-ink-body tracking-tight">Elips Academy</span><span class="font-micro-caption text-micro-caption text-ink-muted tracking-wider uppercase">Course Scheduler</span></div></div><div class="px-space-md py-space-xs"><div class="px-space-sm py-space-xxs rounded-full bg-surface-container-low flex items-center justify-between text-ink-muted"><span class="font-micro-caption text-micro-caption uppercase tracking-wider font-semibold text-primary">Cabang</span><span class="font-label-capsule text-label-capsule text-ink-body font-medium">Buduran & Candi</span></div></div><nav class="flex flex-col gap-space-xxs px-space-sm mt-space-sm" data-active-classes="bg-accent-subtle text-primary font-body-strong"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg transition-colors bg-accent-subtle text-primary font-body-strong" data-path="jadwal-kelas" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Jadwal Kelas</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="cabang" href="#"><span class="material-symbols-outlined text-[20px]">apartment</span><span>Cabang</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="program-kursus" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span>Program Kursus</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="tentor" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Tentor</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant font-body-default text-body-default hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="akun-pengguna" href="#"><span class="material-symbols-outlined text-[20px]">manage_accounts</span><span>Akun Pengguna</span></a></nav></div><div class="p-space-md flex flex-col gap-space-xs"><div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-schedule-verified text-[18px]">verified</span><span class="font-label-capsule text-label-capsule text-ink-body">Sistem Sinkron</span></div><span class="font-micro-caption text-micro-caption text-ink-muted">v1.2</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-canvas-pure/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-space-xxs rounded-full bg-surface-container-low text-ink-muted"><span class="material-symbols-outlined text-primary text-[18px]">store</span><span class="font-body-subtle text-body-subtle text-ink-body font-medium">Cabang Utama: Buduran</span></div></div><div class="flex items-center gap-space-md"><span class="inline-flex items-center px-space-sm py-space-xxs rounded-full bg-accent-subtle text-primary font-label-capsule text-label-capsule font-semibold">Superadmin</span><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-xs text-ink-body"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XR66GZNVYBQ97gVVX9d49mMIlRDZJTai3KUcBT6CbyAj64_9GQdCUMEETpL8y3VnudYjmmJw0yGtbDoaKB3EJIqQyTbahU4tFagZr-M8qT0osUA2s8H_fhO5sAF-sUWTsg1OUKf2sjUHHDoLNCGf7nNxN5g1TfzHYXTCds3N0yJ-n9kBkZbzOkO4eALmVpQSJXzgx3KiniLKtZsgoSO5EVg671lExBvP6Kw2LWJ127ZukD_qT-v4WEMUetzz4otCO7HMUZ-BdrKw"/><div class="flex flex-col leading-none text-left"><span class="font-body-strong text-body-subtle text-ink-body">Elips Admin</span><span class="font-micro-caption text-micro-caption text-ink-muted">admin@elips.id</span></div></div></div></header><main class="w-full pt-16 px-space-xl bg-canvas-parchment"><div class="flex flex-col w-full pb-space-2xl">
+<!-- Active state setter for parent app shell sidebar -->
+<script>
+    (function () {
+      try {
+        const branchLinks = document.querySelectorAll('aside nav a[data-path="cabang"]');
+        branchLinks.forEach(link => {
+          link.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+          link.classList.add('bg-accent-subtle', 'text-primary', 'font-body-strong', 'shadow-sm');
+        });
+      } catch (e) {}
+    })();
+  </script>
+<!-- Page Breadcrumb & Header Zone -->
+<div class="flex flex-col gap-space-sm pt-space-md mb-space-lg">
+<div class="flex items-center gap-space-xs text-ink-muted font-micro-caption text-micro-caption tracking-wider uppercase">
+<span class="hover:text-ink-body transition-colors cursor-pointer">Elips Master</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary font-semibold">Cabang & Fasilitas Belajar</span>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<h1 class="font-headline-lg text-headline-lg text-ink-body tracking-tight">Manajemen Cabang Pelatihan</h1>
+<p class="font-body-subtle text-body-subtle text-ink-muted max-w-2xl mt-space-xxs">
+          Kelola lokasi fisik Elips Academy, integrasi alokasi ruang belajar, dan sinkronisasi otomatis status operasional terhadap seluruh jadwal kelas terdaftar.
+        </p>
+</div>
+<!-- Header Action Group -->
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-canvas-pure text-ink-body font-label-capsule text-label-capsule shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98]" id="btnExportData">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">file_download</span>
+<span>Ekspor Laporan</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary-container text-canvas-pure font-label-capsule text-label-capsule font-semibold shadow-md hover:opacity-95 transition-all active:scale-[0.98]" id="btnOpenModal">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>+ Tambah Cabang Baru</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Key Metrics Row (Apple-grade Stat Tiles) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-xl">
+<!-- Stat 1 -->
+<div class="rounded-xl bg-canvas-pure p-space-md shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase tracking-wider text-ink-muted font-semibold">Lokasi Aktif</span>
+<div class="w-8 h-8 rounded-full bg-accent-subtle text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">apartment</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body font-bold">2</span>
+<span class="font-label-capsule text-label-capsule text-schedule-verified font-medium">Cabang Utama</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">Buduran & Candi, Sidoarjo</span>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="rounded-xl bg-canvas-pure p-space-md shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase tracking-wider text-ink-muted font-semibold">Ruang Belajar</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-low text-ink-body flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">meeting_room</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body font-bold">6</span>
+<span class="font-label-capsule text-label-capsule text-ink-muted">Ruang Terdaftar</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">4 Kelas Teori + 2 Lab Multimedia</span>
+</div>
+</div>
+<!-- Stat 3 -->
+<div class="rounded-xl bg-canvas-pure p-space-md shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase tracking-wider text-ink-muted font-semibold">Jadwal Sesi Terkait</span>
+<div class="w-8 h-8 rounded-full bg-accent-subtle text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">event_available</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-ink-body font-bold">24</span>
+<span class="font-label-capsule text-label-capsule text-primary font-medium">Sesi Pekan Ini</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">Buduran: 14 sesi | Candi: 10 sesi</span>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="rounded-xl bg-canvas-pure p-space-md shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-micro-caption text-micro-caption uppercase tracking-wider text-ink-muted font-semibold">Integritas Relasi</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-low text-schedule-verified flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">security</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-schedule-verified font-bold">100%</span>
+<span class="font-label-capsule text-label-capsule text-schedule-verified font-medium">Tersinkron</span>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">PRD 14.2: Soft-delete lock aktif</span>
+</div>
+</div>
+</div>
+<!-- Filter, Search & View Controls Bar -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm bg-canvas-pure p-space-sm rounded-xl shadow-sm mb-space-md">
+<div class="flex items-center gap-space-xs flex-1 max-w-lg">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-[18px]">search</span>
+<input class="w-full pl-9 pr-space-md py-space-xs rounded-full bg-canvas-parchment text-ink-body font-body-subtle text-body-subtle placeholder:text-ink-subtle focus:outline-none focus:bg-canvas-pure focus:shadow-inner transition-all" id="searchInput" placeholder="Cari nama cabang, kode, atau alamat..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<!-- Status Filter -->
+<div class="relative">
+<select class="appearance-none pl-space-md pr-8 py-space-xs rounded-full bg-canvas-parchment text-ink-body font-label-capsule text-label-capsule focus:outline-none cursor-pointer" id="statusFilter">
+<option value="all">Semua Status</option>
+<option value="aktif">Status: Aktif Saja</option>
+<option value="nonaktif">Status: Nonaktif Saja</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-muted text-[16px]">expand_more</span>
+</div>
+<!-- View Switcher -->
+<div class="flex items-center bg-canvas-parchment p-1 rounded-full">
+<button class="p-space-xxs px-space-xs rounded-full bg-canvas-pure text-ink-body shadow-sm flex items-center gap-1 text-micro-caption font-semibold" id="viewTableBtn" title="Tampilan Tabel Rinci">
+<span class="material-symbols-outlined text-[16px]">table_rows</span>
+<span>Tabel</span>
+</button>
+<button class="p-space-xxs px-space-xs rounded-full text-ink-muted hover:text-ink-body flex items-center gap-1 text-micro-caption" id="viewCardsBtn" title="Tampilan Kartu Lokasi">
+<span class="material-symbols-outlined text-[16px]">grid_view</span>
+<span>Kartu</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Primary Split View: List/Table + Quick Preview Inspector -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md items-start">
+<!-- Main Branch List Panel (8 Cols on XL) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<!-- TABLE VIEW -->
+<div class="bg-canvas-pure rounded-xl shadow-sm overflow-hidden flex flex-col" id="tableViewWrapper">
+<div class="px-space-md py-space-sm flex items-center justify-between bg-surface-pearl">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">dns</span>
+<span class="font-body-strong text-body-strong text-ink-body">Daftar Cabang Pelatihan Resmi</span>
+</div>
+<span class="font-micro-caption text-micro-caption px-space-xs py-space-xxs rounded-full bg-surface-container-low text-ink-muted font-medium">Tabel: `cabang` (PostgreSQL)</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-ink-muted font-micro-caption text-micro-caption uppercase tracking-wider bg-canvas-parchment/60">
+<th class="py-space-xs px-space-md font-semibold">Kode & Cabang</th>
+<th class="py-space-xs px-space-md font-semibold">Alamat Lengkap</th>
+<th class="py-space-xs px-space-md font-semibold">Fasilitas Ruang</th>
+<th class="py-space-xs px-space-md font-semibold text-center">Jadwal Aktif</th>
+<th class="py-space-xs px-space-md font-semibold text-center">Status</th>
+<th class="py-space-xs px-space-md font-semibold text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y-0" id="branchTableBody">
+<!-- Cabang 1: Buduran -->
+<tr class="branch-row group hover:bg-surface-pearl transition-colors cursor-pointer border-b border-divider-soft last:border-0" data-branch="buduran" onclick="selectBranch('buduran')">
+<td class="py-space-sm px-space-md align-top">
+<div class="flex items-start gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-accent-subtle text-primary flex items-center justify-center font-bold text-micro-caption shrink-0">
+                      01
+                    </div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body flex items-center gap-1">
+                        Buduran
+                        <span class="material-symbols-outlined text-primary text-[14px]" title="Pusat Utama">verified</span>
+</span>
+<span class="font-micro-caption text-micro-caption text-primary font-medium tracking-tight">CBG-01 • Pusat Pelatihan Utama</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md align-top max-w-xs">
+<span class="font-body-subtle text-body-subtle text-ink-body block line-clamp-2">
+                    Jl. Raya Buduran No. 45, Kec. Buduran, Kab. Sidoarjo, Jawa Timur 61252
+                  </span>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">Geotag: -7.4241, 112.7214</span>
+</td>
+<td class="py-space-sm px-space-md align-top">
+<div class="flex flex-col gap-1">
+<span class="font-label-capsule text-label-capsule text-ink-body font-medium">3 Ruangan (Kap. 35)</span>
+<div class="flex flex-wrap gap-1">
+<span class="px-space-xxs py-0.5 rounded bg-surface-container-low font-micro-caption text-micro-caption text-ink-muted">Ruang 1</span>
+<span class="px-space-xxs py-0.5 rounded bg-surface-container-low font-micro-caption text-micro-caption text-ink-muted">Ruang 2</span>
+<span class="px-space-xxs py-0.5 rounded bg-accent-subtle font-micro-caption text-micro-caption text-primary font-medium">Lab Komp A</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md align-top text-center">
+<span class="inline-flex items-center px-space-xs py-space-xxs rounded-full bg-accent-subtle text-primary font-label-capsule text-label-capsule font-semibold">
+                    14 Sesi
+                  </span>
+<span class="font-micro-caption text-micro-caption text-ink-muted block mt-1">Microsoft Office, Web</span>
+</td>
+<td class="py-space-sm px-space-md align-top text-center">
+<span class="inline-flex items-center gap-1 px-space-xs py-space-xxs rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-label-capsule font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-sm px-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1" onclick="event.stopPropagation()">
+<button class="p-1.5 rounded-full hover:bg-surface-container-low text-ink-muted hover:text-ink-body" onclick="editBranch('buduran')" title="Edit Cabang">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-full hover:bg-surface-container-low text-ink-muted hover:text-ink-body" onclick="showRoomManager('buduran')" title="Kelola Ruangan">
+<span class="material-symbols-outlined text-[18px]">meeting_room</span>
+</button>
+<button class="p-1.5 rounded-full hover:bg-error-container/40 text-ink-muted hover:text-error" onclick="toggleBranchStatus('buduran', 14)" title="Nonaktifkan Cabang">
+<span class="material-symbols-outlined text-[18px]">toggle_on</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Cabang 2: Candi -->
+<tr class="branch-row group hover:bg-surface-pearl transition-colors cursor-pointer border-b border-divider-soft last:border-0" data-branch="candi" onclick="selectBranch('candi')">
+<td class="py-space-sm px-space-md align-top">
+<div class="flex items-start gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-low text-ink-body flex items-center justify-center font-bold text-micro-caption shrink-0">
+                      02
+                    </div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Candi</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted font-medium tracking-tight">CBG-02 • Cabang Operasional</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md align-top max-w-xs">
+<span class="font-body-subtle text-body-subtle text-ink-body block line-clamp-2">
+                    Jl. Raya Candi No. 88, Kec. Candi, Kab. Sidoarjo, Jawa Timur 61271
+                  </span>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-space-xxs block">Geotag: -7.4789, 112.7152</span>
+</td>
+<td class="py-space-sm px-space-md align-top">
+<div class="flex flex-col gap-1">
+<span class="font-label-capsule text-label-capsule text-ink-body font-medium">3 Ruangan (Kap. 30)</span>
+<div class="flex flex-wrap gap-1">
+<span class="px-space-xxs py-0.5 rounded bg-surface-container-low font-micro-caption text-micro-caption text-ink-muted">Ruang 1</span>
+<span class="px-space-xxs py-0.5 rounded bg-surface-container-low font-micro-caption text-micro-caption text-ink-muted">Ruang 2</span>
+<span class="px-space-xxs py-0.5 rounded bg-accent-subtle font-micro-caption text-micro-caption text-primary font-medium">Lab Komp B</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md align-top text-center">
+<span class="inline-flex items-center px-space-xs py-space-xxs rounded-full bg-surface-container-low text-ink-body font-label-capsule text-label-capsule font-semibold">
+                    10 Sesi
+                  </span>
+<span class="font-micro-caption text-micro-caption text-ink-muted block mt-1">Graphic Design, Office</span>
+</td>
+<td class="py-space-sm px-space-md align-top text-center">
+<span class="inline-flex items-center gap-1 px-space-xs py-space-xxs rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-label-capsule font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span>
+                    Aktif
+                  </span>
+</td>
+<td class="py-space-sm px-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1" onclick="event.stopPropagation()">
+<button class="p-1.5 rounded-full hover:bg-surface-container-low text-ink-muted hover:text-ink-body" onclick="editBranch('candi')" title="Edit Cabang">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-full hover:bg-surface-container-low text-ink-muted hover:text-ink-body" onclick="showRoomManager('candi')" title="Kelola Ruangan">
+<span class="material-symbols-outlined text-[18px]">meeting_room</span>
+</button>
+<button class="p-1.5 rounded-full hover:bg-error-container/40 text-ink-muted hover:text-error" onclick="toggleBranchStatus('candi', 10)" title="Nonaktifkan Cabang">
+<span class="material-symbols-outlined text-[18px]">toggle_on</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- CARDS VIEW (Hidden by default, switchable) -->
+<div class="hidden grid-cols-1 md:grid-cols-2 gap-space-md" id="cardsViewWrapper">
+<!-- Card 1: Buduran -->
+<div class="bg-canvas-pure rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative cursor-pointer" onclick="selectBranch('buduran')">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="px-space-xs py-space-xxs rounded-full bg-accent-subtle text-primary font-label-capsule text-label-capsule font-semibold">Cabang Utama</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-space-xxs rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-label-capsule font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span> Aktif
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-ink-body">Buduran (CBG-01)</h3>
+<p class="font-body-subtle text-body-subtle text-ink-muted mt-1">Jl. Raya Buduran No. 45, Sidoarjo</p>
+<div class="mt-space-md p-space-sm bg-surface-pearl rounded-lg">
+<div class="flex items-center justify-between text-micro-caption text-ink-muted mb-1">
+<span>Alokasi Ruangan</span>
+<span class="font-bold text-ink-body">3 Ruangan</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 80%"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-2 block">14 Sesi Terjadwal Pekan Ini</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-primary font-medium">Buka Detail Panel →</span>
+<button class="text-ink-muted hover:text-ink-body text-body-subtle font-medium" onclick="event.stopPropagation(); editBranch('buduran')">Edit</button>
+</div>
+</div>
+<!-- Card 2: Candi -->
+<div class="bg-canvas-pure rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative cursor-pointer" onclick="selectBranch('candi')">
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="px-space-xs py-space-xxs rounded-full bg-surface-container-low text-ink-body font-label-capsule text-label-capsule font-medium">Operasional</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-space-xxs rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-label-capsule font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-schedule-verified"></span> Aktif
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-ink-body">Candi (CBG-02)</h3>
+<p class="font-body-subtle text-body-subtle text-ink-muted mt-1">Jl. Raya Candi No. 88, Sidoarjo</p>
+<div class="mt-space-md p-space-sm bg-surface-pearl rounded-lg">
+<div class="flex items-center justify-between text-micro-caption text-ink-muted mb-1">
+<span>Alokasi Ruangan</span>
+<span class="font-bold text-ink-body">3 Ruangan</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 65%"></div>
+</div>
+<span class="font-micro-caption text-micro-caption text-ink-muted mt-2 block">10 Sesi Terjadwal Pekan Ini</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-capsule text-label-capsule text-primary font-medium">Buka Detail Panel →</span>
+<button class="text-ink-muted hover:text-ink-body text-body-subtle font-medium" onclick="event.stopPropagation(); editBranch('candi')">Edit</button>
+</div>
+</div>
+</div>
+<!-- Database Integrity & PRD Notice Card -->
+<div class="rounded-xl bg-canvas-pure p-space-md shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-accent-subtle text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-strong text-ink-body">Prinsip Integritas Data & Proteksi Relasi (PRD 14.2)</span>
+<p class="font-body-subtle text-body-subtle text-ink-muted mt-0.5 max-w-xl">
+              Cabang yang telah memiliki riwayat atau jadwal aktif yang berelasi (<span class="font-mono text-micro-caption text-primary">jadwal.cabang_id</span>) dilindungi dari penghapusan permanen (<em class="italic">hard-delete</em>). Nonaktifkan cabang untuk membekukan pembukaan kelas baru.
+            </p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-space-xs">
+<span class="px-space-sm py-space-xxs rounded-full bg-surface-pearl text-ink-muted font-label-capsule text-label-capsule">
+            PostgreSQL Foreign Key Safe
+          </span>
+</div>
+</div>
+</div>
+<!-- Quick Detail Inspector / Selected Branch Sidebar (4 Cols on XL) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md sticky top-20">
+<!-- Interactive Branch Detail Card -->
+<div class="bg-canvas-pure rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md" id="branchInspectorCard">
+<!-- Inspector Header -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 text-primary font-micro-caption text-micro-caption uppercase font-semibold">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span id="inspBadgeType">Kantor & Pusat Pelatihan</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-ink-body mt-0.5" id="inspBranchName">Buduran (CBG-01)</h2>
+<span class="font-body-subtle text-body-subtle text-ink-muted mt-1" id="inspBranchAddress">
+              Jl. Raya Buduran No. 45, Kec. Buduran, Sidoarjo 61252
+            </span>
+</div>
+<span class="inline-flex items-center gap-1 px-space-xs py-space-xxs rounded-full bg-schedule-verified/10 text-schedule-verified font-label-capsule text-label-capsule font-semibold" id="inspStatusBadge">
+            Aktif
+          </span>
+</div>
+<!-- Static Map Visual Preview with data-location -->
+<div class="w-full h-36 rounded-lg overflow-hidden relative shadow-inner bg-surface-container-low flex flex-col justify-end p-space-sm" data-alt="Minimalist clean architectural map overhead view of Buduran Sidoarjo training center surrounded by green parks in gentle morning light, Apple map aesthetic" data-location="Buduran, Sidoarjo, Indonesia" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBK6jEdnbuNrZ9QYthnc-_icSkMwD9YmEyY0oWCiQPu4C2m5fsCfqfAVMYFm8APyXfpmc_epVgNi2Ki0vweSxDrLskQ25IpF8jSILcn2pxfwazGn_U55-5vJBGXH973WmnnjSFUlGnLofm6Cua7xG4-h6aZ_zupo_n1_vKZz-UjdKtPNp5v3pmqgl3b6b7QyqojD7JWuK_nfW7SxtzxZxAySWmkxeVM3BjQnbxRBAoEv4bsI7BaMaWo');">
+<div class="bg-canvas-pure/90 backdrop-blur-md px-space-xs py-space-xxs rounded-md shadow-sm self-start flex items-center gap-1 text-ink-body">
+<span class="material-symbols-outlined text-primary text-[14px]">pin_drop</span>
+<span class="font-micro-caption text-micro-caption font-semibold">Sidoarjo Central Hub</span>
+</div>
+</div>
+<!-- Operational Info Matrix -->
+<div class="grid grid-cols-2 gap-space-xs p-space-xs bg-surface-pearl rounded-lg">
+<div class="flex flex-col p-space-xs">
+<span class="font-micro-caption text-micro-caption text-ink-muted uppercase">Jam Operasional</span>
+<span class="font-label-capsule text-label-capsule text-ink-body font-semibold mt-0.5">08.00 - 20.30 WIB</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Senin - Sabtu</span>
+</div>
+<div class="flex flex-col p-space-xs">
+<span class="font-micro-caption text-micro-caption text-ink-muted uppercase">Penanggung Jawab</span>
+<span class="font-label-capsule text-label-capsule text-ink-body font-semibold mt-0.5">Drs. H. Hartono</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Head of Branch</span>
+</div>
+<div class="flex flex-col p-space-xs">
+<span class="font-micro-caption text-micro-caption text-ink-muted uppercase">Kontak Kantor</span>
+<span class="font-label-capsule text-label-capsule text-ink-body font-semibold mt-0.5">(031) 892-1144</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Hotline Support</span>
+</div>
+<div class="flex flex-col p-space-xs">
+<span class="font-micro-caption text-micro-caption text-ink-muted uppercase">Kapasitas Total</span>
+<span class="font-label-capsule text-label-capsule text-ink-body font-semibold mt-0.5">35 Siswa / Sesi</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">3 Ruang Belajar</span>
+</div>
+</div>
+<!-- Schedule Today Snapshot -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-strong text-ink-body">Jadwal Kelas Hari Ini</span>
+<span class="font-micro-caption text-micro-caption text-primary font-medium cursor-pointer hover:underline">Lihat Semua (14)</span>
+</div>
+<div class="flex flex-col gap-space-xxs" id="todayScheduleContainer">
+<!-- Schedule Item 1 -->
+<div class="p-space-xs rounded-lg bg-surface-pearl flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-1.5 h-8 rounded-full bg-primary-container"></div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-subtle text-ink-body">Microsoft Office Executive</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Ruang 1 • 09.00 - 11.00 WIB</span>
+</div>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-accent-subtle text-primary font-micro-caption text-micro-caption font-semibold">MO-001</span>
+</div>
+<!-- Schedule Item 2 -->
+<div class="p-space-xs rounded-lg bg-surface-pearl flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-1.5 h-8 rounded-full bg-schedule-pending"></div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-subtle text-ink-body">Web Programming Fullstack</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Lab Komputer A • 13.30 - 15.30 WIB</span>
+</div>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-ink-body font-micro-caption text-micro-caption font-semibold">WP-001</span>
+</div>
+<!-- Schedule Item 3 -->
+<div class="p-space-xs rounded-lg bg-surface-pearl flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-1.5 h-8 rounded-full bg-primary-container"></div>
+<div class="flex flex-col">
+<span class="font-body-strong text-body-subtle text-ink-body">Desain Grafis Komersil</span>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Ruang 2 • 16.00 - 18.00 WIB</span>
+</div>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-accent-subtle text-primary font-micro-caption text-micro-caption font-semibold">DG-002</span>
+</div>
+</div>
+</div>
+<!-- Quick Branch Action Buttons -->
+<div class="flex items-center gap-space-xs pt-space-xs">
+<button class="flex-1 py-space-xs px-space-sm rounded-full bg-canvas-parchment text-ink-body font-label-capsule text-label-capsule font-semibold hover:bg-surface-container-low transition-colors" id="inspEditBtn">
+            Edit Informasi
+          </button>
+<button class="flex-1 py-space-xs px-space-sm rounded-full bg-primary text-on-primary font-label-capsule text-label-capsule font-semibold hover:opacity-95 transition-colors" id="inspManageRoomBtn">
+            Kelola Ruangan
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal: Tambah / Edit Cabang (PRD Compliant) -->
+<div class="fixed inset-0 bg-ink-body/40 backdrop-blur-sm z-50 hidden items-center justify-center p-space-md" id="branchModal">
+<div class="bg-canvas-pure rounded-xl max-w-lg w-full p-space-lg shadow-xl flex flex-col gap-space-md animate-in fade-in zoom-in-95 duration-200">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-ink-body" id="modalTitle">Tambah Cabang Pelatihan Baru</h3>
+<span class="font-micro-caption text-micro-caption text-ink-muted">Tabel database: `cabang` (PostgreSQL)</span>
+</div>
+<button class="p-1 rounded-full hover:bg-surface-container-low text-ink-muted" id="btnCloseModal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-sm" id="branchForm" onsubmit="handleBranchSubmit(event)">
+<div class="flex flex-col gap-1">
+<label class="font-label-capsule text-label-capsule text-ink-body font-semibold">Nama Cabang <span class="text-error">*</span></label>
+<input class="w-full px-space-md py-space-xs rounded-lg bg-surface-pearl font-body-subtle text-body-subtle text-ink-body focus:outline-none focus:bg-canvas-pure focus:ring-2 focus:ring-primary" id="formNamaCabang" placeholder="Contoh: Porong / Krian / Gedangan" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-capsule text-label-capsule text-ink-body font-semibold">Alamat Lengkap Cabang <span class="text-error">*</span></label>
+<textarea class="w-full px-space-md py-space-xs rounded-lg bg-surface-pearl font-body-subtle text-body-subtle text-ink-body focus:outline-none focus:bg-canvas-pure focus:ring-2 focus:ring-primary resize-none" id="formAlamat" placeholder="Masukkan nama jalan, nomor, kecamatan, dan kode pos operasional..." required="" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-capsule text-label-capsule text-ink-body font-semibold">Status Operasional</label>
+<select class="w-full px-space-md py-space-xs rounded-lg bg-surface-pearl font-body-subtle text-body-subtle text-ink-body focus:outline-none cursor-pointer" id="formStatus">
+<option value="aktif">Aktif (Buka Jadwal)</option>
+<option value="nonaktif">Nonaktif (Freeze)</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-capsule text-label-capsule text-ink-body font-semibold">Alokasi Ruangan Awal</label>
+<input class="w-full px-space-md py-space-xs rounded-lg bg-surface-pearl font-body-subtle text-body-subtle text-ink-body focus:outline-none" id="formInitialRooms" max="20" min="1" type="number" value="2"/>
+</div>
+</div>
+<div class="p-space-xs rounded-lg bg-accent-subtle/70 text-primary flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">info</span>
+<span class="font-micro-caption text-micro-caption leading-relaxed">
+            Cabang yang baru dibuat otomatis dapat dipilih pada Form Penjadwalan Kelas, Kalender Ruangan, dan Penetapan Tentor Cabang.
+          </span>
+</div>
+<div class="flex items-center justify-end gap-space-xs mt-space-xs pt-space-xs">
+<button class="px-space-md py-space-xs rounded-full bg-canvas-parchment text-ink-body font-label-capsule text-label-capsule font-medium hover:bg-surface-container-low transition-colors" id="btnCancelModal" type="button">
+            Batal
+          </button>
+<button class="px-space-md py-space-xs rounded-full bg-primary-container text-canvas-pure font-label-capsule text-label-capsule font-semibold hover:opacity-95 shadow-md transition-all" type="submit">
+            Simpan Data Cabang
+          </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Notification Toast Container -->
+<div class="fixed bottom-6 right-6 z-50 hidden bg-ink-body text-canvas-pure px-space-md py-space-sm rounded-xl shadow-xl flex items-center gap-space-xs animate-in slide-in-from-bottom-5" id="toastNotification">
+<span class="material-symbols-outlined text-schedule-verified text-[20px]" id="toastIcon">check_circle</span>
+<span class="font-body-subtle text-body-subtle" id="toastMessage">Operasi berhasil dilakukan.</span>
+</div>
+<!-- Page Micro-interactions Logic -->
+<script>
+    const branchData = {
+      buduran: {
+        code: 'CBG-01',
+        name: 'Buduran (Kantor & Pusat Pelatihan Utama)',
+        shortName: 'Buduran (CBG-01)',
+        type: 'Kantor & Pusat Pelatihan',
+        address: 'Jl. Raya Buduran No. 45, Kec. Buduran, Kab. Sidoarjo, Jawa Timur 61252',
+        rooms: '3 Ruangan (Kap. 35)',
+        roomList: ['Ruang 1', 'Ruang 2', 'Lab Komputer A'],
+        schedulesCount: 14,
+        status: 'aktif',
+        head: 'Drs. H. Hartono',
+        phone: '(031) 892-1144',
+        todayClasses: [
+          { title: 'Microsoft Office Executive', room: 'Ruang 1', time: '09.00 - 11.00 WIB', code: 'MO-001', color: 'bg-primary-container' },
+          { title: 'Web Programming Fullstack', room: 'Lab Komputer A', time: '13.30 - 15.30 WIB', code: 'WP-001', color: 'bg-schedule-pending' },
+          { title: 'Desain Grafis Komersil', room: 'Ruang 2', time: '16.00 - 18.00 WIB', code: 'DG-002', color: 'bg-primary-container' }
+        ]
+      },
+      candi: {
+        code: 'CBG-02',
+        name: 'Candi (Cabang Operasional)',
+        shortName: 'Candi (CBG-02)',
+        type: 'Cabang Operasional',
+        address: 'Jl. Raya Candi No. 88, Kec. Candi, Kab. Sidoarjo, Jawa Timur 61271',
+        rooms: '3 Ruangan (Kap. 30)',
+        roomList: ['Ruang 1', 'Ruang 2', 'Lab Komputer B'],
+        schedulesCount: 10,
+        status: 'aktif',
+        head: 'Siti Rahmawati, S.Kom',
+        phone: '(031) 805-4321',
+        todayClasses: [
+          { title: 'Graphic Design Master', room: 'Lab Komputer B', time: '10.00 - 12.00 WIB', code: 'GD-003', color: 'bg-schedule-pending' },
+          { title: 'Microsoft Office Advanced', room: 'Ruang 1', time: '14.00 - 16.00 WIB', code: 'MO-008', color: 'bg-primary-container' },
+          { title: 'Digital Marketing & Content', room: 'Ruang 2', time: '18.30 - 20.30 WIB', code: 'DM-001', color: 'bg-accent-focus' }
+        ]
+      }
+    };
+
+    function selectBranch(key) {
+      const data = branchData[key];
+      if (!data) return;
+
+      document.getElementById('inspBranchName').textContent = data.shortName;
+      document.getElementById('inspBranchAddress').textContent = data.address;
+      document.getElementById('inspBadgeType').textContent = data.type;
+
+      // Update Inspector Schedule
+      const scheduleContainer = document.getElementById('todayScheduleContainer');
+      scheduleContainer.innerHTML = '';
+      data.todayClasses.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'p-space-xs rounded-lg bg-surface-pearl flex items-center justify-between';
+        row.innerHTML = `
+          <div class="flex items-center gap-space-xs">
+            <div class="w-1.5 h-8 rounded-full ${item.color}"></div>
+            <div class="flex flex-col">
+              <span class="font-body-strong text-body-subtle text-ink-body">${item.title}</span>
+              <span class="font-micro-caption text-micro-caption text-ink-muted">${item.room} • ${item.time}</span>
+            </div>
+          </div>
+          <span class="px-space-xs py-0.5 rounded-full bg-accent-subtle text-primary font-micro-caption text-micro-caption font-semibold">${item.code}</span>
+        `;
+        scheduleContainer.appendChild(row);
+      });
+
+      // Highlight Table row
+      document.querySelectorAll('.branch-row').forEach(row => {
+        if (row.getAttribute('data-branch') === key) {
+          row.classList.add('bg-accent-subtle/30');
+        } else {
+          row.classList.remove('bg-accent-subtle/30');
+        }
+      });
+    }
+
+    function toggleBranchStatus(branchKey, activeSchedules) {
+      if (activeSchedules > 0) {
+        const confirmed = confirm(
+          `[Proteksi Integritas Database PRD 14.2]\n\nCabang ${branchKey.toUpperCase()} saat ini memiliki ${activeSchedules} jadwal aktif yang terikat.\n\nSistem akan menonaktifkan status cabang tanpa menghapus jadwal yang telah ada (soft-protection). Lanjutkan?`
+        );
+        if (confirmed) {
+          showToast(`Status cabang ${branchKey.toUpperCase()} berhasil dialihkan ke Nonaktif.`);
+        }
+      } else {
+        showToast(`Status cabang berhasil diperbarui.`);
+      }
+    }
+
+    function editBranch(key) {
+      const data = branchData[key];
+      document.getElementById('modalTitle').textContent = `Edit Cabang: ${data.shortName}`;
+      document.getElementById('formNamaCabang').value = data.name.split(' (')[0];
+      document.getElementById('formAlamat').value = data.address;
+      document.getElementById('branchModal').classList.remove('hidden');
+      document.getElementById('branchModal').classList.add('flex');
+    }
+
+    function showRoomManager(key) {
+      showToast(`Membuka panel alokasi ruangan untuk cabang ${key.toUpperCase()}`);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3500);
+    }
+
+    // Modal Events
+    const modal = document.getElementById('branchModal');
+    document.getElementById('btnOpenModal').addEventListener('click', () => {
+      document.getElementById('modalTitle').textContent = 'Tambah Cabang Pelatihan Baru';
+      document.getElementById('branchForm').reset();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+
+    document.getElementById('btnCancelModal').addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+
+    function handleBranchSubmit(e) {
+      e.preventDefault();
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      showToast('Data cabang baru berhasil disimpan ke sistem PostgreSQL.');
+    }
+
+    // View Switching
+    const viewTableBtn = document.getElementById('viewTableBtn');
+    const viewCardsBtn = document.getElementById('viewCardsBtn');
+    const tableViewWrapper = document.getElementById('tableViewWrapper');
+    const cardsViewWrapper = document.getElementById('cardsViewWrapper');
+
+    viewTableBtn.addEventListener('click', () => {
+      tableViewWrapper.classList.remove('hidden');
+      cardsViewWrapper.classList.add('hidden');
+      cardsViewWrapper.classList.remove('grid');
+      viewTableBtn.classList.add('bg-canvas-pure', 'shadow-sm', 'font-semibold');
+      viewCardsBtn.classList.remove('bg-canvas-pure', 'shadow-sm', 'font-semibold');
+    });
+
+    viewCardsBtn.addEventListener('click', () => {
+      tableViewWrapper.classList.add('hidden');
+      cardsViewWrapper.classList.remove('hidden');
+      cardsViewWrapper.classList.add('grid');
+      viewCardsBtn.classList.add('bg-canvas-pure', 'shadow-sm', 'font-semibold');
+      viewTableBtn.classList.remove('bg-canvas-pure', 'shadow-sm', 'font-semibold');
+    });
+
+    // Inspector quick buttons
+    document.getElementById('inspEditBtn').addEventListener('click', () => editBranch('buduran'));
+    document.getElementById('inspManageRoomBtn').addEventListener('click', () => showRoomManager('buduran'));
+    document.getElementById('btnExportData').addEventListener('click', () => showToast('Mengunduh berkas laporan relasi cabang (CSV/PDF)...'));
+
+    // Search filter micro-interaction
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('.branch-row').forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+</div></main></div></body></html>
