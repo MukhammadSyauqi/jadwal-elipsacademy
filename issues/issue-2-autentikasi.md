@@ -37,10 +37,10 @@ Implementasi sistem login dan logout untuk Elips Academy. Sistem hanya memiliki 
 - Mockup login: `PRD & DESIGN.md/DESIGN.md ADMIN/halaman_login_elips_academy/screen.png`
 
 ## Acceptance Criteria
-- [ ] Halaman login tampil sesuai mockup
-- [ ] Login berhasil dengan email dan password yang benar
-- [ ] Login gagal menampilkan pesan error yang jelas
-- [ ] Redirect setelah login sesuai role (admin → dashboard admin, superadmin → dashboard superadmin)
-- [ ] Middleware role mencegah akses ke halaman yang bukan hak user (response 403)
-- [ ] Logout berhasil menghapus session dan redirect ke halaman login
-- [ ] User yang belum login tidak bisa mengakses halaman selain login
+- [x] Halaman login tampil sesuai mockup
+- [x] Login berhasil dengan email dan password yang benar
+- [x] Login gagal menampilkan pesan error yang jelas
+- [x] Redirect setelah login sesuai role (admin → dashboard admin, superadmin → dashboard superadmin)
+- [x] Middleware role mencegah akses ke halaman yang bukan hak user (response 403)
+- [x] Logout berhasil menghapus session dan redirect ke halaman login
+- [x] User yang belum login tidak bisa mengakses halaman selain login
