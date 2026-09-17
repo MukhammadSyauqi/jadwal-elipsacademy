@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminJadwalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SuperadminDashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,15 @@ Route::middleware('auth')->group(function () {
     // Admin & Superadmin can access admin area
     Route::middleware('role:admin,superadmin')->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+        // CRUD Jadwal
+        Route::get('/admin/jadwal/create', [AdminJadwalController::class, 'create'])->name('admin.jadwal.create');
+        Route::post('/admin/jadwal', [AdminJadwalController::class, 'store'])->name('admin.jadwal.store');
+        Route::get('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'show'])->name('admin.jadwal.show');
+        Route::get('/admin/jadwal/{jadwal}/edit', [AdminJadwalController::class, 'edit'])->name('admin.jadwal.edit');
+        Route::put('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'update'])->name('admin.jadwal.update');
+        Route::post('/admin/jadwal/{jadwal}/batal', [AdminJadwalController::class, 'batal'])->name('admin.jadwal.batal');
+        Route::delete('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'destroy'])->name('admin.jadwal.destroy');
     });
 
     // Only Superadmin can access superadmin area

@@ -40,13 +40,13 @@ Implementasi fitur lengkap pengelolaan jadwal kelas untuk role Admin: Tambah, Li
 - Mockup Edit: `PRD & DESIGN.md/DESIGN.md ADMIN/ubah_jadwal_kelas_elips_academy/screen.png`
 
 ## Acceptance Criteria
-- [ ] Admin dapat membuat jadwal baru melalui form yang sesuai mockup
-- [ ] Validasi server-side berfungsi (field wajib, jam_selesai > jam_mulai)
-- [ ] Deteksi bentrok tentor berfungsi dan menampilkan peringatan
-- [ ] Deteksi bentrok ruangan berfungsi dan menampilkan peringatan
-- [ ] Halaman detail jadwal menampilkan informasi lengkap beserta data relasi
-- [ ] Admin dapat mengedit jadwal dengan data lama terisi otomatis
-- [ ] Edit jadwal tidak dianggap bentrok dengan dirinya sendiri
-- [ ] Admin dapat membatalkan jadwal (status → dibatalkan) dengan konfirmasi
-- [ ] Semua aksi hanya bisa dilakukan oleh user dengan role Admin atau Superadmin
-- [ ] Tombol "Tambah Jadwal" dan "Ubah" di dashboard Issue #3 terhubung ke halaman yang benar
+- [x] Admin dapat membuat jadwal baru melalui form yang sesuai mockup
+- [x] Validasi server-side berfungsi (field wajib, jam_selesai > jam_mulai)
+- [x] Deteksi bentrok tentor berfungsi dan menampilkan peringatan
+- [x] Deteksi bentrok ruangan berfungsi dan menampilkan peringatan
+- [x] Halaman detail jadwal menampilkan informasi lengkap beserta data relasi
+- [x] Admin dapat mengedit jadwal dengan data lama terisi otomatis
+- [x] Edit jadwal tidak dianggap bentrok dengan dirinya sendiri
+- [x] Admin dapat membatalkan jadwal (status → dibatalkan) dengan konfirmasi
+- [x] Semua aksi hanya bisa dilakukan oleh user dengan role Admin atau Superadmin
+- [x] Tombol "Tambah Jadwal" dan "Ubah" di dashboard Issue #3 terhubung ke halaman yang benar

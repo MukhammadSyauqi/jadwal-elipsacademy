@@ -142,6 +142,19 @@
     <main class="w-full flex-1 py-6 sm:py-8 px-4 sm:px-8">
         <div class="max-w-6xl mx-auto flex flex-col gap-6">
 
+            <!-- Flash Message Sukses -->
+            @if(session('success'))
+                <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-xs">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-emerald-600 text-2xl">check_circle</span>
+                        <div class="text-sm font-semibold">{{ session('success') }}</div>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove()" class="text-emerald-600 hover:text-emerald-800 p-1 rounded-lg hover:bg-emerald-100 transition-colors">
+                        <span class="material-symbols-outlined text-lg block">close</span>
+                    </button>
+                </div>
+            @endif
+
             <!-- 2. Sapaan & Navigasi Waktu -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex flex-col gap-1">
@@ -199,12 +212,12 @@
                     </div>
 
                     <!-- Tambah Jadwal Button -->
-                    <button type="button" 
-                            onclick="openActionModal('Tambah Jadwal', 'Form pembuatan jadwal baru akan diimplementasikan pada issue selanjutnya (Issue #4).')"
-                            class="px-4 py-2 rounded-full bg-primary-container text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 hover:bg-brand-hover shadow-sm active:scale-95 transition-all">
+                    <a href="{{ route('admin.jadwal.create', ['cabang_id' => $selectedCabang->id ?? 1, 'tanggal' => $selectedDate]) }}" 
+                       id="btnTambahJadwal"
+                       class="px-4 py-2 rounded-full bg-primary-container text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 hover:bg-brand-hover shadow-sm active:scale-95 transition-all">
                         <span class="material-symbols-outlined text-base">add</span>
                         <span>+ Tambah Jadwal</span>
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -451,24 +464,21 @@
                             <!-- Action Buttons -->
                             <div class="flex items-center gap-1.5">
                                 @if($isLive)
-                                    <button type="button" 
-                                            onclick="openDetailModal('{{ $jadwal->nama_kelas }}', '{{ $jadwal->program->nama_program ?? '' }}', '{{ $jadwal->tentor->nama ?? '' }}', '{{ $jadwal->ruangan ?? '' }}', '{{ $jadwal->formatted_jam }}', '{{ $jadwal->durasi }}', 'Sedang Berlangsung', '{{ $jadwal->catatan ?? '' }}')"
-                                            class="px-3 py-1.5 rounded-full bg-primary text-white text-xs font-semibold hover:opacity-90 shadow-xs transition-all">
-                                        Kelola Kelas
-                                    </button>
+                                    <a href="{{ route('admin.jadwal.show', $jadwal->id) }}" 
+                                       class="px-3 py-1.5 rounded-full bg-primary text-white text-xs font-semibold hover:opacity-90 shadow-xs transition-all inline-flex items-center gap-1">
+                                        <span>Kelola Kelas</span>
+                                    </a>
                                 @else
-                                    <button type="button" 
-                                            onclick="openDetailModal('{{ $jadwal->nama_kelas }}', '{{ $jadwal->program->nama_program ?? '' }}', '{{ $jadwal->tentor->nama ?? '' }}', '{{ $jadwal->ruangan ?? '' }}', '{{ $jadwal->formatted_jam }}', '{{ $jadwal->durasi }}', '{{ ucfirst($jadwal->display_status) }}', '{{ $jadwal->catatan ?? '' }}')"
-                                            class="px-3 py-1.5 rounded-full bg-surface-pearl text-ink-body text-xs font-semibold hover:bg-surface-container border border-hairline transition-all">
-                                        Lihat Detail
-                                    </button>
+                                    <a href="{{ route('admin.jadwal.show', $jadwal->id) }}" 
+                                       class="px-3 py-1.5 rounded-full bg-surface-pearl text-ink-body text-xs font-semibold hover:bg-surface-container border border-hairline transition-all inline-flex items-center gap-1">
+                                        <span>Lihat Detail</span>
+                                    </a>
                                 @endif
 
-                                <button type="button" 
-                                        onclick="openActionModal('Ubah Jadwal {{ $jadwal->nama_kelas }}', 'Fitur pengubahan jadwal kelas akan diintegrasikan pada Issue #4.')"
-                                        class="px-3 py-1.5 rounded-full text-ink-muted hover:text-ink-body hover:bg-surface-pearl text-xs font-semibold transition-all">
-                                    Ubah
-                                </button>
+                                <a href="{{ route('admin.jadwal.edit', $jadwal->id) }}" 
+                                   class="px-3 py-1.5 rounded-full text-ink-muted hover:text-ink-body hover:bg-surface-pearl text-xs font-semibold transition-all inline-flex items-center gap-1">
+                                    <span>Ubah</span>
+                                </a>
                             </div>
                         </div>
                     </div>
