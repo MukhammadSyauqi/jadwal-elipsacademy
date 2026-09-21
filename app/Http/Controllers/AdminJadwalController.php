@@ -9,6 +9,7 @@ use App\Models\Tentor;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -60,9 +61,9 @@ class AdminJadwalController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'cabang_id' => 'required|exists:cabang,id',
-            'program_id' => 'required|exists:program,id',
-            'tentor_id' => 'required|exists:tentor,id',
+            'cabang_id' => ['required', Rule::exists('cabang', 'id')->where('status', 'aktif')],
+            'program_id' => ['required', Rule::exists('program', 'id')->where('status', 'aktif')],
+            'tentor_id' => ['required', Rule::exists('tentor', 'id')->where('status', 'aktif')],
             'nama_kelas' => 'required|string|max:100',
             'jenis_kelas' => 'required|in:private,rombel,business',
             'tanggal' => 'required|date',
@@ -93,6 +94,16 @@ class AdminJadwalController extends Controller
 
         // Save schedule
         $jadwal = Jadwal::create($validated);
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->input('redirect_to'))->with('success', 'Jadwal berhasil disimpan.');
+        }
+
+        if ($request->user() && $request->user()->role === 'superadmin') {
+            return redirect()
+                ->route('superadmin.jadwal.index')
+                ->with('success', 'Jadwal berhasil disimpan.');
+        }
 
         return redirect()
             ->route('admin.dashboard', [
@@ -161,9 +172,24 @@ class AdminJadwalController extends Controller
     public function update(Request $request, Jadwal $jadwal): RedirectResponse
     {
         $validated = $request->validate([
-            'cabang_id' => 'required|exists:cabang,id',
-            'program_id' => 'required|exists:program,id',
-            'tentor_id' => 'required|exists:tentor,id',
+            'cabang_id' => [
+                'required',
+                Rule::exists('cabang', 'id')->where(function ($query) use ($jadwal) {
+                    $query->where('status', 'aktif')->orWhere('id', $jadwal->cabang_id);
+                }),
+            ],
+            'program_id' => [
+                'required',
+                Rule::exists('program', 'id')->where(function ($query) use ($jadwal) {
+                    $query->where('status', 'aktif')->orWhere('id', $jadwal->program_id);
+                }),
+            ],
+            'tentor_id' => [
+                'required',
+                Rule::exists('tentor', 'id')->where(function ($query) use ($jadwal) {
+                    $query->where('status', 'aktif')->orWhere('id', $jadwal->tentor_id);
+                }),
+            ],
             'nama_kelas' => 'required|string|max:100',
             'jenis_kelas' => 'required|in:private,rombel,business',
             'tanggal' => 'required|date',
@@ -195,6 +221,10 @@ class AdminJadwalController extends Controller
 
         $jadwal->update($validated);
 
+        if ($request->filled('redirect_to')) {
+            return redirect($request->input('redirect_to'))->with('success', 'Jadwal berhasil diperbarui.');
+        }
+
         return redirect()
             ->route('admin.jadwal.show', $jadwal->id)
             ->with('success', 'Jadwal berhasil diperbarui.');
@@ -206,6 +236,16 @@ class AdminJadwalController extends Controller
     public function batal(Request $request, Jadwal $jadwal): RedirectResponse
     {
         $jadwal->update(['status' => 'dibatalkan']);
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->input('redirect_to'))->with('success', 'Jadwal berhasil dibatalkan.');
+        }
+
+        if ($request->user() && $request->user()->role === 'superadmin') {
+            return redirect()
+                ->route('superadmin.jadwal.index')
+                ->with('success', 'Jadwal berhasil dibatalkan.');
+        }
 
         $tanggalStr = $jadwal->tanggal ? $jadwal->tanggal->toDateString() : Carbon::today()->toDateString();
 
