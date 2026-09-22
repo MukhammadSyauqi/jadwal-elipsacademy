@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Material Symbols Outlined -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -21,33 +21,36 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#0284c7',
-                        'primary-container': '#0369a1',
-                        'on-primary': '#ffffff',
+                        'primary': '#904d00',
+                        'primary-container': '#f28e2b',
+                        'on-primary-container': '#5e3000',
+                        'brand-hover': '#e07d1a',
                         'canvas-pure': '#ffffff',
-                        'canvas-parchment': '#f8fafc',
-                        'surface-pearl': '#f1f5f9',
-                        'surface-container-low': '#e2e8f0',
-                        'surface-container-high': '#cbd5e1',
-                        'hairline': '#e2e8f0',
-                        'ink-body': '#0f172a',
-                        'ink-muted': '#64748b',
-                        'ink-subtle': '#94a3b8',
-                        'accent-subtle': '#e0f2fe',
-                        'schedule-verified': '#059669',
-                        'schedule-pending': '#d97706',
+                        'canvas-parchment': '#F5F5F7',
+                        'surface-pearl': '#FAFAFC',
+                        'surface-container-low': '#f6f3f5',
+                        'surface-container': '#f0edef',
+                        'surface-container-high': '#eae7ea',
+                        'hairline': '#E0E0E0',
+                        'ink-body': '#1D1D1F',
+                        'ink-muted': '#6E6E73',
+                        'ink-subtle': '#86868B',
+                        'accent-subtle': '#FEF3C7',
+                        'accent-focus': '#F59E0B',
+                        'schedule-verified': '#10B981',
+                        'schedule-pending': '#6366F1',
                         'error': '#dc2626',
                         'error-container': '#fee2e2',
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
             vertical-align: middle;
@@ -61,17 +64,22 @@
 
 <div class="flex min-h-screen">
     <!-- Left Navigation Sidebar -->
-    <aside class="w-64 bg-canvas-pure border-r border-hairline flex flex-col justify-between fixed inset-y-0 z-50">
+    <aside id="sidebarNav" class="w-64 bg-canvas-pure border-r border-hairline flex flex-col justify-between fixed inset-y-0 left-0 z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
         <div>
             <!-- Brand Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-hairline gap-3">
-                <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    E
+            <div class="h-16 flex items-center justify-between px-6 border-b border-hairline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                        E
+                    </div>
+                    <div>
+                        <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
+                        <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
-                    <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
-                </div>
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
             </div>
 
             <!-- Navigation Menu -->
@@ -145,24 +153,30 @@
         </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
     <!-- Main Content Wrapper -->
-    <div class="pl-64 flex flex-col flex-1 min-h-screen">
+    <div class="lg:pl-64 flex flex-col flex-1 min-h-screen w-full">
         <!-- Topbar Header -->
-        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-8">
-            <div class="flex items-center gap-2 text-xs text-ink-muted">
-                <a href="{{ route('superadmin.dashboard') }}" class="hover:text-primary transition-colors">Portal Superadmin</a>
-                <span>/</span>
-                <span class="text-ink-body font-semibold">Master Data Cabang</span>
+        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-3">
+            <div class="flex items-center gap-2.5 text-xs text-ink-muted">
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 rounded-xl text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-colors shrink-0" aria-label="Buka Menu">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <a href="{{ route('superadmin.dashboard') }}" class="hover:text-primary transition-colors hidden sm:inline">Portal Superadmin</a>
+                <span class="hidden sm:inline">/</span>
+                <span class="text-ink-body font-semibold truncate">Master Data Cabang</span>
             </div>
 
-            <div class="flex items-center gap-3">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent-subtle text-primary border border-primary/20">
-                    <span class="w-2 h-2 rounded-full bg-primary"></span>
-                    Superadmin Hak Penuh
+            <div class="flex items-center gap-2 sm:gap-3">
+                <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent-subtle text-primary border border-primary/20">
+                    <span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                    Superadmin
                 </span>
                 <button onclick="openCreateModal()" 
                         id="btnOpenCreateModal"
-                        class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-xs font-semibold hover:bg-primary-container shadow-sm transition-all">
+                        class="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover shadow-sm transition-all active:scale-95">
                     <span class="material-symbols-outlined text-[16px]">add</span>
                     <span>Tambah Cabang</span>
                 </button>
@@ -691,11 +705,29 @@
         deleteModal.classList.add('flex');
     }
 
-    // Close modals on Escape key
+    function toggleSidebar() {
+        const sb = document.getElementById('sidebarNav');
+        const bd = document.getElementById('sidebarBackdrop');
+        if (sb.classList.contains('-translate-x-full')) {
+            sb.classList.remove('-translate-x-full');
+            bd.classList.remove('hidden');
+        } else {
+            sb.classList.add('-translate-x-full');
+            bd.classList.add('hidden');
+        }
+    }
+
+    // Close modals and drawer on Escape key
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeCabangModal();
             closeDeleteModal();
+            const sb = document.getElementById('sidebarNav');
+            const bd = document.getElementById('sidebarBackdrop');
+            if (sb && !sb.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                sb.classList.add('-translate-x-full');
+                bd.classList.add('hidden');
+            }
         }
     });
 </script>

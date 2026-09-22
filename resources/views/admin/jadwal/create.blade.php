@@ -53,9 +53,10 @@
             <!-- Tengah: Tombol Kembali -->
             <div class="flex items-center">
                 <a href="{{ route('admin.dashboard', ['cabang_id' => $selectedCabang->id ?? 1, 'tanggal' => $selectedDate]) }}" 
-                   class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-muted hover:text-ink-body bg-gray-100 hover:bg-gray-200/80 px-3.5 py-1.5 rounded-full transition-all">
+                   class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-muted hover:text-ink-body bg-gray-100 hover:bg-gray-200/80 px-3 sm:px-3.5 py-1.5 rounded-full transition-all">
                     <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                    <span>Kembali ke Jadwal</span>
+                    <span class="hidden sm:inline">Kembali ke Jadwal</span>
+                    <span class="sm:hidden">Kembali</span>
                 </a>
             </div>
 

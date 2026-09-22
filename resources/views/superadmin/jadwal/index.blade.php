@@ -47,17 +47,22 @@
 <body class="bg-canvas-parchment font-sans text-ink-body antialiased min-h-screen flex">
 
     <!-- Sidebar Navigation -->
-    <aside class="fixed left-0 top-0 h-full w-64 bg-canvas-pure border-r border-hairline shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between">
+    <aside id="sidebarNav" class="fixed left-0 top-0 h-full w-64 bg-canvas-pure border-r border-hairline shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="flex flex-col">
             <!-- Brand -->
-            <div class="h-16 px-6 flex items-center gap-3 border-b border-hairline">
-                <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    E
+            <div class="h-16 px-6 flex items-center justify-between border-b border-hairline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                        E
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <span class="font-bold text-ink-body text-base tracking-tight truncate leading-tight">Elips Academy</span>
+                        <span class="text-[11px] text-ink-muted uppercase tracking-wider font-semibold">Course Scheduler</span>
+                    </div>
                 </div>
-                <div class="flex flex-col min-w-0">
-                    <span class="font-bold text-ink-body text-base tracking-tight truncate leading-tight">Elips Academy</span>
-                    <span class="text-[11px] text-ink-muted uppercase tracking-wider font-semibold">Course Scheduler</span>
-                </div>
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
             </div>
 
             <!-- Cabang Overview Indicator -->
@@ -139,14 +144,20 @@
         </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
     <!-- Main Content Container -->
-    <div class="pl-64 flex flex-col flex-1 min-h-screen">
+    <div class="lg:pl-64 flex flex-col flex-1 min-h-screen w-full">
         <!-- Topbar Header -->
-        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-8">
+        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-3">
             <div class="flex items-center gap-3">
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 rounded-xl text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-colors shrink-0" aria-label="Buka Menu">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
                 <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low text-ink-muted border border-hairline text-xs">
                     <span class="material-symbols-outlined text-primary text-[18px]">store</span>
-                    <span class="font-semibold text-ink-body">Cabang Terkelola: Buduran & Candi</span>
+                    <span class="font-semibold text-ink-body">Cabang: Buduran & Candi</span>
                 </div>
             </div>
 
@@ -599,8 +610,20 @@
         </div>
     </div>
 
-    <!-- Modal Logic -->
+    <!-- Modal & Drawer Logic -->
     <script>
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebarNav');
+            const bd = document.getElementById('sidebarBackdrop');
+            if (sb.classList.contains('-translate-x-full')) {
+                sb.classList.remove('-translate-x-full');
+                bd.classList.remove('hidden');
+            } else {
+                sb.classList.add('-translate-x-full');
+                bd.classList.add('hidden');
+            }
+        }
+
         function openCancelModal(jadwalId, className) {
             document.getElementById('cancelModalClassName').textContent = className;
             document.getElementById('cancelForm').action = '/admin/jadwal/' + jadwalId + '/batal';
@@ -611,9 +634,17 @@
             document.getElementById('cancelModal').classList.add('hidden');
         }
 
-        // Close modal on Escape key
+        // Close modal or drawer on Escape key
         window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeCancelModal();
+            if (e.key === 'Escape') {
+                closeCancelModal();
+                const sb = document.getElementById('sidebarNav');
+                const bd = document.getElementById('sidebarBackdrop');
+                if (sb && !sb.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                    sb.classList.add('-translate-x-full');
+                    bd.classList.add('hidden');
+                }
+            }
         });
     </script>
 </body>

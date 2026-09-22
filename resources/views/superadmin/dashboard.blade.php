@@ -47,17 +47,22 @@
 <body class="bg-canvas-parchment font-sans text-ink-body antialiased min-h-screen flex">
 
     <!-- Sidebar Navigation -->
-    <aside class="fixed left-0 top-0 h-full w-64 bg-canvas-pure border-r border-hairline shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between">
+    <aside id="sidebarNav" class="fixed left-0 top-0 h-full w-64 bg-canvas-pure border-r border-hairline shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="flex flex-col">
             <!-- Brand -->
-            <div class="h-16 px-6 flex items-center gap-3 border-b border-hairline">
-                <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    E
+            <div class="h-16 px-6 flex items-center justify-between border-b border-hairline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                        E
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <span class="font-bold text-ink-body text-base tracking-tight truncate leading-tight">Elips Academy</span>
+                        <span class="text-[11px] text-ink-muted uppercase tracking-wider font-semibold">Superadmin Panel</span>
+                    </div>
                 </div>
-                <div class="flex flex-col min-w-0">
-                    <span class="font-bold text-ink-body text-base tracking-tight truncate leading-tight">Elips Academy</span>
-                    <span class="text-[11px] text-ink-muted uppercase tracking-wider font-semibold">Superadmin Panel</span>
-                </div>
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
             </div>
 
             <!-- Active Semester Pill -->
@@ -142,24 +147,32 @@
         </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
     <!-- Main Wrapper -->
-    <div class="pl-64 flex flex-col flex-1 min-h-screen">
+    <div class="lg:pl-64 flex flex-col flex-1 min-h-screen w-full">
         <!-- Topbar Header -->
-        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-8">
-            <!-- Search Bar in Header -->
-            <form method="GET" action="{{ route('superadmin.dashboard') }}" class="flex items-center gap-2 flex-1 max-w-md">
-                @if($filterSesi && $filterSesi !== 'all')
-                    <input type="hidden" name="sesi" value="{{ $filterSesi }}">
-                @endif
-                <div class="relative w-full">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-[18px]">search</span>
-                    <input type="text" 
-                           name="q" 
-                           value="{{ $searchQuery }}" 
-                           placeholder="Cari jadwal, tentor, program, cabang..."
-                           class="w-full pl-9 pr-4 py-1.5 rounded-full bg-canvas-parchment text-xs text-ink-body placeholder:text-ink-subtle border border-hairline focus:bg-canvas-pure focus:outline-none focus:ring-2 focus:ring-primary-container transition-all">
-                </div>
-            </form>
+        <header class="sticky top-0 h-16 bg-canvas-pure/90 backdrop-blur-md border-b border-hairline z-40 flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-3">
+            <div class="flex items-center gap-2 flex-1 max-w-md">
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 rounded-xl text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-colors shrink-0" aria-label="Buka Menu">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <!-- Search Bar in Header -->
+                <form method="GET" action="{{ route('superadmin.dashboard') }}" class="flex items-center gap-2 flex-1">
+                    @if($filterSesi && $filterSesi !== 'all')
+                        <input type="hidden" name="sesi" value="{{ $filterSesi }}">
+                    @endif
+                    <div class="relative w-full">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-[18px]">search</span>
+                        <input type="text" 
+                               name="q" 
+                               value="{{ $searchQuery }}" 
+                               placeholder="Cari jadwal, tentor, program, cabang..."
+                               class="w-full pl-9 pr-4 py-1.5 rounded-full bg-canvas-parchment text-xs text-ink-body placeholder:text-ink-subtle border border-hairline focus:bg-canvas-pure focus:outline-none focus:ring-2 focus:ring-primary-container transition-all">
+                    </div>
+                </form>
+            </div>
 
             <!-- Actions & Status -->
             <div class="flex items-center gap-4">
@@ -604,8 +617,31 @@
         </main>
     </div>
 
-    <!-- Branch Room Switcher Script -->
+    <!-- Scripts -->
     <script>
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebarNav');
+            const bd = document.getElementById('sidebarBackdrop');
+            if (sb.classList.contains('-translate-x-full')) {
+                sb.classList.remove('-translate-x-full');
+                bd.classList.remove('hidden');
+            } else {
+                sb.classList.add('-translate-x-full');
+                bd.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sb = document.getElementById('sidebarNav');
+                const bd = document.getElementById('sidebarBackdrop');
+                if (sb && !sb.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                    sb.classList.add('-translate-x-full');
+                    bd.classList.add('hidden');
+                }
+            }
+        });
+
         function switchBranchRooms(slug) {
             document.querySelectorAll('.branch-rooms-group').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.branch-tab-btn').forEach(btn => {

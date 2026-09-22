@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Material Symbols Outlined -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -21,33 +21,36 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#0284c7',
-                        'primary-container': '#0369a1',
-                        'on-primary': '#ffffff',
+                        'primary': '#904d00',
+                        'primary-container': '#f28e2b',
+                        'on-primary-container': '#5e3000',
+                        'brand-hover': '#e07d1a',
                         'canvas-pure': '#ffffff',
-                        'canvas-parchment': '#f8fafc',
-                        'surface-pearl': '#f1f5f9',
-                        'surface-container-low': '#e2e8f0',
-                        'surface-container-high': '#cbd5e1',
-                        'hairline': '#e2e8f0',
-                        'ink-body': '#0f172a',
-                        'ink-muted': '#64748b',
-                        'ink-subtle': '#94a3b8',
-                        'accent-subtle': '#e0f2fe',
-                        'schedule-verified': '#059669',
-                        'schedule-pending': '#d97706',
+                        'canvas-parchment': '#F5F5F7',
+                        'surface-pearl': '#FAFAFC',
+                        'surface-container-low': '#f6f3f5',
+                        'surface-container': '#f0edef',
+                        'surface-container-high': '#eae7ea',
+                        'hairline': '#E0E0E0',
+                        'ink-body': '#1D1D1F',
+                        'ink-muted': '#6E6E73',
+                        'ink-subtle': '#86868B',
+                        'accent-subtle': '#FEF3C7',
+                        'accent-focus': '#F59E0B',
+                        'schedule-verified': '#10B981',
+                        'schedule-pending': '#6366F1',
                         'error': '#dc2626',
                         'error-container': '#fee2e2',
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
             vertical-align: middle;
@@ -61,17 +64,22 @@
 
 <div class="flex min-h-screen">
     <!-- Left Navigation Sidebar -->
-    <aside class="w-64 bg-canvas-pure border-r border-hairline flex flex-col justify-between fixed inset-y-0 z-50">
+    <aside id="sidebarNav" class="w-64 bg-canvas-pure border-r border-hairline flex flex-col justify-between fixed inset-y-0 left-0 z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
         <div>
             <!-- Brand Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-hairline gap-3">
-                <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    E
+            <div class="h-16 flex items-center justify-between px-6 border-b border-hairline">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                        E
+                    </div>
+                    <div>
+                        <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
+                        <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
-                    <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
-                </div>
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
             </div>
 
             <!-- Navigation Menu -->
@@ -145,34 +153,39 @@
         </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
     <!-- Main Content Area -->
-    <div class="pl-64 flex-1 flex flex-col min-w-0">
+    <div class="lg:pl-64 flex-1 flex flex-col min-w-0 w-full">
         <!-- Top App Bar -->
-        <header class="h-16 bg-canvas-pure border-b border-hairline sticky top-0 z-40 px-8 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-2 text-xs font-medium text-ink-muted">
-                    <span>ELIPS MASTER</span>
+        <header class="h-16 bg-canvas-pure border-b border-hairline sticky top-0 z-40 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <button type="button" onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 rounded-xl text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-colors shrink-0" aria-label="Buka Menu">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <div class="flex items-center gap-1.5 sm:gap-2 text-xs font-medium text-ink-muted">
+                    <span class="hidden sm:inline">ELIPS MASTER</span>
+                    <span class="material-symbols-outlined text-[14px] hidden sm:inline">chevron_right</span>
+                    <span class="text-primary font-bold">AKUN PENGGUNA</span>
                     <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                    <span class="text-primary font-bold">AKUN PENGGUNA & HAK AKSES</span>
-                    <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                    <span class="text-ink-body font-semibold">TABEL USERS</span>
+                    <span class="text-ink-body font-semibold">USERS</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-schedule-verified text-xs font-semibold">
+            <div class="flex items-center gap-2 sm:gap-4">
+                <div class="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-schedule-verified text-xs font-semibold">
                     <span class="w-2 h-2 rounded-full bg-schedule-verified animate-pulse"></span>
-                    <span>Auth Guard: Laravel Web Active</span>
+                    <span>Auth Guard Active</span>
                 </div>
-                <div class="h-4 w-px bg-hairline"></div>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                <div class="h-4 w-px bg-hairline hidden md:block"></div>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-accent-subtle text-primary border border-primary/20">
                     Superadmin
                 </span>
-            </div>
         </header>
 
         <!-- Main Body -->
-        <main class="p-8 space-y-6">
+        <main class="p-4 sm:p-6 lg:p-8 space-y-6">
             <!-- Flash Message -->
             @if(session('success'))
                 <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center justify-between shadow-xs animate-fade-in" id="flashSuccess">
@@ -215,7 +228,7 @@
             <!-- Title & Top CTA -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-ink-body font-serif">Manajemen Akun Pengguna</h1>
+                    <h1 class="text-2xl font-bold tracking-tight text-ink-body">Manajemen Akun Pengguna</h1>
                     <p class="text-sm text-ink-muted mt-1">
                         Kelola akun akses sistem, pembagian role hak akses (Admin & Superadmin), dan audit keamanan autentikasi Elips Academy.
                     </p>
@@ -224,7 +237,7 @@
                     <button type="button" 
                             id="btnTambahUser"
                             onclick="openTambahModal()"
-                            class="px-4 py-2.5 rounded-full bg-primary hover:bg-primary-container text-white text-sm font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+                            class="px-4 py-2.5 rounded-full bg-primary-container hover:bg-brand-hover text-white text-sm font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
                         <span class="material-symbols-outlined text-[18px]">person_add</span>
                         <span>+ Tambah Akun Pengguna</span>
                     </button>
@@ -278,7 +291,7 @@
                 <div class="p-5 bg-canvas-pure rounded-2xl border border-hairline shadow-xs flex flex-col justify-between relative overflow-hidden">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs uppercase font-bold tracking-wider text-ink-muted">Admin Operasional</span>
-                        <span class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary">
+                        <span class="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-primary">
                             <span class="material-symbols-outlined text-[18px]">badge</span>
                         </span>
                     </div>
@@ -405,7 +418,7 @@
                                             <!-- Pengguna -->
                                             <td class="py-3.5 px-4">
                                                 <div class="flex items-center gap-3">
-                                                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 {{ $isSuper ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-primary' }}">
+                                                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 {{ $isSuper ? 'bg-amber-100 text-amber-800' : 'bg-orange-100 text-primary' }}">
                                                         {{ $initials }}
                                                     </div>
                                                     <div class="flex flex-col min-w-0">
@@ -437,7 +450,7 @@
                                                         SUPERADMIN
                                                     </span>
                                                 @else
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-primary border border-blue-200">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-50 text-primary border border-orange-200">
                                                         ADMIN
                                                     </span>
                                                 @endif
@@ -524,7 +537,7 @@
                             <!-- Header Profil User Terpilih -->
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3.5">
-                                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-xs {{ $isSelSuper ? 'bg-amber-500 text-white' : 'bg-primary text-white' }}">
+                                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-xs {{ $isSelSuper ? 'bg-amber-500 text-white' : 'bg-primary-container text-white' }}">
                                         {{ $selInitials }}
                                     </div>
                                     <div class="flex flex-col min-w-0">
@@ -541,7 +554,7 @@
                                                     SUPERADMIN
                                                 </span>
                                             @else
-                                                <span class="px-2 py-0.5 rounded-full bg-blue-50 text-primary text-[10px] font-bold border border-blue-200">
+                                                <span class="px-2 py-0.5 rounded-full bg-orange-50 text-primary text-[10px] font-bold border border-orange-200">
                                                     ADMIN CABANG
                                                 </span>
                                             @endif
@@ -1010,6 +1023,18 @@
         m.classList.remove('flex');
     }
 
+    function toggleSidebar() {
+        const sb = document.getElementById('sidebarNav');
+        const bd = document.getElementById('sidebarBackdrop');
+        if (sb.classList.contains('-translate-x-full')) {
+            sb.classList.remove('-translate-x-full');
+            bd.classList.remove('hidden');
+        } else {
+            sb.classList.add('-translate-x-full');
+            bd.classList.add('hidden');
+        }
+    }
+
     // Close on backdrop click or Escape key
     window.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
@@ -1017,6 +1042,12 @@
             closeEditModal();
             closeResetPasswordModal();
             closeDeleteModal();
+            const sb = document.getElementById('sidebarNav');
+            const bd = document.getElementById('sidebarBackdrop');
+            if (sb && !sb.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                sb.classList.add('-translate-x-full');
+                bd.classList.add('hidden');
+            }
         }
     });
 </script>

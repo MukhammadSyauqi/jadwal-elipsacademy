@@ -497,11 +497,10 @@
                                class="px-4 py-2 rounded-full bg-ink-body text-white text-xs font-semibold hover:opacity-90 transition-all">
                                 Kembali ke Hari Ini
                             </a>
-                            <button type="button" 
-                                    onclick="openActionModal('Tambah Jadwal', 'Form pembuatan jadwal baru akan diimplementasikan pada Issue #4.')"
-                                    class="px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover transition-all">
+                            <a href="{{ route('admin.jadwal.create', ['cabang_id' => $selectedCabang->id ?? 1, 'tanggal' => $selectedDate]) }}" 
+                               class="px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover transition-all">
                                 + Tambah Jadwal Baru
-                            </button>
+                            </a>
                         </div>
                     </div>
                 @endforelse
