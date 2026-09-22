@@ -8,6 +8,7 @@ use App\Http\Controllers\SuperadminDashboardController;
 use App\Http\Controllers\SuperadminJadwalController;
 use App\Http\Controllers\SuperadminProgramController;
 use App\Http\Controllers\SuperadminTentorController;
+use App\Http\Controllers\SuperadminUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -72,5 +73,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/superadmin/tentor/{tentor}', [SuperadminTentorController::class, 'update'])->name('superadmin.tentor.update');
         Route::post('/superadmin/tentor/{tentor}/toggle-status', [SuperadminTentorController::class, 'toggleStatus'])->name('superadmin.tentor.toggle-status');
         Route::delete('/superadmin/tentor/{tentor}', [SuperadminTentorController::class, 'destroy'])->name('superadmin.tentor.destroy');
+
+        // Manajemen Akun Pengguna
+        Route::get('/superadmin/user', [SuperadminUserController::class, 'index'])->name('superadmin.user.index');
+        Route::post('/superadmin/user', [SuperadminUserController::class, 'store'])->name('superadmin.user.store');
+        Route::put('/superadmin/user/{user}', [SuperadminUserController::class, 'update'])->name('superadmin.user.update');
+        Route::post('/superadmin/user/{user}/reset-password', [SuperadminUserController::class, 'resetPassword'])->name('superadmin.user.reset-password');
+        Route::delete('/superadmin/user/{user}', [SuperadminUserController::class, 'destroy'])->name('superadmin.user.destroy');
     });
 });
