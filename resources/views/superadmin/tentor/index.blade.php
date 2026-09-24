@@ -68,15 +68,10 @@
         <div>
             <!-- Brand Logo -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-hairline">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                        E
-                    </div>
-                    <div>
-                        <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
-                        <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
-                    </div>
-                </div>
+                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="sr-only">Elips Academy</span>
+                </a>
                 <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
@@ -431,7 +426,7 @@
 
                     <div class="p-4 border-t border-hairline flex items-center justify-between text-xs text-ink-muted bg-canvas-parchment/30">
                         <span>Menampilkan {{ $tentors->count() }} tentor pengajar</span>
-                        <span>PRD 14.2: Foreign Key Restrict Berlaku</span>
+                        <span>Proteksi Relasi Data Aktif</span>
                     </div>
                 </div>
 
@@ -543,7 +538,7 @@
                     <div class="p-4 rounded-2xl bg-accent-subtle/50 border border-primary/20 flex items-start gap-3">
                         <span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">policy</span>
                         <div class="text-xs text-ink-body leading-relaxed">
-                            <span class="font-bold text-primary block mb-0.5">Aturan Integritas PRD 14.2</span>
+                            <span class="font-bold text-primary block mb-0.5">Aturan Integritas Data</span>
                             Tentor yang telah memiliki riwayat mengajar terlindungi dari penghapusan permanen. Nonaktifkan tentor untuk membekukan penugasan kelas baru.
                         </div>
                     </div>
@@ -700,7 +695,7 @@
         const iconEl = document.getElementById('deleteTentorModalIcon');
 
         if (totalJadwal > 0) {
-            titleEl.innerText = 'Penghapusan Diblokir (PRD 14.2)';
+            titleEl.innerText = 'Penghapusan Diblokir';
             iconEl.innerText = 'security';
             iconEl.parentElement.className = 'w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0';
             bodyEl.innerHTML = `

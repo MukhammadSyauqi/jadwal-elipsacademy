@@ -51,15 +51,10 @@
         <div class="flex flex-col">
             <!-- Brand -->
             <div class="h-16 px-6 flex items-center justify-between border-b border-hairline">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                        E
-                    </div>
-                    <div class="flex flex-col min-w-0">
-                        <span class="font-bold text-ink-body text-base tracking-tight truncate leading-tight">Elips Academy</span>
-                        <span class="text-[11px] text-ink-muted uppercase tracking-wider font-semibold">Superadmin Panel</span>
-                    </div>
-                </div>
+                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="sr-only">Elips Academy</span>
+                </a>
                 <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>

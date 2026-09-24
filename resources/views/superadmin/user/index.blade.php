@@ -68,15 +68,10 @@
         <div>
             <!-- Brand Logo -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-hairline">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                        E
-                    </div>
-                    <div>
-                        <span class="font-bold text-base tracking-tight text-ink-body block leading-tight">Elips Academy</span>
-                        <span class="text-[10px] tracking-wider uppercase text-primary font-bold">Portal Superadmin</span>
-                    </div>
-                </div>
+                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="sr-only">Elips Academy</span>
+                </a>
                 <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
@@ -585,11 +580,11 @@
                                 </button>
                             </div>
 
-                            <!-- Seksi Matrix Permission Hak Akses (PRD Section 4) -->
+                            <!-- Seksi Matrix Permission Hak Akses -->
                             <div class="space-y-2 pt-1 border-t border-hairline">
                                 <div class="flex items-center justify-between">
                                     <span class="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
-                                        Matrix Permission (PRD Poin 4)
+                                        Matrix Permission Hak Akses
                                     </span>
                                     <span class="text-[11px] font-bold {{ $isSelSuper ? 'text-amber-600' : 'text-primary' }}">
                                         {{ $isSelSuper ? 'Akses Penuh (Superadmin)' : 'Akses Terbatas (Admin)' }}
@@ -656,7 +651,7 @@
                             <!-- Seksi Keamanan & Autentikasi -->
                             <div class="space-y-2 pt-1 border-t border-hairline">
                                 <span class="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
-                                    Keamanan & Autentikasi (PRD Poin 6)
+                                    Keamanan & Autentikasi
                                 </span>
 
                                 <div class="bg-surface-pearl rounded-xl p-3 space-y-2 text-xs border border-hairline">
@@ -707,7 +702,7 @@
                 </div>
             </div>
 
-            <!-- Bottom Guidelines & Architecture Info (PRD Poin 4 & 6) -->
+            <!-- Bottom Guidelines & Architecture Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div class="p-5 bg-canvas-pure rounded-2xl border border-hairline shadow-xs space-y-2">
                     <div class="flex items-center gap-2.5">
@@ -715,7 +710,7 @@
                             <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
                         </span>
                         <div>
-                            <h4 class="text-sm font-bold text-ink-body">Kebijakan Pembagian Role Sistem (PRD Poin 4)</h4>
+                            <h4 class="text-sm font-bold text-ink-body">Kebijakan Pembagian Role Sistem</h4>
                             <p class="text-[11px] text-ink-muted">Hierarki Hak Akses: Superadmin vs Admin Cabang</p>
                         </div>
                     </div>
@@ -730,7 +725,7 @@
                             <span class="material-symbols-outlined text-[18px]">security</span>
                         </span>
                         <div>
-                            <h4 class="text-sm font-bold text-ink-body">Integritas & Keamanan Akun Laravel 11 (PRD Poin 6)</h4>
+                            <h4 class="text-sm font-bold text-ink-body">Integritas & Keamanan Akun</h4>
                             <p class="text-[11px] text-ink-muted">Enkripsi Password, Unique Key, & Proteksi Server-Side</p>
                         </div>
                     </div>

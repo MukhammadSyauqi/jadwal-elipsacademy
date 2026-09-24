@@ -57,8 +57,8 @@ Terdapat **16 referensi PRD** di 4 file superadmin yang harus dihilangkan atau d
 
 ## Acceptance Criteria
 
-- [ ] Semua halaman menggunakan `logo.png` sebagai brand, bukan teks/icon placeholder
-- [ ] Klik logo di admin header mengarah ke `admin.dashboard` (atau `superadmin.dashboard` jika role superadmin)
-- [ ] Klik logo di sidebar superadmin mengarah ke `superadmin.dashboard`
-- [ ] Tidak ada teks "PRD", "PRD 14.2", "PRD Poin 4", "PRD Poin 6" yang terlihat di frontend
-- [ ] Logo tampil proporsional di semua ukuran layar (desktop & mobile)
+- [x] Semua halaman menggunakan `logo.png` sebagai brand, bukan teks/icon placeholder
+- [x] Klik logo di admin header mengarah ke `admin.dashboard` (atau `superadmin.dashboard` jika role superadmin)
+- [x] Klik logo di sidebar superadmin mengarah ke `superadmin.dashboard`
+- [x] Tidak ada teks "PRD", "PRD 14.2", "PRD Poin 4", "PRD Poin 6" yang terlihat di frontend
+- [x] Logo tampil proporsional di semua ukuran layar (desktop & mobile)

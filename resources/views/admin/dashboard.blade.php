@@ -73,12 +73,9 @@
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
             <!-- Brand -->
             <div class="flex items-center gap-4">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 group">
-                    <span class="material-symbols-outlined text-primary text-2xl">school</span>
-                    <div class="flex flex-col leading-none">
-                        <span class="font-bold text-ink-body text-base tracking-tight group-hover:text-primary transition-colors">Elips Academy</span>
-                        <span class="text-[11px] text-ink-muted font-medium mt-0.5">Dashboard Operasional</span>
-                    </div>
+                <a href="{{ auth()->user()?->role === 'superadmin' ? route('superadmin.dashboard') : route('admin.dashboard') }}" class="flex items-center gap-2.5 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="sr-only">Elips Academy</span>
                 </a>
 
                 <div class="h-5 w-px bg-hairline hidden sm:block"></div>

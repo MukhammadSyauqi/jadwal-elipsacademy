@@ -40,14 +40,10 @@
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#EDEDF0]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <!-- Brand & Lokasi Cabang -->
-            <a href="{{ route('admin.dashboard', array_filter(['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal ? $jadwal->tanggal->toDateString() : null])) }}" class="flex items-center gap-3 group">
-                <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-base shadow-sm">
-                    E
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-base font-bold text-[#1D1D1F] tracking-tight leading-none group-hover:text-primary transition-colors">Elips Academy</span>
-                    <span class="text-[10px] text-secondary font-semibold uppercase tracking-wider mt-0.5">CABANG {{ strtoupper($jadwal->cabang->nama_cabang ?? 'BUDURAN') }}</span>
-                </div>
+            <a href="{{ auth()->user()?->role === 'superadmin' ? route('superadmin.dashboard') : route('admin.dashboard', array_filter(['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal ? $jadwal->tanggal->toDateString() : null])) }}" class="flex items-center gap-3 group">
+                <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                <span class="sr-only">Elips Academy</span>
+                <span class="text-[10px] text-secondary font-semibold uppercase tracking-wider bg-orange-50 border border-orange-200/60 px-2 py-0.5 rounded-full hidden sm:inline">CABANG {{ strtoupper($jadwal->cabang->nama_cabang ?? 'BUDURAN') }}</span>
             </a>
 
             <!-- Kanan: Profil & Keluar -->
