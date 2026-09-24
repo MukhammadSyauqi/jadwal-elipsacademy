@@ -18,6 +18,7 @@ class Jadwal extends Model
         'tentor_id',
         'nama_kelas',
         'jenis_kelas',
+        'mode_kelas',
         'tanggal',
         'jam_mulai',
         'jam_selesai',

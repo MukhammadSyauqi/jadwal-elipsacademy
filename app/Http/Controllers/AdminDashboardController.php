@@ -17,22 +17,12 @@ class AdminDashboardController extends Controller
     {
         $user = $request->user();
 
-        // 1. Cabang handling
+        // 1. Cabang handling (Default: all branches, optional filter by cabang_id)
         $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
         $selectedCabangId = $request->query('cabang_id');
-
-        if (!$selectedCabangId) {
-            // Heuristic: check if user's name matches a cabang name
-            if ($user && stripos($user->nama, 'Candi') !== false) {
-                $candi = $cabangs->firstWhere('nama_cabang', 'Candi');
-                $selectedCabangId = $candi ? $candi->id : ($cabangs->first()?->id ?? 1);
-            } else {
-                // Default to first branch (e.g. Buduran or id 1)
-                $selectedCabangId = $cabangs->first()?->id ?? 1;
-            }
-        }
-
-        $selectedCabang = $cabangs->firstWhere('id', $selectedCabangId) ?? $cabangs->first();
+        $selectedCabang = (!empty($selectedCabangId) && $selectedCabangId !== 'semua')
+            ? $cabangs->firstWhere('id', $selectedCabangId)
+            : null;
 
         // 2. Date handling
         $today = Carbon::today();
@@ -52,7 +42,7 @@ class AdminDashboardController extends Controller
         $isToday = ($selectedDate === $todayDate);
         $isTomorrow = ($selectedDate === $tomorrowDate);
 
-        // 3. Base schedules for the selected date & branch (used for summary stats and session badge counters)
+        // 3. Base schedules for the selected date & optional branch filter
         $baseJadwalQuery = Jadwal::with(['cabang', 'program', 'tentor'])
             ->when($selectedCabang, fn($q) => $q->where('cabang_id', $selectedCabang->id))
             ->where('tanggal', $selectedDate);
@@ -63,12 +53,14 @@ class AdminDashboardController extends Controller
         $totalSchedules = $allDayJadwal->count();
         $ongoingSchedules = $allDayJadwal->filter(fn($j) => $j->display_status === 'sedang_berlangsung')->count();
         $completedSchedules = $allDayJadwal->where('status', 'selesai')->count();
+        $upcomingSchedules = $allDayJadwal->filter(fn($j) => $j->display_status === 'akan_datang')->count();
         $cancelledSchedules = $allDayJadwal->where('status', 'dibatalkan')->count();
 
         $summary = [
             'total' => $totalSchedules,
             'ongoing' => $ongoingSchedules,
             'completed' => $completedSchedules,
+            'upcoming' => $upcomingSchedules,
             'cancelled' => $cancelledSchedules,
         ];
 
@@ -104,7 +96,8 @@ class AdminDashboardController extends Controller
                 $q->where('nama_kelas', 'like', "%{$search}%")
                     ->orWhere('ruangan', 'like', "%{$search}%")
                     ->orWhereHas('tentor', fn($t) => $t->where('nama', 'like', "%{$search}%"))
-                    ->orWhereHas('program', fn($p) => $p->where('nama_program', 'like', "%{$search}%"));
+                    ->orWhereHas('program', fn($p) => $p->where('nama_program', 'like', "%{$search}%"))
+                    ->orWhereHas('cabang', fn($c) => $c->where('nama_cabang', 'like', "%{$search}%"));
             });
         }
 

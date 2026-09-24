@@ -47,10 +47,10 @@
     <!-- Top Minimal Navigation Bar -->
     <header class="w-full flex items-center justify-between px-6 lg:px-12 py-5">
         <div class="flex items-center space-x-2"></div>
-        <div class="flex items-center space-x-2.5">
+        {{-- <div class="flex items-center space-x-2.5">
             <span class="text-[13px] font-medium text-ink-muted hidden sm:inline-block">Sistem Penjadwalan Kelas</span>
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        </div>
+        </div> --}}
     </header>
 
     <!-- Main Container -->
@@ -71,8 +71,7 @@
                     </div>
 
                     <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F6F3F5] text-ink-muted text-[11px] font-semibold tracking-wider uppercase mb-3">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-orange"></span>
-                        Sistem Penjadwalan Terpadu
+                        Sistem Penjadwalan Kelas
                     </div>
 
                     <h1 class="text-2xl font-bold text-ink-body tracking-tight">
@@ -203,7 +202,6 @@
     <!-- Footer -->
     <footer class="w-full px-6 lg:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-ink-muted text-xs">
         <span>&copy; {{ date('Y') }} Elips Academy Inc. All rights reserved.</span>
-        <span>Sistem Penjadwalan Terpadu v1.0</span>
     </footer>
 
     <script>

@@ -103,6 +103,19 @@
                 <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-hairline">
                     <div class="space-y-2">
                         <div class="flex items-center gap-2 flex-wrap">
+                            <!-- Mode Kelas -->
+                            @if(($jadwal->mode_kelas ?? 'offline') === 'online')
+                                <span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                                    <span class="material-symbols-outlined text-[15px]">videocam</span>
+                                    Online
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span class="material-symbols-outlined text-[15px]">domain</span>
+                                    Offline
+                                </span>
+                            @endif
+
                             <span class="px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider
                                 @if($jadwal->jenis_kelas === 'private') bg-blue-50 text-blue-700 border border-blue-200
                                 @elseif($jadwal->jenis_kelas === 'business') bg-amber-50 text-amber-800 border border-amber-200

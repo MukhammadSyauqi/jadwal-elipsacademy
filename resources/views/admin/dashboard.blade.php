@@ -71,36 +71,15 @@
     <!-- 1. Header Aplikasi -->
     <header class="sticky top-0 bg-canvas-pure/95 backdrop-blur-xl border-b border-hairline shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-4 sm:px-8 py-3">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
-            <!-- Brand & Cabang Selector -->
+            <!-- Brand -->
             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 group">
                     <span class="material-symbols-outlined text-primary text-2xl">school</span>
                     <div class="flex flex-col leading-none">
-                        <span class="font-bold text-ink-body text-base tracking-tight">Elips Academy</span>
-                        <!-- Cabang Switcher Dropdown -->
-                        <div class="relative inline-block mt-0.5" id="cabangDropdownWrapper">
-                            <form id="cabangForm" method="GET" action="{{ route('admin.dashboard') }}" class="inline">
-                                <input type="hidden" name="tanggal" value="{{ $selectedDate }}">
-                                @if($sesi && $sesi !== 'semua')
-                                    <input type="hidden" name="sesi" value="{{ $sesi }}">
-                                @endif
-                                @if(!empty($q))
-                                    <input type="hidden" name="q" value="{{ $q }}">
-                                @endif
-                                <div class="flex items-center gap-1 text-[11px] font-semibold text-ink-muted uppercase tracking-wider bg-surface-pearl hover:bg-surface-container px-2 py-0.5 rounded-full border border-hairline cursor-pointer transition-all">
-                                    <span class="material-symbols-outlined text-xs text-primary">location_on</span>
-                                    <select name="cabang_id" onchange="this.form.submit()" class="bg-transparent border-none text-[11px] font-semibold text-ink-muted cursor-pointer focus:outline-none pr-1">
-                                        @foreach($cabangs as $c)
-                                            <option value="{{ $c->id }}" {{ $selectedCabang && $selectedCabang->id === $c->id ? 'selected' : '' }}>
-                                                Cabang {{ $c->nama_cabang }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
+                        <span class="font-bold text-ink-body text-base tracking-tight group-hover:text-primary transition-colors">Elips Academy</span>
+                        <span class="text-[11px] text-ink-muted font-medium mt-0.5">Dashboard Operasional</span>
                     </div>
-                </div>
+                </a>
 
                 <div class="h-5 w-px bg-hairline hidden sm:block"></div>
 
@@ -169,7 +148,7 @@
                         Jadwal Kelas {{ $isToday ? 'Hari Ini' : ($isTomorrow ? 'Besok' : '') }}
                     </h1>
                     <p class="text-sm text-ink-muted">
-                        Semua sesi kelas tatap muka yang berlangsung {{ $isToday ? 'hari ini' : ($isTomorrow ? 'besok' : 'pada tanggal ini') }} di Cabang <strong>{{ $selectedCabang->nama_cabang ?? 'Buduran' }}</strong>.
+                        Semua sesi kelas yang berlangsung {{ $isToday ? 'hari ini' : ($isTomorrow ? 'besok' : 'pada tanggal ini') }} @if($selectedCabang) di Cabang <strong>{{ $selectedCabang->nama_cabang }}</strong> @else di <strong>Semua Cabang</strong> @endif.
                     </p>
                 </div>
 
@@ -212,7 +191,7 @@
                     </div>
 
                     <!-- Tambah Jadwal Button -->
-                    <a href="{{ route('admin.jadwal.create', ['cabang_id' => $selectedCabang->id ?? 1, 'tanggal' => $selectedDate]) }}" 
+                    <a href="{{ route('admin.jadwal.create', array_filter(['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate])) }}" 
                        id="btnTambahJadwal"
                        class="px-4 py-2 rounded-full bg-primary-container text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 hover:bg-brand-hover shadow-sm active:scale-95 transition-all">
                         <span class="material-symbols-outlined text-base">add</span>
@@ -259,38 +238,65 @@
                     </div>
                 </div>
 
-                <!-- Dibatalkan Card -->
-                <div class="bg-canvas-pure rounded-xl p-4 border border-red-200 bg-red-50/30 shadow-xs flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-xl">cancel</span>
+                <!-- Akan Datang Card -->
+                <div class="bg-canvas-pure rounded-xl p-4 border border-indigo-200 bg-indigo-50/30 shadow-xs flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-schedule-pending flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-xl">upcoming</span>
                     </div>
                     <div class="flex flex-col min-w-0">
-                        <span class="text-[11px] font-medium text-red-900 uppercase tracking-wider truncate">Dibatalkan</span>
-                        <span class="text-xl font-bold text-red-700 leading-tight">{{ $summary['cancelled'] }}</span>
+                        <span class="text-[11px] font-medium text-indigo-900 uppercase tracking-wider truncate">Akan Datang</span>
+                        <span class="text-xl font-bold text-indigo-800 leading-tight">{{ $summary['upcoming'] }}</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. Filter Sesi & Pencarian -->
-            <div class="bg-canvas-pure rounded-xl p-3 sm:p-4 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border border-hairline">
-                <!-- Sesi Filter Tabs -->
-                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="schedule-filters">
-                    @php
-                        $filters = [
-                            'semua' => 'Semua Kelas (' . $sessionCounts['semua'] . ')',
-                            'pagi' => 'Pagi (08:00 - 12:00)',
-                            'siang' => 'Siang (13:00 - 15:00)',
-                            'sore' => 'Sore (15:30 - 17:30)',
-                            'malam' => 'Malam (18:30 - 20:30)',
-                        ];
-                    @endphp
+            <!-- 4. Filter Cabang, Sesi & Pencarian -->
+            <div class="bg-canvas-pure rounded-xl p-3 sm:p-4 shadow-xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 border border-hairline">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Cabang Dropdown Filter -->
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="inline-flex items-center shrink-0">
+                        <input type="hidden" name="tanggal" value="{{ $selectedDate }}">
+                        @if($sesi && $sesi !== 'semua')
+                            <input type="hidden" name="sesi" value="{{ $sesi }}">
+                        @endif
+                        @if(!empty($q))
+                            <input type="hidden" name="q" value="{{ $q }}">
+                        @endif
+                        <div class="relative w-full sm:w-auto inline-flex items-center">
+                            <span class="material-symbols-outlined absolute left-2.5 text-primary text-base pointer-events-none">location_on</span>
+                            <select name="cabang_id" onchange="this.form.submit()" class="w-full sm:w-auto pl-8 pr-7 py-1.5 bg-surface-pearl hover:bg-surface-container rounded-full text-xs font-semibold text-ink-body border border-hairline focus:outline-none focus:border-brand-orange cursor-pointer appearance-none transition-all">
+                                <option value="">Semua Cabang</option>
+                                @foreach($cabangs as $c)
+                                    <option value="{{ $c->id }}" {{ $selectedCabang && $selectedCabang->id === $c->id ? 'selected' : '' }}>
+                                        Cabang {{ $c->nama_cabang }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="material-symbols-outlined absolute right-2 text-ink-subtle text-sm pointer-events-none">expand_more</span>
+                        </div>
+                    </form>
 
-                    @foreach($filters as $key => $label)
-                        <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['sesi' => $key])) }}" 
-                           class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all {{ ($sesi === $key) ? 'bg-ink-body text-white shadow-xs' : 'bg-surface-pearl text-ink-muted hover:text-ink-body hover:bg-surface-container border border-hairline' }}">
-                            {{ $label }}
-                        </a>
-                    @endforeach
+                    <div class="hidden sm:block h-5 w-px bg-hairline"></div>
+
+                    <!-- Sesi Filter Tabs -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="schedule-filters">
+                        @php
+                            $filters = [
+                                'semua' => 'Semua Sesi (' . $sessionCounts['semua'] . ')',
+                                'pagi' => 'Pagi (08:00 - 12:00)',
+                                'siang' => 'Siang (13:00 - 15:00)',
+                                'sore' => 'Sore (15:30 - 17:30)',
+                                'malam' => 'Malam (18:30 - 20:30)',
+                            ];
+                        @endphp
+
+                        @foreach($filters as $key => $label)
+                            <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['sesi' => $key])) }}" 
+                               class="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all {{ ($sesi === $key) ? 'bg-ink-body text-white shadow-xs' : 'bg-surface-pearl text-ink-muted hover:text-ink-body hover:bg-surface-container border border-hairline' }}">
+                                {{ $label }}
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
 
                 <!-- Search Input Form -->
@@ -307,7 +313,7 @@
                     <input type="text" 
                            name="q" 
                            value="{{ $q }}" 
-                           placeholder="Cari nama kelas atau tentor..." 
+                           placeholder="Cari program, tentor, atau cabang..." 
                            class="w-full bg-surface-pearl rounded-full pl-9 pr-8 py-1.5 text-xs text-ink-body placeholder:text-ink-subtle focus:outline-none focus:bg-canvas-pure border border-hairline focus:border-brand-orange transition-all">
                     
                     @if(!empty($q))
@@ -320,10 +326,19 @@
                 </form>
             </div>
 
-            <!-- Active Filter Indicators if Search or Sesi is active -->
-            @if(!empty($q) || ($sesi && $sesi !== 'semua'))
+            <!-- Active Filter Indicators if Search, Sesi, or Cabang is active -->
+            @if(!empty($q) || ($sesi && $sesi !== 'semua') || $selectedCabang)
                 <div class="flex items-center gap-2 text-xs text-ink-muted px-1 flex-wrap">
                     <span>Filter aktif:</span>
+                    @if($selectedCabang)
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-orange-50 text-secondary border border-amber-200 font-semibold">
+                            <span class="material-symbols-outlined text-[13px] text-primary">location_on</span>
+                            Cabang: {{ $selectedCabang->nama_cabang }}
+                            <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['cabang_id' => null])) }}" class="hover:text-amber-900" title="Hapus filter cabang">
+                                <span class="material-symbols-outlined text-xs">close</span>
+                            </a>
+                        </span>
+                    @endif
                     @if(!empty($q))
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
                             Pencarian: "<strong>{{ $q }}</strong>"
@@ -340,7 +355,7 @@
                             </a>
                         </span>
                     @endif
-                    <a href="{{ route('admin.dashboard', ['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate]) }}" class="text-brand-orange hover:underline font-medium ml-1">
+                    <a href="{{ route('admin.dashboard', ['tanggal' => $selectedDate]) }}" class="text-brand-orange hover:underline font-medium ml-1">
                         Reset Filter
                     </a>
                 </div>
@@ -381,20 +396,28 @@
                             <!-- Class Information Details -->
                             <div class="flex flex-col gap-1">
                                 <!-- Tags & Meta -->
-                                <div class="flex items-center gap-1.5 flex-wrap">
-                                    <!-- Program Code -->
-                                    <span class="text-[11px] px-2 py-0.5 rounded-full font-bold {{ $isLive ? 'bg-primary-container text-white' : 'bg-surface-container-highest text-ink-body' }}">
-                                        {{ $jadwal->nama_kelas }}
-                                    </span>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <!-- Mode Kelas (Online / Offline) -->
+                                    @if(($jadwal->mode_kelas ?? 'offline') === 'online')
+                                        <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                                            <span class="material-symbols-outlined text-[13px]">videocam</span>
+                                            Online
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <span class="material-symbols-outlined text-[13px]">domain</span>
+                                            Offline
+                                        </span>
+                                    @endif
                                     
                                     <!-- Jenis Kelas -->
-                                    <span class="text-[11px] px-2 py-0.5 rounded-full bg-surface-pearl text-ink-muted border border-hairline capitalize">
+                                    <span class="text-[11px] px-2 py-0.5 rounded-full bg-surface-pearl text-ink-muted border border-hairline capitalize font-medium">
                                         {{ $jadwal->jenis_kelas }}
                                     </span>
 
                                     <!-- Pertemuan -->
                                     @if($jadwal->pertemuan)
-                                        <span class="text-[11px] text-ink-subtle">
+                                        <span class="text-[11px] text-ink-subtle font-medium">
                                             Pertemuan {{ $jadwal->pertemuan }}
                                         </span>
                                     @endif
@@ -408,8 +431,16 @@
                                     @endif
                                 </h2>
 
-                                <!-- Tentor & Room Info -->
-                                <div class="flex items-center gap-3 sm:gap-4 text-xs text-ink-muted flex-wrap mt-0.5">
+                                <!-- Tentor, Room & Cabang Info -->
+                                <div class="flex items-center gap-2 sm:gap-3 text-xs text-ink-muted flex-wrap mt-0.5">
+                                    <!-- Cabang Label (Always Visible) -->
+                                    <span class="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                                        <span class="material-symbols-outlined text-[15px] text-primary">location_on</span>
+                                        <span>Cabang {{ $jadwal->cabang->nama_cabang ?? '-' }}</span>
+                                    </span>
+
+                                    <span class="text-ink-subtle">•</span>
+
                                     <!-- Tentor -->
                                     <span class="flex items-center gap-1 {{ $isLive ? 'text-ink-body font-semibold' : '' }}">
                                         <span class="material-symbols-outlined text-sm {{ $isLive ? 'text-primary' : 'text-ink-subtle' }}">person</span>
@@ -422,13 +453,6 @@
                                     <span class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm text-ink-subtle">meeting_room</span>
                                         <span>{{ $jadwal->ruangan ?? 'Ruang Belum Ditentukan' }}</span>
-                                    </span>
-
-                                    <!-- Cabang (if multiple view) -->
-                                    <span class="text-ink-subtle hidden sm:inline">•</span>
-                                    <span class="flex items-center gap-1 text-[11px] text-ink-subtle hidden sm:inline-flex">
-                                        <span class="material-symbols-outlined text-xs">location_on</span>
-                                        <span>{{ $jadwal->cabang->nama_cabang ?? '' }}</span>
                                     </span>
                                 </div>
                             </div>
@@ -490,14 +514,14 @@
                         </div>
                         <h3 class="text-lg font-bold text-ink-body">Tidak Ada Jadwal Kelas</h3>
                         <p class="text-sm text-ink-muted max-w-md mt-1 mb-6">
-                            Tidak ada jadwal kelas tatap muka yang ditemukan untuk kriteria filter atau tanggal yang dipilih di Cabang {{ $selectedCabang->nama_cabang ?? 'Buduran' }}.
+                            Tidak ada jadwal kelas yang ditemukan untuk kriteria filter atau tanggal yang dipilih @if($selectedCabang) di Cabang {{ $selectedCabang->nama_cabang }} @else di Semua Cabang @endif.
                         </p>
                         <div class="flex items-center gap-3">
-                            <a href="{{ route('admin.dashboard', ['cabang_id' => $selectedCabang?->id, 'tanggal' => $todayDate]) }}" 
+                            <a href="{{ route('admin.dashboard', ['tanggal' => $todayDate]) }}" 
                                class="px-4 py-2 rounded-full bg-ink-body text-white text-xs font-semibold hover:opacity-90 transition-all">
                                 Kembali ke Hari Ini
                             </a>
-                            <a href="{{ route('admin.jadwal.create', ['cabang_id' => $selectedCabang->id ?? 1, 'tanggal' => $selectedDate]) }}" 
+                            <a href="{{ route('admin.jadwal.create', array_filter(['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate])) }}" 
                                class="px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover transition-all">
                                 + Tambah Jadwal Baru
                             </a>

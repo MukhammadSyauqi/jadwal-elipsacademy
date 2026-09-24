@@ -211,35 +211,65 @@
                         </div>
                     </div>
 
-                    <!-- 3. Jenis Kelas (Pills Segmen) -->
-                    <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#1D1D1F] tracking-tight">
-                            Jenis Kelas <span class="text-red-500">*</span>
-                        </label>
-                        <div class="grid grid-cols-3 gap-2 bg-[#F5F5F7] p-1 rounded-xl">
-                            @php $oldJenis = old('jenis_kelas', 'private'); @endphp
-                            <label class="cursor-pointer">
-                                <input type="radio" name="jenis_kelas" value="private" class="peer sr-only" {{ $oldJenis === 'private' ? 'checked' : '' }}/>
-                                <div class="py-2.5 px-3 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
-                                    Private
-                                </div>
+                    <!-- 3. Jenis & Mode Kelas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Jenis Kelas (Pills Segmen) -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-[#1D1D1F] tracking-tight">
+                                Jenis Kelas <span class="text-red-500">*</span>
                             </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="jenis_kelas" value="rombel" class="peer sr-only" {{ $oldJenis === 'rombel' ? 'checked' : '' }}/>
-                                <div class="py-2.5 px-3 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
-                                    Rombel
-                                </div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="jenis_kelas" value="business" class="peer sr-only" {{ $oldJenis === 'business' ? 'checked' : '' }}/>
-                                <div class="py-2.5 px-3 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
-                                    Business
-                                </div>
-                            </label>
+                            <div class="grid grid-cols-3 gap-1.5 bg-[#F5F5F7] p-1 rounded-xl">
+                                @php $oldJenis = old('jenis_kelas', 'private'); @endphp
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="jenis_kelas" value="private" class="peer sr-only" {{ $oldJenis === 'private' ? 'checked' : '' }}/>
+                                    <div class="py-2.5 px-2 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
+                                        Private
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="jenis_kelas" value="rombel" class="peer sr-only" {{ $oldJenis === 'rombel' ? 'checked' : '' }}/>
+                                    <div class="py-2.5 px-2 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
+                                        Rombel
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="jenis_kelas" value="business" class="peer sr-only" {{ $oldJenis === 'business' ? 'checked' : '' }}/>
+                                    <div class="py-2.5 px-2 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all">
+                                        Business
+                                    </div>
+                                </label>
+                            </div>
+                            @error('jenis_kelas')
+                                <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error('jenis_kelas')
-                            <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
-                        @enderror
+
+                        <!-- Mode Kelas (Offline / Online) -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-[#1D1D1F] tracking-tight">
+                                Mode Kelas <span class="text-red-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-1.5 bg-[#F5F5F7] p-1 rounded-xl">
+                                @php $oldMode = old('mode_kelas', 'offline'); @endphp
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mode_kelas" value="offline" class="peer sr-only" {{ $oldMode === 'offline' ? 'checked' : '' }}/>
+                                    <div class="py-2.5 px-3 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all flex items-center justify-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[15px]">domain</span>
+                                        Offline
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mode_kelas" value="online" class="peer sr-only" {{ $oldMode === 'online' ? 'checked' : '' }}/>
+                                    <div class="py-2.5 px-3 text-center text-xs font-medium rounded-lg text-ink-muted peer-checked:bg-white peer-checked:text-[#1D1D1F] peer-checked:font-semibold peer-checked:shadow-sm transition-all flex items-center justify-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[15px]">videocam</span>
+                                        Online
+                                    </div>
+                                </label>
+                            </div>
+                            @error('mode_kelas')
+                                <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- 4. Tanggal & Waktu -->

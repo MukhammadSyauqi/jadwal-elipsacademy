@@ -38,7 +38,7 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Masuk ke Akun Anda');
-        $response->assertSee('Sistem Penjadwalan Terpadu');
+        $response->assertSee('Sistem Penjadwalan Kelas');
     }
 
     public function test_root_redirects_guest_to_login(): void
