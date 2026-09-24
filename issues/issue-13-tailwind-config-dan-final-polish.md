@@ -42,11 +42,11 @@ Lakukan pengecekan akhir pada semua halaman:
 
 ## Acceptance Criteria
 
-- [ ] Semua halaman menggunakan set color tokens yang identik di tailwind.config
-- [ ] Superadmin dashboard dan jadwal index menampilkan badge Online/Offline
-- [ ] Tidak ada visual regression setelah semua issue #9–#12 dikerjakan
-- [ ] Aplikasi responsif di semua ukuran layar
-- [ ] Semua flash message berfungsi dengan benar
+- [x] Semua halaman menggunakan set color tokens yang identik di tailwind.config
+- [x] Superadmin dashboard dan jadwal index menampilkan badge Online/Offline
+- [x] Tidak ada visual regression setelah semua issue #9–#12 dikerjakan
+- [x] Aplikasi responsif di semua ukuran layar
+- [x] Semua flash message berfungsi dengan benar
 
 ## Catatan
 

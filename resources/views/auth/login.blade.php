@@ -13,26 +13,51 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
-                        brand: {
+                        "primary": "#904D00",
+                        "primary-container": "#F28E2B",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#5E3000",
+                        "secondary": "#944A00",
+                        "secondary-container": "#FC8F34",
+                        "brand-hover": "#E07D1C",
+                        "canvas-parchment": "#F5F5F7",
+                        "canvas-pure": "#FFFFFF",
+                        "surface-pearl": "#FAFAFC",
+                        "surface-container-low": "#F6F3F5",
+                        "surface-container": "#F0EDEF",
+                        "surface-container-high": "#EAE7EA",
+                        "surface-container-highest": "#E4E2E4",
+                        "hairline": "#E0E0E0",
+                        "ink-body": "#1D1D1F",
+                        "ink-muted": "#6E6E73",
+                        "ink-subtle": "#86868B",
+                        "accent-subtle": "#FEF3C7",
+                        "accent-focus": "#F59E0B",
+                        "schedule-verified": "#10B981",
+                        "schedule-pending": "#6366F1",
+                        "schedule-conflict": "#EF4444",
+                        "error": "#BA1A1A",
+                        "error-container": "#FEE2E2",
+                        "brand": {
                             orange: '#F28E2B',
                             hover: '#E07D1C',
                             light: '#FFF7ED',
                             dark: '#904D00',
                         },
-                        surface: {
+                        "surface": {
                             canvas: '#F5F5F7',
                             pearl: '#FAFAFC',
                             card: '#FFFFFF',
                         },
-                        ink: {
+                        "ink": {
                             body: '#1D1D1F',
                             muted: '#6E6E73',
                             subtle: '#86868B',
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
                     }
                 }
             }
