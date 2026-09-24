@@ -192,7 +192,7 @@
                        id="btnTambahJadwal"
                        class="px-4 py-2 rounded-full bg-primary-container text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 hover:bg-brand-hover shadow-sm active:scale-95 transition-all">
                         <span class="material-symbols-outlined text-base">add</span>
-                        <span>+ Tambah Jadwal</span>
+                        <span>Tambah Jadwal</span>
                     </a>
                 </div>
             </div>
@@ -520,7 +520,7 @@
                             </a>
                             <a href="{{ route('admin.jadwal.create', array_filter(['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate])) }}" 
                                class="px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover transition-all">
-                                + Tambah Jadwal Baru
+                                Tambah Jadwal Baru
                             </a>
                         </div>
                     </div>

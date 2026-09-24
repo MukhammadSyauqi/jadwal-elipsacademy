@@ -55,8 +55,8 @@ Saat ini sidebar superadmin memiliki inkonsistensi antar halaman:
 
 ## Acceptance Criteria
 
-- [ ] Tidak ada icon yang muncul dobel (icon + teks mengatakan hal yang sama)
-- [ ] Semua sidebar superadmin memiliki subtitle, active nav style, dan indicator cabang yang sama
-- [ ] Footer konsisten di semua halaman
-- [ ] Tidak ada teks teknis/developer-facing yang terexpose ke user
-- [ ] Semua icon relevan dengan konteks penggunaannya
+- [x] Tidak ada icon yang muncul dobel (icon + teks mengatakan hal yang sama)
+- [x] Semua sidebar superadmin memiliki subtitle, active nav style, dan indicator cabang yang sama
+- [x] Footer konsisten di semua halaman
+- [x] Tidak ada teks teknis/developer-facing yang terexpose ke user
+- [x] Semua icon relevan dengan konteks penggunaannya

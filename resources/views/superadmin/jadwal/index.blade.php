@@ -51,20 +51,23 @@
         <div class="flex flex-col">
             <!-- Brand -->
             <div class="h-16 px-6 flex items-center justify-between border-b border-hairline">
-                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 group">
-                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
-                    <span class="sr-only">Elips Academy</span>
+                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-2.5 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-7 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Superadmin Panel</span>
                 </a>
                 <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
 
-            <!-- Cabang Overview Indicator -->
+            <!-- Hak Akses Indicator -->
             <div class="px-4 py-3">
-                <div class="px-3 py-2 rounded-xl bg-surface-container-low border border-hairline/60 flex items-center justify-between text-xs">
-                    <span class="text-[11px] font-bold text-primary uppercase tracking-wider">Cabang</span>
-                    <span class="font-semibold text-ink-body">Buduran & Candi</span>
+                <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-container-low border border-hairline/60">
+                    <span class="material-symbols-outlined text-primary-container text-[18px]">verified_user</span>
+                    <div class="flex flex-col min-w-0 flex-1">
+                        <span class="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Hak Akses</span>
+                        <span class="text-xs text-ink-body font-semibold truncate">Lintas Seluruh Cabang</span>
+                    </div>
                 </div>
             </div>
 
@@ -79,7 +82,7 @@
 
                 <a href="{{ route('superadmin.jadwal.index') }}" 
                    id="nav-superadmin-jadwal"
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent-subtle text-primary shadow-xs">
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-primary-container text-white shadow-[0_1px_4px_rgba(242,142,43,0.25)]">
                     <span class="material-symbols-outlined text-[20px]">calendar_month</span>
                     <span>Jadwal Kelas</span>
                 </a>
@@ -210,7 +213,7 @@
                        id="btnCreateSchedule"
                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-container text-white shadow-sm hover:opacity-95 text-xs font-semibold transition-all">
                         <span class="material-symbols-outlined text-[18px]">add</span>
-                        <span>+ Buat Jadwal Baru</span>
+                        <span>Buat Jadwal Baru</span>
                     </a>
                 </div>
             </section>
@@ -567,6 +570,11 @@
             </div>
 
         </main>
+
+        <!-- Footer -->
+        <footer class="bg-canvas-pure border-t border-hairline py-4 px-6 sm:px-8 text-center text-xs text-ink-muted mt-auto">
+            <p>&copy; {{ date('Y') }} Elips Academy. Sistem Manajemen Jadwal Kuliah & Kursus.</p>
+        </footer>
     </div>
 
     <!-- Modal Konfirmasi Pembatalan Jadwal -->

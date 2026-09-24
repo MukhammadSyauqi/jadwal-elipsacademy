@@ -68,22 +68,33 @@
         <div>
             <!-- Brand Logo -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-hairline">
-                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 group">
-                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
-                    <span class="sr-only">Elips Academy</span>
+                <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-2.5 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Elips Academy" class="h-7 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+                    <span class="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Superadmin Panel</span>
                 </a>
                 <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-ink-muted hover:bg-surface-container-low transition-colors" aria-label="Tutup Menu">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
 
+            <!-- Hak Akses Indicator -->
+            <div class="px-4 py-3">
+                <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-container-low border border-hairline/60">
+                    <span class="material-symbols-outlined text-primary-container text-[18px]">verified_user</span>
+                    <div class="flex flex-col min-w-0 flex-1">
+                        <span class="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Hak Akses</span>
+                        <span class="text-xs text-ink-body font-semibold truncate">Lintas Seluruh Cabang</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Navigation Menu -->
-            <nav class="p-4 space-y-1.5">
+            <nav class="flex flex-col gap-1 px-3 pt-1">
                 <a href="{{ route('superadmin.dashboard') }}" 
-                   id="nav-superadmin-overview"
+                   id="nav-superadmin-dashboard"
                    class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
-                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                    <span>Overview</span>
+                    <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                    <span>Dashboard</span>
                 </a>
 
                 <a href="{{ route('superadmin.jadwal.index') }}" 
@@ -109,7 +120,7 @@
 
                 <a href="{{ route('superadmin.tentor.index') }}" 
                    id="nav-superadmin-tentor"
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-accent-subtle text-primary shadow-xs transition-all">
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-primary-container text-white shadow-[0_1px_4px_rgba(242,142,43,0.25)] transition-all">
                     <span class="material-symbols-outlined text-[20px]">badge</span>
                     <span>Tentor</span>
                 </a>
@@ -545,6 +556,11 @@
                 </div>
             </div>
         </main>
+
+        <!-- Footer -->
+        <footer class="bg-canvas-pure border-t border-hairline py-4 px-6 sm:px-8 text-center text-xs text-ink-muted mt-auto">
+            <p>&copy; {{ date('Y') }} Elips Academy. Sistem Manajemen Jadwal Kuliah & Kursus.</p>
+        </footer>
     </div>
 </div>
 
