@@ -40,7 +40,7 @@
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#EDEDF0]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <!-- Brand & Lokasi Cabang -->
-            <a href="{{ route('admin.dashboard', ['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal->toDateString()]) }}" class="flex items-center gap-3 group">
+            <a href="{{ route('admin.dashboard', array_filter(['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal ? $jadwal->tanggal->toDateString() : null])) }}" class="flex items-center gap-3 group">
                 <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-base shadow-sm">
                     E
                 </div>
@@ -49,16 +49,6 @@
                     <span class="text-[10px] text-secondary font-semibold uppercase tracking-wider mt-0.5">CABANG {{ strtoupper($jadwal->cabang->nama_cabang ?? 'BUDURAN') }}</span>
                 </div>
             </a>
-
-            <!-- Tengah: Tombol Kembali -->
-            <div class="flex items-center">
-                <a href="{{ route('admin.jadwal.show', $jadwal->id) }}" 
-                   class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-muted hover:text-ink-body bg-gray-100 hover:bg-gray-200/80 px-3 sm:px-3.5 py-1.5 rounded-full transition-all">
-                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                    <span class="hidden sm:inline">Kembali ke Detail</span>
-                    <span class="sm:hidden">Kembali</span>
-                </a>
-            </div>
 
             <!-- Kanan: Profil & Keluar -->
             <div class="flex items-center gap-3">
@@ -85,6 +75,15 @@
     <!-- Konten Utama: Form Ubah Jadwal -->
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-8 sm:py-10 flex flex-col items-center">
         <div class="w-full max-w-[700px] flex flex-col gap-6">
+
+            <!-- Tombol Navigasi Kembali -->
+            <div>
+                <a href="{{ request('redirect_to', route('admin.jadwal.show', $jadwal->id)) }}" 
+                   class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted hover:text-ink-body bg-white hover:bg-surface-pearl border border-hairline px-3.5 py-1.5 rounded-full shadow-2xs transition-all">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span>Kembali ke Detail</span>
+                </a>
+            </div>
 
             <!-- Header Judul Form -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">

@@ -52,16 +52,6 @@
                 </div>
             </a>
 
-            <!-- Tengah: Tombol Kembali -->
-            <div class="flex items-center">
-                <a href="{{ route('admin.dashboard', ['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal->toDateString()]) }}" 
-                   class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-muted hover:text-ink-body bg-gray-100 hover:bg-gray-200/80 px-3 sm:px-3.5 py-1.5 rounded-full transition-all">
-                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                    <span class="hidden sm:inline">Kembali ke Jadwal</span>
-                    <span class="sm:hidden">Kembali</span>
-                </a>
-            </div>
-
             <!-- Kanan: Profil & Keluar -->
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-2.5">
@@ -87,6 +77,15 @@
     <!-- Konten Utama: Detail Jadwal -->
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-8 sm:py-10 flex flex-col items-center">
         <div class="w-full max-w-[760px] flex flex-col gap-6">
+
+            <!-- Tombol Navigasi Kembali -->
+            <div>
+                <a href="{{ request('redirect_to', route('admin.dashboard', array_filter(['cabang_id' => $jadwal->cabang_id, 'tanggal' => $jadwal->tanggal ? $jadwal->tanggal->toDateString() : null]))) }}" 
+                   class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted hover:text-ink-body bg-white hover:bg-surface-pearl border border-hairline px-3.5 py-1.5 rounded-full shadow-2xs transition-all">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span>Kembali ke Jadwal</span>
+                </a>
+            </div>
 
             <!-- Flash Message Sukses -->
             @if(session('success'))

@@ -31,7 +31,7 @@ Setelah tombol kembali dipindahkan, header CRUD menjadi lebih simpel:
 
 ## Acceptance Criteria
 
-- [ ] Tombol "Kembali" tidak lagi ada di header pada ketiga halaman CRUD
-- [ ] Tombol "Kembali" muncul di area konten, di atas judul halaman
-- [ ] Klik tombol kembali mengarah ke halaman yang benar (dashboard / detail)
-- [ ] Header tampil bersih: hanya logo di kiri dan profil+logout di kanan
+- [x] Tombol "Kembali" tidak lagi ada di header pada ketiga halaman CRUD
+- [x] Tombol "Kembali" muncul di area konten, di atas judul halaman
+- [x] Klik tombol kembali mengarah ke halaman yang benar (dashboard / detail)
+- [x] Header tampil bersih: hanya logo di kiri dan profil+logout di kanan
