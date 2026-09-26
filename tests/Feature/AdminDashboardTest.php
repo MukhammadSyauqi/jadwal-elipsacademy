@@ -437,6 +437,31 @@ class AdminDashboardTest extends TestCase
         $createResponse->assertSee('Ruang 2');
         $createResponse->assertSee('Lab Komputer A');
     }
+
+    public function test_buduran_admin_user_can_access_dashboard_and_create_page(): void
+    {
+        $buduranCabang = Cabang::firstOrCreate(
+            ['nama_cabang' => 'Buduran'],
+            ['alamat' => 'Jl. Raya Buduran, Sidoarjo', 'status' => 'aktif']
+        );
+
+        $adminBuduran = User::firstOrCreate(
+            ['email' => 'admin.buduran@elipsacademy.com'],
+            ['nama' => 'Admin Buduran', 'password' => Hash::make('password'), 'role' => 'admin']
+        );
+
+        // 1. Dashboard
+        $dashResponse = $this->actingAs($adminBuduran)->get(route('admin.dashboard'));
+        $dashResponse->assertStatus(200);
+        $dashResponse->assertSee('Admin Buduran');
+        $dashResponse->assertSee('Buduran');
+
+        // 2. Create Jadwal Page (Cabang Buduran should be pre-selected)
+        $createResponse = $this->actingAs($adminBuduran)->get(route('admin.jadwal.create'));
+        $createResponse->assertStatus(200);
+        $createResponse->assertSee('Cabang Buduran');
+    }
 }
+
 
 
