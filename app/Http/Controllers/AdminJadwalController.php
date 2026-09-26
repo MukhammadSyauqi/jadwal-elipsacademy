@@ -60,6 +60,22 @@ class AdminJadwalController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Auto-generate nama_kelas fallback if left empty
+        if (empty($request->input('nama_kelas')) && $request->filled(['program_id', 'tanggal', 'pertemuan'])) {
+            $program = Program::find($request->input('program_id'));
+            if ($program) {
+                try {
+                    $tgl = Carbon::parse($request->input('tanggal'))->format('dm');
+                    $pert = str_pad($request->input('pertemuan'), 2, '0', STR_PAD_LEFT);
+                    $request->merge([
+                        'nama_kelas' => "{$program->kode_inisial}-{$tgl}-{$pert}",
+                    ]);
+                } catch (\Exception $e) {
+                    // Let validator handle invalid formats
+                }
+            }
+        }
+
         $validated = $request->validate([
             'cabang_id' => ['required', Rule::exists('cabang', 'id')->where('status', 'aktif')],
             'program_id' => ['required', Rule::exists('program', 'id')->where('status', 'aktif')],
@@ -173,6 +189,22 @@ class AdminJadwalController extends Controller
      */
     public function update(Request $request, Jadwal $jadwal): RedirectResponse
     {
+        // Auto-generate nama_kelas fallback if left empty
+        if (empty($request->input('nama_kelas')) && $request->filled(['program_id', 'tanggal', 'pertemuan'])) {
+            $program = Program::find($request->input('program_id'));
+            if ($program) {
+                try {
+                    $tgl = Carbon::parse($request->input('tanggal'))->format('dm');
+                    $pert = str_pad($request->input('pertemuan'), 2, '0', STR_PAD_LEFT);
+                    $request->merge([
+                        'nama_kelas' => "{$program->kode_inisial}-{$tgl}-{$pert}",
+                    ]);
+                } catch (\Exception $e) {
+                    // Let validator handle invalid formats
+                }
+            }
+        }
+
         $validated = $request->validate([
             'cabang_id' => [
                 'required',

@@ -351,4 +351,62 @@ class JadwalCrudTest extends TestCase
             'status' => 'dibatalkan',
         ]);
     }
+
+    public function test_program_model_generates_correct_kode_inisial(): void
+    {
+        $progOffice = Program::firstWhere('nama_program', 'Microsoft Office') ?? Program::create(['nama_program' => 'Microsoft Office', 'kategori' => 'Office', 'status' => 'aktif']);
+        $progWeb = Program::firstWhere('nama_program', 'Web Programming') ?? Program::create(['nama_program' => 'Web Programming', 'kategori' => 'Programming', 'status' => 'aktif']);
+        $progDesign = Program::firstWhere('nama_program', 'Graphic Design') ?? Program::create(['nama_program' => 'Graphic Design', 'kategori' => 'Design', 'status' => 'aktif']);
+
+        $this->assertEquals('MO', $progOffice->kode_inisial);
+        $this->assertEquals('WP', $progWeb->kode_inisial);
+        $this->assertEquals('GD', $progDesign->kode_inisial);
+    }
+
+    public function test_admin_create_jadwal_auto_generates_nama_kelas_if_empty(): void
+    {
+        $admin = $this->getAdminUser();
+        $program = Program::firstWhere('nama_program', 'Microsoft Office') ?? Program::first();
+
+        $payload = [
+            'cabang_id' => 1,
+            'program_id' => $program->id,
+            'tentor_id' => 1,
+            'nama_kelas' => '', // kosong, backend auto-generate
+            'jenis_kelas' => 'private',
+            'mode_kelas' => 'offline',
+            'tanggal' => '2026-09-26',
+            'jam_mulai' => '13:00',
+            'jam_selesai' => '15:00',
+            'ruangan' => 'Lab Komputer A',
+            'pertemuan' => 1,
+        ];
+
+        // Ensure no conflicting schedule exists
+        Jadwal::where('cabang_id', 1)->where('tanggal', '2026-09-26')->where('jam_mulai', '13:00:00')->delete();
+
+        $response = $this->actingAs($admin)->post(route('admin.jadwal.store'), $payload);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('jadwal', [
+            'program_id' => $program->id,
+            'nama_kelas' => 'MO-2609-01',
+            'tanggal' => '2026-09-26',
+            'pertemuan' => 1,
+        ]);
+    }
+
+    public function test_create_and_edit_page_contains_data_kode_and_auto_generate_badge(): void
+    {
+        $admin = $this->getAdminUser();
+
+        $response = $this->actingAs($admin)->get(route('admin.jadwal.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('data-kode="MO"', false);
+        $response->assertSee('Auto-Generate');
+    }
 }
+

@@ -201,7 +201,7 @@
                                         class="w-full h-11 pl-3.5 pr-10 rounded-xl bg-[#F5F5F7] border @error('program_id') border-red-500 @else border-transparent @enderror text-[#1D1D1F] text-sm focus:bg-white focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all appearance-none cursor-pointer" 
                                         required>
                                     @foreach($programs as $prog)
-                                        <option value="{{ $prog->id }}" {{ old('program_id', $jadwal->program_id) == $prog->id ? 'selected' : '' }}>
+                                        <option value="{{ $prog->id }}" data-kode="{{ $prog->kode_inisial }}" {{ old('program_id', $jadwal->program_id) == $prog->id ? 'selected' : '' }}>
                                             {{ $prog->nama_program }} ({{ ucfirst($prog->kategori) }})
                                         </option>
                                     @endforeach
@@ -217,15 +217,21 @@
                     <!-- 2. Kode Kelas & Nomor Pertemuan -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-semibold text-[#1D1D1F] tracking-tight" for="inputKodeKelas">
-                                Nama / Kode Kelas <span class="text-red-500">*</span>
-                            </label>
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-semibold text-[#1D1D1F] tracking-tight" for="inputKodeKelas">
+                                    Nama / Kode Kelas <span class="text-red-500">*</span>
+                                </label>
+                                <span class="inline-flex items-center gap-1 text-[10px] text-primary font-semibold bg-accent-subtle/70 px-2 py-0.5 rounded-full border border-amber-200">
+                                    <span class="material-symbols-outlined text-[12px]">auto_fix_high</span>
+                                    Auto-Generate
+                                </span>
+                            </div>
                             <input name="nama_kelas" 
                                    id="inputKodeKelas" 
                                    type="text" 
                                    value="{{ old('nama_kelas', $jadwal->nama_kelas) }}" 
-                                   placeholder="Misal: MO-003" 
-                                   class="w-full h-11 px-3.5 rounded-xl bg-[#F5F5F7] border @error('nama_kelas') border-red-500 @else border-transparent @enderror text-[#1D1D1F] text-sm placeholder:text-ink-subtle focus:bg-white focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all" 
+                                   placeholder="Misal: MO-2609-01" 
+                                   class="w-full h-11 px-3.5 rounded-xl bg-[#F5F5F7] border @error('nama_kelas') border-red-500 @else border-transparent @enderror text-[#1D1D1F] text-sm placeholder:text-ink-subtle focus:bg-white focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all font-mono tracking-wide" 
                                    required/>
                             @error('nama_kelas')
                                 <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
@@ -525,11 +531,57 @@
             const btnPlus = document.getElementById('btnPlus');
             const inputPertemuan = document.getElementById('inputPertemuan');
 
+            const selectProgram = document.getElementById('selectProgram');
+            const inputTanggal = document.getElementById('inputTanggal');
+            const inputKodeKelas = document.getElementById('inputKodeKelas');
+
+            function getProgramCode() {
+                if (!selectProgram) return '';
+                const selectedOpt = selectProgram.options[selectProgram.selectedIndex];
+                if (!selectedOpt || !selectedOpt.value) return '';
+                if (selectedOpt.dataset.kode) return selectedOpt.dataset.kode;
+                const text = selectedOpt.textContent.trim().split('(')[0].trim();
+                const words = text.split(/\s+/);
+                if (words.length >= 2) {
+                    return words.map(w => w.charAt(0).toUpperCase()).join('').substring(0, 4);
+                }
+                return text.substring(0, 3).toUpperCase();
+            }
+
+            function getDateCode() {
+                if (!inputTanggal || !inputTanggal.value) return '';
+                const parts = inputTanggal.value.split('-'); // YYYY-MM-DD
+                if (parts.length === 3) {
+                    const dd = parts[2];
+                    const mm = parts[1];
+                    return `${dd}${mm}`;
+                }
+                return '';
+            }
+
+            function getPertemuanCode() {
+                if (!inputPertemuan) return '01';
+                const val = parseInt(inputPertemuan.value) || 1;
+                return String(val).padStart(2, '0');
+            }
+
+            function updateKodeKelasAuto() {
+                if (!inputKodeKelas) return;
+                const progCode = getProgramCode();
+                const dateCode = getDateCode();
+                const pertCode = getPertemuanCode();
+
+                if (progCode && dateCode) {
+                    inputKodeKelas.value = `${progCode}-${dateCode}-${pertCode}`;
+                }
+            }
+
             if (btnMinus && inputPertemuan) {
                 btnMinus.addEventListener('click', () => {
                     let val = parseInt(inputPertemuan.value) || 1;
                     if (val > 1) {
                         inputPertemuan.value = val - 1;
+                        updateKodeKelasAuto();
                     }
                 });
             }
@@ -538,7 +590,21 @@
                 btnPlus.addEventListener('click', () => {
                     let val = parseInt(inputPertemuan.value) || 1;
                     inputPertemuan.value = val + 1;
+                    updateKodeKelasAuto();
                 });
+            }
+
+            if (selectProgram) {
+                selectProgram.addEventListener('change', updateKodeKelasAuto);
+            }
+
+            if (inputTanggal) {
+                inputTanggal.addEventListener('change', updateKodeKelasAuto);
+                inputTanggal.addEventListener('input', updateKodeKelasAuto);
+            }
+
+            if (inputPertemuan) {
+                inputPertemuan.addEventListener('input', updateKodeKelasAuto);
             }
 
             const btnOpen = document.getElementById('btnOpenBatalModal');
