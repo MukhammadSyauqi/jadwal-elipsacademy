@@ -375,4 +375,41 @@ class AdminDashboardTest extends TestCase
         $responseFiltered->assertSee('Buduran Unique Schedule');
         $responseFiltered->assertDontSee('Candi Unique Schedule');
     }
+
+    public function test_empty_state_does_not_show_kembali_ke_hari_ini_when_viewing_today(): void
+    {
+        $admin = $this->getAdminUser();
+        $todayDate = Carbon::today()->toDateString();
+
+        // Clear schedules for today
+        Jadwal::whereDate('tanggal', $todayDate)->delete();
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard', [
+            'tanggal' => $todayDate,
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertSee('Tidak Ada Jadwal Kelas');
+        $response->assertDontSee('Kembali ke Hari Ini');
+        $response->assertSee('Tambah Jadwal Baru');
+    }
+
+    public function test_empty_state_shows_kembali_ke_hari_ini_when_viewing_other_dates(): void
+    {
+        $admin = $this->getAdminUser();
+        $futureDate = Carbon::today()->addDays(5)->toDateString();
+
+        // Clear schedules for future date
+        Jadwal::whereDate('tanggal', $futureDate)->delete();
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard', [
+            'tanggal' => $futureDate,
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertSee('Tidak Ada Jadwal Kelas');
+        $response->assertSee('Kembali ke Hari Ini');
+        $response->assertSee('Tambah Jadwal Baru');
+    }
 }
+

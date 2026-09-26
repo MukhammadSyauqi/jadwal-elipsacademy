@@ -522,11 +522,20 @@
                         <p class="text-sm text-ink-muted max-w-md mt-1 mb-6">
                             Tidak ada jadwal kelas yang ditemukan untuk kriteria filter atau tanggal yang dipilih @if($selectedCabang) di Cabang {{ $selectedCabang->nama_cabang }} @else di Semua Cabang @endif.
                         </p>
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('admin.dashboard', ['tanggal' => $todayDate]) }}" 
-                               class="px-4 py-2 rounded-full bg-ink-body text-white text-xs font-semibold hover:opacity-90 transition-all">
-                                Kembali ke Hari Ini
-                            </a>
+                        <div class="flex items-center gap-3 flex-wrap justify-center">
+                            @if(!$isToday)
+                                <a href="{{ route('admin.dashboard', ['tanggal' => $todayDate]) }}" 
+                                   id="btnKembaliHariIni"
+                                   class="px-4 py-2 rounded-full bg-ink-body text-white text-xs font-semibold hover:opacity-90 transition-all">
+                                    Kembali ke Hari Ini
+                                </a>
+                            @endif
+                            @if(!empty($q) || ($sesi && $sesi !== 'semua') || $selectedCabang)
+                                <a href="{{ route('admin.dashboard', ['tanggal' => $selectedDate]) }}" 
+                                   class="px-4 py-2 rounded-full bg-surface-pearl text-ink-body border border-hairline text-xs font-semibold hover:bg-surface-container transition-all">
+                                    Reset Filter
+                                </a>
+                            @endif
                             <a href="{{ route('admin.jadwal.create', array_filter(['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate])) }}" 
                                class="px-4 py-2 rounded-full bg-primary-container text-white text-xs font-semibold hover:bg-brand-hover transition-all">
                                 Tambah Jadwal Baru
