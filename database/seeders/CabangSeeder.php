@@ -25,6 +25,12 @@ class CabangSeeder extends Seeder
                 'alamat' => 'Jl. Raya Candi, Sidoarjo',
                 'status' => 'aktif',
             ],
+            [
+                'id' => 3,
+                'nama_cabang' => 'Gubeng',
+                'alamat' => 'Jl. Raya Gubeng No. 45, Surabaya',
+                'status' => 'aktif',
+            ],
         ];
 
         foreach ($cabangList as $item) {

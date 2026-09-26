@@ -528,6 +528,37 @@
             if (selectProgram && selectProgram.value && !inputKodeKelas.value) {
                 updateKodeKelasAuto();
             }
+
+            // Dynamic room options based on branch selection
+            const selectCabang = document.getElementById('selectCabang');
+            const selectRuangan = document.getElementById('selectRuangan');
+            const branchRoomsMap = {
+                'candi': ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'],
+                'gubeng': ['Ruang 1', 'Ruang 2', 'Lab Komputer A'],
+                'buduran': ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'],
+            };
+
+            if (selectCabang && selectRuangan) {
+                selectCabang.addEventListener('change', () => {
+                    const selectedText = selectCabang.options[selectCabang.selectedIndex]?.textContent.toLowerCase() || '';
+                    let rooms = branchRoomsMap['buduran'];
+                    if (selectedText.includes('candi')) {
+                        rooms = branchRoomsMap['candi'];
+                    } else if (selectedText.includes('gubeng')) {
+                        rooms = branchRoomsMap['gubeng'];
+                    }
+
+                    const currentVal = selectRuangan.value;
+                    selectRuangan.innerHTML = '<option value="" disabled selected>Pilih Ruangan...</option>';
+                    rooms.forEach(r => {
+                        const opt = document.createElement('option');
+                        opt.value = r;
+                        opt.textContent = r;
+                        if (r === currentVal) opt.selected = true;
+                        selectRuangan.appendChild(opt);
+                    });
+                });
+            }
         })();
     </script>
 </body>

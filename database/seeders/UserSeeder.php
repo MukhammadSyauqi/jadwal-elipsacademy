@@ -26,6 +26,12 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ],
+            [
+                'nama' => 'Staff Gubeng',
+                'email' => 'gubeng@elipsacademy.com',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ],
         ];
 
         foreach ($users as $userData) {

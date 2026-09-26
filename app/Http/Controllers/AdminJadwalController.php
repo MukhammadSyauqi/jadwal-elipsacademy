@@ -30,10 +30,13 @@ class AdminJadwalController extends Controller
         // Pre-select cabang from query param or user's assigned/first branch
         $selectedCabangId = $request->query('cabang_id');
         if (!$selectedCabangId) {
-            if ($user && stripos($user->nama, 'Candi') !== false) {
-                $candi = $cabangs->firstWhere('nama_cabang', 'Candi');
-                $selectedCabangId = $candi ? $candi->id : ($cabangs->first()?->id ?? 1);
-            } else {
+            foreach ($cabangs as $c) {
+                if ($user && stripos($user->nama, $c->nama_cabang) !== false) {
+                    $selectedCabangId = $c->id;
+                    break;
+                }
+            }
+            if (!$selectedCabangId) {
                 $selectedCabangId = $cabangs->first()?->id ?? 1;
             }
         }
@@ -41,8 +44,14 @@ class AdminJadwalController extends Controller
 
         $selectedDate = $request->query('tanggal', Carbon::today()->toDateString());
 
-        // Default room options
-        $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B'];
+        // Default room options based on branch
+        if ($selectedCabang && stripos($selectedCabang->nama_cabang, 'Candi') !== false) {
+            $defaultRuangan = ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'];
+        } elseif ($selectedCabang && stripos($selectedCabang->nama_cabang, 'Gubeng') !== false) {
+            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A'];
+        } else {
+            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'];
+        }
 
         return view('admin.jadwal.create', [
             'user' => $user,
@@ -169,7 +178,13 @@ class AdminJadwalController extends Controller
             ->orderBy('nama')
             ->get();
 
-        $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B'];
+        if ($jadwal->cabang && stripos($jadwal->cabang->nama_cabang, 'Candi') !== false) {
+            $defaultRuangan = ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'];
+        } elseif ($jadwal->cabang && stripos($jadwal->cabang->nama_cabang, 'Gubeng') !== false) {
+            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A'];
+        } else {
+            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'];
+        }
         if (!in_array($jadwal->ruangan, $defaultRuangan) && !empty($jadwal->ruangan)) {
             $defaultRuangan[] = $jadwal->ruangan;
         }

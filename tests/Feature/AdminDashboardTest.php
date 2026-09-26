@@ -411,5 +411,32 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Kembali ke Hari Ini');
         $response->assertSee('Tambah Jadwal Baru');
     }
+
+    public function test_gubeng_staff_user_can_access_dashboard_and_create_page(): void
+    {
+        $gubengCabang = Cabang::firstOrCreate(
+            ['nama_cabang' => 'Gubeng'],
+            ['alamat' => 'Jl. Raya Gubeng No. 45, Surabaya', 'status' => 'aktif']
+        );
+
+        $staffGubeng = User::firstOrCreate(
+            ['email' => 'gubeng@elipsacademy.com'],
+            ['nama' => 'Staff Gubeng', 'password' => Hash::make('password'), 'role' => 'admin']
+        );
+
+        // 1. Dashboard
+        $dashResponse = $this->actingAs($staffGubeng)->get(route('admin.dashboard'));
+        $dashResponse->assertStatus(200);
+        $dashResponse->assertSee('Gubeng');
+
+        // 2. Create Jadwal Page (Cabang Gubeng should be pre-selected and 3 rooms available)
+        $createResponse = $this->actingAs($staffGubeng)->get(route('admin.jadwal.create'));
+        $createResponse->assertStatus(200);
+        $createResponse->assertSee('Cabang Gubeng');
+        $createResponse->assertSee('Ruang 1');
+        $createResponse->assertSee('Ruang 2');
+        $createResponse->assertSee('Lab Komputer A');
+    }
 }
+
 
