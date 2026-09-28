@@ -425,7 +425,7 @@
                                     <tr class="border-b border-hairline text-[11px] font-bold uppercase tracking-wider text-ink-muted bg-canvas-pure">
                                         <th class="py-3 px-4">Pengguna</th>
                                         <th class="py-3 px-3">Email</th>
-                                        <th class="py-3 px-3">Role</th>
+                                        <th class="py-3 px-3">Role & Cabang</th>
                                         <th class="py-3 px-4 text-right">Aksi</th>
                                     </tr>
                                 </thead>
@@ -470,16 +470,28 @@
                                                 </div>
                                             </td>
 
-                                            <!-- Role -->
+                                            <!-- Role & Cabang -->
                                             <td class="py-3.5 px-3">
                                                 @if($isSuper)
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                                        SUPERADMIN
-                                                    </span>
+                                                    <div class="flex flex-col gap-1 items-start">
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                            SUPERADMIN
+                                                        </span>
+                                                        <span class="text-[11px] text-ink-muted flex items-center gap-1 font-medium">
+                                                            <span class="material-symbols-outlined text-[13px] text-amber-600">public</span>
+                                                            Semua Cabang
+                                                        </span>
+                                                    </div>
                                                 @else
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-50 text-primary border border-orange-200">
-                                                        ADMIN
-                                                    </span>
+                                                    <div class="flex flex-col gap-1 items-start">
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-50 text-primary border border-orange-200">
+                                                            ADMIN
+                                                        </span>
+                                                        <span class="text-[11px] text-ink-muted flex items-center gap-1 font-medium">
+                                                            <span class="material-symbols-outlined text-[13px] text-primary">location_on</span>
+                                                            {{ $u->cabang ? 'Cabang ' . $u->cabang->nama_cabang : 'Belum Ditugaskan' }}
+                                                        </span>
+                                                    </div>
                                                 @endif
                                             </td>
 
@@ -592,6 +604,10 @@
                                                 </span>
                                             @endif
                                         </div>
+                                        <div class="flex items-center gap-1.5 text-xs text-ink-muted mt-2">
+                                            <span class="material-symbols-outlined text-[15px] {{ $isSelSuper ? 'text-amber-600' : 'text-primary' }}">{{ $isSelSuper ? 'public' : 'location_on' }}</span>
+                                            <span>Cabang: <strong class="text-ink-body font-semibold">{{ $isSelSuper ? 'Semua Cabang (Global)' : ($selectedUser->cabang ? 'Cabang ' . $selectedUser->cabang->nama_cabang : 'Belum Ditugaskan') }}</strong></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -631,7 +647,7 @@
                                             <span class="text-ink-body font-medium">Manajemen Jadwal (CRUD)</span>
                                         </div>
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $isSelSuper ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' }}">
-                                            {{ $isSelSuper ? 'Semua Cabang' : 'Cabang Aktif' }}
+                                            {{ $isSelSuper ? 'Semua Cabang' : ($selectedUser->cabang ? 'Cabang ' . $selectedUser->cabang->nama_cabang : 'Cabang Aktif') }}
                                         </span>
                                     </div>
 
@@ -827,10 +843,25 @@
                 <select id="create_role" 
                         name="role" 
                         required 
+                        onchange="handleCreateRoleChange(this.value)"
                         class="w-full px-3.5 py-2 bg-surface-pearl border border-hairline rounded-xl text-xs text-ink-body focus:border-primary focus:bg-canvas-pure outline-none cursor-pointer">
-                    <option value="admin">Admin (Operasional Jadwal)</option>
+                    <option value="admin">Admin (Operasional Jadwal Cabang)</option>
                     <option value="superadmin">Superadmin (Akses Penuh Master & Akun)</option>
                 </select>
+            </div>
+
+            <div id="create_cabang_wrapper">
+                <label for="create_cabang_id" class="block text-xs font-bold text-ink-body mb-1">Penugasan Cabang <span class="text-red-500">*</span></label>
+                <select id="create_cabang_id" 
+                        name="cabang_id" 
+                        required 
+                        class="w-full px-3.5 py-2 bg-surface-pearl border border-hairline rounded-xl text-xs text-ink-body focus:border-primary focus:bg-canvas-pure outline-none cursor-pointer">
+                    <option value="" disabled selected>Pilih Cabang Operasional</option>
+                    @foreach($cabangs as $cabang)
+                        <option value="{{ $cabang->id }}">Cabang {{ $cabang->nama_cabang }}</option>
+                    @endforeach
+                </select>
+                <p class="text-[10px] text-ink-muted mt-1">Admin hanya dapat melihat dan mengelola jadwal di cabang ini.</p>
             </div>
 
             <div class="pt-3 border-t border-hairline flex items-center justify-end gap-2">
@@ -888,10 +919,24 @@
                 <select id="edit_role" 
                         name="role" 
                         required 
+                        onchange="handleEditRoleChange(this.value)"
                         class="w-full px-3.5 py-2 bg-surface-pearl border border-hairline rounded-xl text-xs text-ink-body focus:border-primary focus:bg-canvas-pure outline-none cursor-pointer">
-                    <option value="admin">Admin (Operasional Jadwal)</option>
+                    <option value="admin">Admin (Operasional Jadwal Cabang)</option>
                     <option value="superadmin">Superadmin (Akses Penuh Master & Akun)</option>
                 </select>
+            </div>
+
+            <div id="edit_cabang_wrapper">
+                <label for="edit_cabang_id" class="block text-xs font-bold text-ink-body mb-1">Penugasan Cabang <span class="text-red-500">*</span></label>
+                <select id="edit_cabang_id" 
+                        name="cabang_id" 
+                        class="w-full px-3.5 py-2 bg-surface-pearl border border-hairline rounded-xl text-xs text-ink-body focus:border-primary focus:bg-canvas-pure outline-none cursor-pointer">
+                    <option value="" disabled>Pilih Cabang Operasional</option>
+                    @foreach($cabangs as $cabang)
+                        <option value="{{ $cabang->id }}">Cabang {{ $cabang->nama_cabang }}</option>
+                    @endforeach
+                </select>
+                <p class="text-[10px] text-ink-muted mt-1">Admin hanya dapat melihat dan mengelola jadwal di cabang ini.</p>
             </div>
 
             <div class="pt-3 border-t border-hairline flex items-center justify-end gap-2">
@@ -1001,7 +1046,39 @@
 
 <script>
     // Modal Functions
+    function handleCreateRoleChange(role) {
+        const wrapper = document.getElementById('create_cabang_wrapper');
+        const select = document.getElementById('create_cabang_id');
+        if (role === 'superadmin') {
+            wrapper.classList.add('hidden');
+            select.removeAttribute('required');
+            select.value = '';
+            select.disabled = true;
+        } else {
+            wrapper.classList.remove('hidden');
+            select.setAttribute('required', 'required');
+            select.disabled = false;
+        }
+    }
+
+    function handleEditRoleChange(role) {
+        const wrapper = document.getElementById('edit_cabang_wrapper');
+        const select = document.getElementById('edit_cabang_id');
+        if (role === 'superadmin') {
+            wrapper.classList.add('hidden');
+            select.removeAttribute('required');
+            select.value = '';
+            select.disabled = true;
+        } else {
+            wrapper.classList.remove('hidden');
+            select.setAttribute('required', 'required');
+            select.disabled = false;
+        }
+    }
+
     function openTambahModal() {
+        document.getElementById('create_role').value = 'admin';
+        handleCreateRoleChange('admin');
         const m = document.getElementById('modalTambahUser');
         m.classList.remove('hidden');
         m.classList.add('flex');
@@ -1017,6 +1094,12 @@
         document.getElementById('edit_nama').value = user.nama;
         document.getElementById('edit_email').value = user.email;
         document.getElementById('edit_role').value = user.role;
+        handleEditRoleChange(user.role);
+        if (user.role === 'admin' && user.cabang_id) {
+            document.getElementById('edit_cabang_id').value = user.cabang_id;
+        } else {
+            document.getElementById('edit_cabang_id').value = '';
+        }
         const m = document.getElementById('modalEditUser');
         m.classList.remove('hidden');
         m.classList.add('flex');

@@ -100,6 +100,7 @@ class SuperadminUserManagementTest extends TestCase
             'email' => 'staff.baru@elipsacademy.com',
             'password' => 'secret12345',
             'role' => 'admin',
+            'cabang_id' => 1,
         ]);
 
         $response->assertRedirect();
@@ -107,11 +108,47 @@ class SuperadminUserManagementTest extends TestCase
             'nama' => 'Staff Operasional Baru',
             'email' => 'staff.baru@elipsacademy.com',
             'role' => 'admin',
+            'cabang_id' => 1,
         ]);
 
         $createdUser = User::where('email', 'staff.baru@elipsacademy.com')->first();
         $this->assertNotNull($createdUser);
         $this->assertTrue(Hash::check('secret12345', $createdUser->password));
+    }
+
+    public function test_create_admin_requires_cabang_id(): void
+    {
+        $superadmin = $this->getSuperadmin();
+
+        $response = $this->actingAs($superadmin)->post(route('superadmin.user.store'), [
+            'nama' => 'Admin Tanpa Cabang',
+            'email' => 'tanpa.cabang@elipsacademy.com',
+            'password' => 'secret12345',
+            'role' => 'admin',
+            // cabang_id omitted
+        ]);
+
+        $response->assertSessionHasErrors('cabang_id');
+    }
+
+    public function test_create_superadmin_sets_cabang_id_to_null(): void
+    {
+        $superadmin = $this->getSuperadmin();
+
+        $response = $this->actingAs($superadmin)->post(route('superadmin.user.store'), [
+            'nama' => 'Superadmin Baru',
+            'email' => 'superadmin.baru@elipsacademy.com',
+            'password' => 'secret12345',
+            'role' => 'superadmin',
+            'cabang_id' => 1, // should be ignored/null
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('users', [
+            'email' => 'superadmin.baru@elipsacademy.com',
+            'role' => 'superadmin',
+            'cabang_id' => null,
+        ]);
     }
 
     public function test_create_user_fails_on_duplicate_email(): void
@@ -189,6 +226,7 @@ class SuperadminUserManagementTest extends TestCase
             'nama' => 'User B Edited',
             'email' => $userA->email,
             'role' => 'admin',
+            'cabang_id' => 1,
         ]);
         $responseDuplicate->assertSessionHasErrors('email');
 
@@ -197,6 +235,7 @@ class SuperadminUserManagementTest extends TestCase
             'nama' => 'User B Edited',
             'email' => $userB->email,
             'role' => 'admin',
+            'cabang_id' => 1,
         ]);
         $responseSame->assertSessionHasNoErrors();
     }

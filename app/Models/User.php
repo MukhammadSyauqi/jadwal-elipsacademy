@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,7 +22,24 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'cabang_id',
     ];
+
+    /**
+     * Get the cabang associated with this user.
+     */
+    public function cabang(): BelongsTo
+    {
+        return $this->belongsTo(Cabang::class, 'cabang_id');
+    }
+
+    /**
+     * Helper accessor for fallback cabang name display.
+     */
+    public function getCabangNameAttribute(): string
+    {
+        return $this->cabang?->nama_cabang ?? 'Semua Cabang';
+    }
 
     /**
      * Check if user is superadmin.

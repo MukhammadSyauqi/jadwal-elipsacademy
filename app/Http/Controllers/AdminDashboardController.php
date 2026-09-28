@@ -17,12 +17,19 @@ class AdminDashboardController extends Controller
     {
         $user = $request->user();
 
-        // 1. Cabang handling (Default: all branches, optional filter by cabang_id)
-        $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
-        $selectedCabangId = $request->query('cabang_id');
-        $selectedCabang = (!empty($selectedCabangId) && $selectedCabangId !== 'semua')
-            ? $cabangs->firstWhere('id', $selectedCabangId)
-            : null;
+        // 1. Cabang handling
+        if ($user && $user->cabang_id !== null) {
+            // Admin cabang: lock to assigned cabang
+            $cabangs = Cabang::where('id', $user->cabang_id)->get();
+            $selectedCabang = $cabangs->first();
+        } else {
+            // Superadmin / unrestricted user: view all or filter by cabang_id
+            $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
+            $selectedCabangId = $request->query('cabang_id');
+            $selectedCabang = (!empty($selectedCabangId) && $selectedCabangId !== 'semua')
+                ? $cabangs->firstWhere('id', $selectedCabangId)
+                : null;
+        }
 
         // 2. Date handling
         $today = Carbon::today();

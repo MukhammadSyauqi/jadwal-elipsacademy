@@ -271,7 +271,9 @@
                         <div class="relative w-full sm:w-auto inline-flex items-center">
                             <span class="material-symbols-outlined absolute left-2.5 text-primary text-base pointer-events-none">location_on</span>
                             <select name="cabang_id" onchange="this.form.submit()" class="w-full sm:w-auto pl-8 pr-7 py-1.5 bg-surface-pearl hover:bg-surface-container rounded-full text-xs font-semibold text-ink-body border border-hairline focus:outline-none focus:border-brand-orange cursor-pointer appearance-none transition-all">
-                                <option value="">Semua Cabang</option>
+                                @if(!$user || $user->cabang_id === null)
+                                    <option value="">Semua Cabang</option>
+                                @endif
                                 @foreach($cabangs as $c)
                                     <option value="{{ $c->id }}" {{ $selectedCabang && $selectedCabang->id === $c->id ? 'selected' : '' }}>
                                         Cabang {{ $c->nama_cabang }}

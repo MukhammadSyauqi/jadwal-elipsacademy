@@ -408,5 +408,90 @@ class JadwalCrudTest extends TestCase
         $response->assertSee('data-kode="MO"', false);
         $response->assertSee('Auto-Generate');
     }
+
+    public function test_admin_store_locks_cabang_id_to_user_cabang(): void
+    {
+        $candiCabang = Cabang::find(2);
+        $buduranCabang = Cabang::find(1);
+
+        $adminCandi = User::firstOrCreate(
+            ['email' => 'admin.candi.storetest@elipsacademy.com'],
+            ['nama' => 'Admin Candi Store Test', 'password' => Hash::make('password'), 'role' => 'admin', 'cabang_id' => $candiCabang->id]
+        );
+
+        $payload = [
+            'cabang_id' => $buduranCabang->id, // Try to submit as Buduran
+            'program_id' => 1,
+            'tentor_id' => 1,
+            'nama_kelas' => 'MO-TEST-LOCK',
+            'jenis_kelas' => 'private',
+            'mode_kelas' => 'offline',
+            'tanggal' => '2026-10-10',
+            'jam_mulai' => '13:00',
+            'jam_selesai' => '14:30',
+            'ruangan' => 'Ruang A Candi',
+            'pertemuan' => 1,
+        ];
+
+        $response = $this->actingAs($adminCandi)->post(route('admin.jadwal.store'), $payload);
+        $response->assertRedirect();
+
+        $jadwal = Jadwal::where('nama_kelas', 'MO-TEST-LOCK')->first();
+        $this->assertNotNull($jadwal);
+        // Assert locked to Candi (2), NOT Buduran (1)
+        $this->assertEquals($candiCabang->id, $jadwal->cabang_id);
+
+        $jadwal->delete();
+    }
+
+    public function test_admin_cannot_edit_or_cancel_other_branch_schedule(): void
+    {
+        $candiCabang = Cabang::find(2);
+        $buduranCabang = Cabang::find(1);
+
+        $adminCandi = User::firstOrCreate(
+            ['email' => 'admin.candi.guardtest@elipsacademy.com'],
+            ['nama' => 'Admin Candi Guard Test', 'password' => Hash::make('password'), 'role' => 'admin', 'cabang_id' => $candiCabang->id]
+        );
+
+        $jadwalBuduran = Jadwal::create([
+            'cabang_id' => $buduranCabang->id,
+            'program_id' => 1,
+            'tentor_id' => 1,
+            'nama_kelas' => 'BUDURAN-FORBIDDEN',
+            'jenis_kelas' => 'private',
+            'mode_kelas' => 'offline',
+            'tanggal' => '2026-10-15',
+            'jam_mulai' => '08:00',
+            'jam_selesai' => '09:30',
+            'ruangan' => 'Ruang 1',
+            'pertemuan' => 1,
+            'status' => 'terjadwal',
+        ]);
+
+        // Attempt edit
+        $this->actingAs($adminCandi)->get(route('admin.jadwal.edit', $jadwalBuduran->id))->assertForbidden();
+
+        // Attempt update
+        $this->actingAs($adminCandi)->put(route('admin.jadwal.update', $jadwalBuduran->id), [
+            'cabang_id' => $candiCabang->id,
+            'program_id' => 1,
+            'tentor_id' => 1,
+            'nama_kelas' => 'BUDURAN-FORBIDDEN-UPDATED',
+            'jenis_kelas' => 'private',
+            'mode_kelas' => 'offline',
+            'tanggal' => '2026-10-15',
+            'jam_mulai' => '08:00',
+            'jam_selesai' => '09:30',
+            'ruangan' => 'Ruang 1',
+            'pertemuan' => 1,
+            'status' => 'terjadwal',
+        ])->assertForbidden();
+
+        // Attempt cancel
+        $this->actingAs($adminCandi)->post(route('admin.jadwal.batal', $jadwalBuduran->id))->assertForbidden();
+
+        $jadwalBuduran->delete();
+    }
 }
 

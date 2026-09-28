@@ -22,25 +22,18 @@ class AdminJadwalController extends Controller
     {
         $user = $request->user();
 
-        // Get active master data
-        $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
+        // Pre-select cabang: if admin, lock to assigned cabang. If superadmin, allow all active branches.
+        if ($user && $user->cabang_id !== null) {
+            $cabangs = Cabang::where('id', $user->cabang_id)->get();
+            $selectedCabang = $cabangs->first();
+        } else {
+            $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
+            $selectedCabangId = $request->query('cabang_id');
+            $selectedCabang = $selectedCabangId ? $cabangs->firstWhere('id', $selectedCabangId) : $cabangs->first();
+        }
+
         $programs = Program::where('status', 'aktif')->orderBy('nama_program')->get();
         $tentors = Tentor::where('status', 'aktif')->orderBy('nama')->get();
-
-        // Pre-select cabang from query param or user's assigned/first branch
-        $selectedCabangId = $request->query('cabang_id');
-        if (!$selectedCabangId) {
-            foreach ($cabangs as $c) {
-                if ($user && stripos($user->nama, $c->nama_cabang) !== false) {
-                    $selectedCabangId = $c->id;
-                    break;
-                }
-            }
-            if (!$selectedCabangId) {
-                $selectedCabangId = $cabangs->first()?->id ?? 1;
-            }
-        }
-        $selectedCabang = $cabangs->firstWhere('id', $selectedCabangId) ?? $cabangs->first();
 
         $selectedDate = $request->query('tanggal', Carbon::today()->toDateString());
 
@@ -69,6 +62,11 @@ class AdminJadwalController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $user = $request->user();
+        if ($user && $user->cabang_id !== null) {
+            $request->merge(['cabang_id' => $user->cabang_id]);
+        }
+
         // Auto-generate nama_kelas fallback if left empty
         if (empty($request->input('nama_kelas')) && $request->filled(['program_id', 'tanggal', 'pertemuan'])) {
             $program = Program::find($request->input('program_id'));
@@ -162,11 +160,20 @@ class AdminJadwalController extends Controller
         $jadwal->load(['cabang', 'program', 'tentor']);
         $user = $request->user();
 
+        // Guard: admin cannot edit schedules of other branches
+        if ($user && $user->cabang_id !== null && $jadwal->cabang_id !== $user->cabang_id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengedit jadwal di luar cabang Anda.');
+        }
+
         // Get master data: include active ones + the ones currently used by this schedule
-        $cabangs = Cabang::where('status', 'aktif')
-            ->orWhere('id', $jadwal->cabang_id)
-            ->orderBy('nama_cabang')
-            ->get();
+        if ($user && $user->cabang_id !== null) {
+            $cabangs = Cabang::where('id', $user->cabang_id)->get();
+        } else {
+            $cabangs = Cabang::where('status', 'aktif')
+                ->orWhere('id', $jadwal->cabang_id)
+                ->orderBy('nama_cabang')
+                ->get();
+        }
 
         $programs = Program::where('status', 'aktif')
             ->orWhere('id', $jadwal->program_id)
@@ -204,6 +211,17 @@ class AdminJadwalController extends Controller
      */
     public function update(Request $request, Jadwal $jadwal): RedirectResponse
     {
+        $user = $request->user();
+
+        // Guard: admin cannot update schedules of other branches
+        if ($user && $user->cabang_id !== null && $jadwal->cabang_id !== $user->cabang_id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengubah jadwal di luar cabang Anda.');
+        }
+
+        if ($user && $user->cabang_id !== null) {
+            $request->merge(['cabang_id' => $user->cabang_id]);
+        }
+
         // Auto-generate nama_kelas fallback if left empty
         if (empty($request->input('nama_kelas')) && $request->filled(['program_id', 'tanggal', 'pertemuan'])) {
             $program = Program::find($request->input('program_id'));
@@ -286,6 +304,13 @@ class AdminJadwalController extends Controller
      */
     public function batal(Request $request, Jadwal $jadwal): RedirectResponse
     {
+        $user = $request->user();
+
+        // Guard: admin cannot cancel schedules of other branches
+        if ($user && $user->cabang_id !== null && $jadwal->cabang_id !== $user->cabang_id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk membatalkan jadwal di luar cabang Anda.');
+        }
+
         $jadwal->update(['status' => 'dibatalkan']);
 
         if ($request->filled('redirect_to')) {

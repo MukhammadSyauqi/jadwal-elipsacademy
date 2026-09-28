@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cabang;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class SuperadminUserController extends Controller
         $search = trim((string) $request->query('q', ''));
         $roleFilter = $request->query('role', 'all');
 
-        $query = User::query();
+        $query = User::with('cabang');
 
         if ($search !== '') {
             $query->where(function ($q) use ($search) {
@@ -34,6 +35,9 @@ class SuperadminUserController extends Controller
         }
 
         $users = $query->orderBy('nama')->get();
+
+        // Active cabang list for dropdowns
+        $cabangs = Cabang::where('status', 'aktif')->orderBy('nama_cabang')->get();
 
         // Metrics calculations
         $totalUsers = User::count();
@@ -54,6 +58,7 @@ class SuperadminUserController extends Controller
             'currentUser' => $currentUser,
             'users' => $users,
             'selectedUser' => $selectedUser,
+            'cabangs' => $cabangs,
             'search' => $search,
             'roleFilter' => $roleFilter,
             'totalUsers' => $totalUsers,
@@ -72,6 +77,11 @@ class SuperadminUserController extends Controller
             'email' => 'required|string|email|max:100|unique:users,email',
             'password' => 'required|string|min:6',
             'role' => 'required|in:admin,superadmin',
+            'cabang_id' => [
+                'nullable',
+                Rule::requiredIf(fn() => $request->input('role') === 'admin'),
+                Rule::exists('cabang', 'id')->where('status', 'aktif'),
+            ],
         ], [
             'nama.required' => 'Nama pengguna wajib diisi.',
             'email.required' => 'Email wajib diisi.',
@@ -81,7 +91,13 @@ class SuperadminUserController extends Controller
             'password.min' => 'Password minimal terdiri dari 6 karakter.',
             'role.required' => 'Role pengguna wajib dipilih.',
             'role.in' => 'Role harus berupa admin atau superadmin.',
+            'cabang_id.required' => 'Cabang wajib dipilih untuk akun dengan role Admin.',
+            'cabang_id.exists' => 'Cabang yang dipilih tidak valid atau tidak aktif.',
         ]);
+
+        if ($validated['role'] === 'superadmin') {
+            $validated['cabang_id'] = null;
+        }
 
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
@@ -106,6 +122,11 @@ class SuperadminUserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
             'role' => 'required|in:admin,superadmin',
+            'cabang_id' => [
+                'nullable',
+                Rule::requiredIf(fn() => $request->input('role') === 'admin'),
+                Rule::exists('cabang', 'id')->where('status', 'aktif'),
+            ],
         ], [
             'nama.required' => 'Nama pengguna wajib diisi.',
             'email.required' => 'Email wajib diisi.',
@@ -113,6 +134,8 @@ class SuperadminUserController extends Controller
             'email.unique' => 'Email ini sudah digunakan oleh akun lain.',
             'role.required' => 'Role pengguna wajib dipilih.',
             'role.in' => 'Role harus berupa admin atau superadmin.',
+            'cabang_id.required' => 'Cabang wajib dipilih untuk akun dengan role Admin.',
+            'cabang_id.exists' => 'Cabang yang dipilih tidak valid atau tidak aktif.',
         ]);
 
         // Guard: prevent demoting self if sole superadmin
@@ -121,6 +144,10 @@ class SuperadminUserController extends Controller
             if ($otherSuperadmins === 0) {
                 return back()->with('error', 'Anda tidak dapat mengubah role diri sendiri menjadi admin karena Anda adalah satu-satunya Superadmin di sistem.');
             }
+        }
+
+        if ($validated['role'] === 'superadmin') {
+            $validated['cabang_id'] = null;
         }
 
         $user->update($validated);

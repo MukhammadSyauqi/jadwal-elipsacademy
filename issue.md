@@ -215,24 +215,115 @@
 
 ---
 
+---
+
+## Issue #14 — Relasi User ↔ Cabang (1 Cabang = 1 Akun Admin)
+
+**Tujuan:** Menambahkan kolom `cabang_id` ke tabel `users` agar setiap admin terikat ke satu cabang. Superadmin = cabang_id NULL.
+
+**Scope:**
+- Migration: tambah `cabang_id` nullable FK ke `users`
+- Update Model User + Cabang (relasi)
+- Update UserSeeder: assign cabang_id, rename Staff Gubeng → Admin Gubeng, email → admin.gubeng@elipsacademy.com
+- Update SuperadminUserController & view: form cabang saat create/edit user
+- Update AdminDashboardController: auto-filter jadwal by cabang user
+- Update AdminJadwalController: hapus heuristik stripos, gunakan cabang_id
+
+**Detail:** `issues/issue-14-relasi-user-cabang.md`
+
+---
+
+## Issue #15 — Tabel Ruangan, Model & Seeder
+
+**Tujuan:** Buat tabel `ruangan` untuk menyimpan data ruangan per cabang, gantikan hardcoded ruangan.
+
+**Scope:**
+- Migration: buat tabel `ruangan` (cabang_id FK, nama_ruangan, kapasitas, status)
+- Migration: tambah `ruangan_id` FK ke tabel `jadwal`
+- Buat Model Ruangan + relasi
+- Update Model Cabang & Jadwal (relasi baru)
+- Buat RuanganSeeder: Candi 2 ruangan, Buduran 3, Gubeng 3
+- Update JadwalSeeder: gunakan ruangan_id
+
+**Detail:** `issues/issue-15-tabel-ruangan-model-seeder.md`
+
+---
+
+## Issue #16 — CRUD Ruangan Superadmin
+
+**Tujuan:** Halaman manajemen ruangan full CRUD untuk Superadmin.
+
+**Scope:**
+- Buat SuperadminRuanganController (index, store, update, toggleStatus, destroy)
+- Buat view superadmin/ruangan/index.blade.php (mengikuti pola Master Data)
+- Tambah routes di web.php
+- Proteksi: tidak bisa hapus ruangan yang masih dipakai jadwal
+
+**Detail:** `issues/issue-16-crud-ruangan-superadmin.md`
+
+---
+
+## Issue #17 — Update Jadwal Form: Ruangan Dinamis + Popup Konfirmasi Konflik
+
+**Tujuan:** Form jadwal menggunakan dropdown dari DB, AJAX reload, dan popup konfirmasi konflik ruangan.
+
+**Scope:**
+- Hapus hardcoded ruangan di AdminJadwalController
+- Dropdown ruangan dari database, reload saat cabang berubah (AJAX)
+- API endpoint: check room conflict + get ruangan by cabang
+- Popup konfirmasi konflik ruangan (soft warning, bisa di-override)
+- Konflik tentor tetap hard block
+- Catatan audit `[OVERRIDE]` — hidden untuk admin, visible untuk superadmin
+- Refactor detectConflicts → detectTentorConflict + detectRoomConflict
+
+**Detail:** `issues/issue-17-jadwal-form-ruangan-dinamis-popup-konflik.md`
+
+---
+
+## Issue #18 — Filter Ruangan di Dashboard + Navigasi Superadmin
+
+**Tujuan:** Tambah filter ruangan di admin dashboard + menu Ruangan di sidebar superadmin.
+
+**Scope:**
+- Filter ruangan di AdminDashboardController & view
+- Tampilkan nama ruangan dari relasi di card jadwal
+- Menu "Ruangan" di sidebar superadmin (sejajar Master Data: Cabang, Program, Tentor, Ruangan)
+- Admin TIDAK memiliki halaman CRUD ruangan terpisah (cukup filter di dashboard)
+
+**Detail:** `issues/issue-18-filter-ruangan-dashboard-navigasi.md`
+
+---
+
 ## Urutan Pengerjaan
 
 ```text
-#1 Setup & Database
+#1 Setup & Database                          ✅
        ↓
-#2 Autentikasi
+#2 Autentikasi                               ✅
        ↓
-#3 Dashboard Admin
+#3 Dashboard Admin                           ✅
        ↓
-#4 CRUD Jadwal
+#4 CRUD Jadwal                               ✅
        ↓
-#5 Dashboard & Jadwal Superadmin
+#5 Dashboard & Jadwal Superadmin             ✅
        ↓
-#6 Data Master (Cabang, Program, Tentor)
+#6 Data Master (Cabang, Program, Tentor)     ✅
        ↓
-#7 Manajemen Akun
+#7 Manajemen Akun                            ✅
        ↓
-#8 UI Polish & Responsif
+#8 UI Polish & Responsif                     ✅
+       ↓
+#9-#13 Perbaikan & Polish Tambahan           ✅
+       ↓
+#14 Relasi User ↔ Cabang                     ✅
+       ↓
+#15 Tabel Ruangan, Model & Seeder
+       ↓
+#16 CRUD Ruangan Superadmin
+       ↓
+#17 Jadwal Form Ruangan Dinamis + Popup
+       ↓
+#18 Filter Ruangan Dashboard + Navigasi
 ```
 
-> **Catatan:** Issue #8 bisa dikerjakan paralel selama development berlangsung, tidak harus menunggu semua issue selesai. Setiap issue yang selesai sebaiknya sudah mengikuti design system semampu mungkin agar polish di akhir tidak terlalu berat.
+> **Catatan:** Issue #14 dan #15 bisa dikerjakan paralel (tidak ada dependency satu sama lain). Issue #16, #17, #18 tergantung pada #14 dan #15.

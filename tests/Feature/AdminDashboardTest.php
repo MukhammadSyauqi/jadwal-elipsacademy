@@ -419,18 +419,20 @@ class AdminDashboardTest extends TestCase
             ['alamat' => 'Jl. Raya Gubeng No. 45, Surabaya', 'status' => 'aktif']
         );
 
-        $staffGubeng = User::firstOrCreate(
-            ['email' => 'gubeng@elipsacademy.com'],
-            ['nama' => 'Staff Gubeng', 'password' => Hash::make('password'), 'role' => 'admin']
+        $adminGubeng = User::updateOrCreate(
+            ['email' => 'admin.gubeng@elipsacademy.com'],
+            ['nama' => 'Admin Gubeng', 'password' => Hash::make('password'), 'role' => 'admin', 'cabang_id' => $gubengCabang->id]
         );
 
         // 1. Dashboard
-        $dashResponse = $this->actingAs($staffGubeng)->get(route('admin.dashboard'));
+        $dashResponse = $this->actingAs($adminGubeng)->get(route('admin.dashboard'));
         $dashResponse->assertStatus(200);
+        $dashResponse->assertSee('Admin Gubeng');
         $dashResponse->assertSee('Gubeng');
+        $dashResponse->assertDontSee('Semua Cabang');
 
         // 2. Create Jadwal Page (Cabang Gubeng should be pre-selected and 3 rooms available)
-        $createResponse = $this->actingAs($staffGubeng)->get(route('admin.jadwal.create'));
+        $createResponse = $this->actingAs($adminGubeng)->get(route('admin.jadwal.create'));
         $createResponse->assertStatus(200);
         $createResponse->assertSee('Cabang Gubeng');
         $createResponse->assertSee('Ruang 1');
@@ -445,9 +447,9 @@ class AdminDashboardTest extends TestCase
             ['alamat' => 'Jl. Raya Buduran, Sidoarjo', 'status' => 'aktif']
         );
 
-        $adminBuduran = User::firstOrCreate(
+        $adminBuduran = User::updateOrCreate(
             ['email' => 'admin.buduran@elipsacademy.com'],
-            ['nama' => 'Admin Buduran', 'password' => Hash::make('password'), 'role' => 'admin']
+            ['nama' => 'Admin Buduran', 'password' => Hash::make('password'), 'role' => 'admin', 'cabang_id' => $buduranCabang->id]
         );
 
         // 1. Dashboard
@@ -455,11 +457,69 @@ class AdminDashboardTest extends TestCase
         $dashResponse->assertStatus(200);
         $dashResponse->assertSee('Admin Buduran');
         $dashResponse->assertSee('Buduran');
+        $dashResponse->assertDontSee('Semua Cabang');
 
         // 2. Create Jadwal Page (Cabang Buduran should be pre-selected)
         $createResponse = $this->actingAs($adminBuduran)->get(route('admin.jadwal.create'));
         $createResponse->assertStatus(200);
         $createResponse->assertSee('Cabang Buduran');
+    }
+
+    public function test_admin_only_sees_schedules_from_own_cabang(): void
+    {
+        $buduran = Cabang::firstOrCreate(['id' => 1], ['nama_cabang' => 'Buduran', 'status' => 'aktif']);
+        $candi = Cabang::firstOrCreate(['id' => 2], ['nama_cabang' => 'Candi', 'status' => 'aktif']);
+
+        $adminBuduran = User::updateOrCreate(
+            ['email' => 'admin.buduran.isolation@elipsacademy.com'],
+            ['nama' => 'Admin Buduran Iso', 'password' => Hash::make('password'), 'role' => 'admin', 'cabang_id' => $buduran->id]
+        );
+
+        $today = Carbon::today()->toDateString();
+
+        // Create 1 schedule in Buduran, 1 in Candi
+        $jadwalBuduran = Jadwal::create([
+            'cabang_id' => $buduran->id,
+            'program_id' => 1,
+            'tentor_id' => 1,
+            'nama_kelas' => 'KELAS-BUDURAN-ISO',
+            'jenis_kelas' => 'private',
+            'mode_kelas' => 'offline',
+            'tanggal' => $today,
+            'jam_mulai' => '08:00',
+            'jam_selesai' => '09:30',
+            'ruangan' => 'Ruang Isolasi Buduran',
+            'catatan' => 'Catatan Khusus Buduran',
+            'pertemuan' => 1,
+            'status' => 'terjadwal',
+        ]);
+
+        $jadwalCandi = Jadwal::create([
+            'cabang_id' => $candi->id,
+            'program_id' => 1,
+            'tentor_id' => 2,
+            'nama_kelas' => 'KELAS-CANDI-ISO',
+            'jenis_kelas' => 'rombel',
+            'mode_kelas' => 'offline',
+            'tanggal' => $today,
+            'jam_mulai' => '10:00',
+            'jam_selesai' => '11:30',
+            'ruangan' => 'Ruang Isolasi Candi',
+            'catatan' => 'Catatan Khusus Candi',
+            'pertemuan' => 1,
+            'status' => 'terjadwal',
+        ]);
+
+        $response = $this->actingAs($adminBuduran)->get(route('admin.dashboard', ['tanggal' => $today]));
+        $response->assertStatus(200);
+        $response->assertSee('Ruang Isolasi Buduran');
+        $response->assertSee('Catatan Khusus Buduran');
+        $response->assertDontSee('Ruang Isolasi Candi');
+        $response->assertDontSee('Catatan Khusus Candi');
+
+        // Cleanup
+        $jadwalBuduran->delete();
+        $jadwalCandi->delete();
     }
 }
 

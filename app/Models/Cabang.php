@@ -25,4 +25,12 @@ class Cabang extends Model
     {
         return $this->hasMany(Jadwal::class, 'cabang_id');
     }
+
+    /**
+     * Get the users (admins) assigned to this cabang.
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'cabang_id');
+    }
 }
