@@ -33,4 +33,12 @@ class Cabang extends Model
     {
         return $this->hasMany(User::class, 'cabang_id');
     }
+
+    /**
+     * Get the rooms (ruangan) for this cabang.
+     */
+    public function ruangans(): HasMany
+    {
+        return $this->hasMany(Ruangan::class, 'cabang_id');
+    }
 }

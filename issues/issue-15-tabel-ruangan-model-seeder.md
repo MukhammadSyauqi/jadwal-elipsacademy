@@ -106,11 +106,11 @@ File: `database/seeders/JadwalSeeder.php`
 
 ## Acceptance Criteria
 
-- [ ] Migration berhasil, tabel `ruangan` terbentuk dengan constraint yang benar
-- [ ] Kolom `ruangan_id` muncul di tabel `jadwal`
-- [ ] Seeder berjalan: Candi punya 2 ruangan, Buduran punya 3, Gubeng punya 3
-- [ ] Model `Ruangan` berfungsi dengan relasi `cabang()` dan `jadwals()`
-- [ ] Model `Cabang` bisa mengakses `$cabang->ruangans`
-- [ ] Model `Jadwal` bisa mengakses `$jadwal->ruanganRef`
-- [ ] Unique constraint berfungsi: tidak bisa buat ruangan duplikat di cabang yang sama
-- [ ] `php artisan migrate:fresh --seed` berhasil tanpa error
+- [x] Migration berhasil, tabel `ruangan` terbentuk dengan constraint yang benar
+- [x] Kolom `ruangan_id` muncul di tabel `jadwal`
+- [x] Seeder berjalan: Candi punya 2 ruangan, Buduran punya 3, Gubeng punya 3
+- [x] Model `Ruangan` berfungsi dengan relasi `cabang()` dan `jadwals()`
+- [x] Model `Cabang` bisa mengakses `$cabang->ruangans`
+- [x] Model `Jadwal` bisa mengakses `$jadwal->ruanganRef`
+- [x] Unique constraint berfungsi: tidak bisa buat ruangan duplikat di cabang yang sama
+- [x] `php artisan migrate:fresh --seed` berhasil tanpa error

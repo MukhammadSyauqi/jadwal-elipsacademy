@@ -42,7 +42,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => \Carbon\Carbon::now()->subMinutes(30)->format('H:i:00'),
                 'jam_selesai' => \Carbon\Carbon::now()->addMinutes(90)->format('H:i:00'),
-                'ruangan' => 'Lab Komputer B',
+                'ruangan' => 'Ruang 2',
                 'pertemuan' => 4,
                 'status' => 'terjadwal',
                 'catatan' => 'Web Programming - Frontend Foundation',
@@ -57,7 +57,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '13:00:00',
                 'jam_selesai' => '15:00:00',
-                'ruangan' => 'Lab Komputer A',
+                'ruangan' => 'Ruang 3',
                 'pertemuan' => 5,
                 'status' => 'terjadwal',
                 'catatan' => 'Web Programming - Backend Laravel',
@@ -72,7 +72,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '15:30:00',
                 'jam_selesai' => '17:30:00',
-                'ruangan' => 'Studio Desain',
+                'ruangan' => 'Ruang 1',
                 'pertemuan' => 8,
                 'status' => 'terjadwal',
                 'catatan' => 'Graphic Design & Brand Visual Identity',
@@ -102,7 +102,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '10:00:00',
                 'jam_selesai' => '12:00:00',
-                'ruangan' => 'Studio 2',
+                'ruangan' => 'Ruang 3',
                 'pertemuan' => 3,
                 'status' => 'dibatalkan',
                 'catatan' => 'Dibatalkan karena pemeliharaan ruangan studio',
@@ -119,7 +119,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $tomorrow,
                 'jam_mulai' => '09:00:00',
                 'jam_selesai' => '11:00:00',
-                'ruangan' => 'Lab Komputer A',
+                'ruangan' => 'Ruang 1',
                 'pertemuan' => 6,
                 'status' => 'terjadwal',
                 'catatan' => 'Web Programming Lanjutan',
@@ -134,7 +134,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $tomorrow,
                 'jam_mulai' => '13:00:00',
                 'jam_selesai' => '15:00:00',
-                'ruangan' => 'Ruang 1',
+                'ruangan' => 'Ruang 2',
                 'pertemuan' => 3,
                 'status' => 'terjadwal',
                 'catatan' => 'Microsoft Office Mahir',
@@ -151,7 +151,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '09:30:00',
                 'jam_selesai' => '11:30:00',
-                'ruangan' => 'Ruang A Candi',
+                'ruangan' => 'Ruang 1',
                 'pertemuan' => 2,
                 'status' => 'selesai',
                 'catatan' => 'Kelas Candi Pagi',
@@ -166,7 +166,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '14:00:00',
                 'jam_selesai' => '16:00:00',
-                'ruangan' => 'Lab Multimedia Candi',
+                'ruangan' => 'Ruang 2',
                 'pertemuan' => 1,
                 'status' => 'terjadwal',
                 'catatan' => 'Kelas Candi Siang Desain',
@@ -181,7 +181,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '19:00:00',
                 'jam_selesai' => '21:00:00',
-                'ruangan' => 'Lab IT Candi',
+                'ruangan' => 'Ruang 1',
                 'pertemuan' => 3,
                 'status' => 'terjadwal',
                 'catatan' => 'Kelas Candi Malam Web',
@@ -213,7 +213,7 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '13:00:00',
                 'jam_selesai' => '15:00:00',
-                'ruangan' => 'Lab Komputer A',
+                'ruangan' => 'Ruang 2',
                 'pertemuan' => 2,
                 'status' => 'terjadwal',
                 'catatan' => 'Kelas Web Programming Cabang Gubeng',
@@ -228,14 +228,25 @@ class JadwalSeeder extends Seeder
                 'tanggal' => $today,
                 'jam_mulai' => '15:30:00',
                 'jam_selesai' => '17:30:00',
-                'ruangan' => 'Ruang 2',
+                'ruangan' => 'Ruang 3',
                 'pertemuan' => 1,
                 'status' => 'terjadwal',
                 'catatan' => 'Kelas Desain Grafis Cabang Gubeng',
             ],
         ];
 
+        // Map ruangan_id from Ruangan table
+        $ruangans = \App\Models\Ruangan::all();
+
         foreach ($jadwalList as $item) {
+            $matchingRuangan = $ruangans->first(function ($r) use ($item) {
+                return $r->cabang_id === $item['cabang_id'] && $r->nama_ruangan === $item['ruangan'];
+            });
+
+            if ($matchingRuangan) {
+                $item['ruangan_id'] = $matchingRuangan->id;
+            }
+
             Jadwal::updateOrCreate(
                 [
                     'cabang_id' => $item['cabang_id'],

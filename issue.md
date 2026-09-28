@@ -317,7 +317,7 @@
        ↓
 #14 Relasi User ↔ Cabang                     ✅
        ↓
-#15 Tabel Ruangan, Model & Seeder
+#15 Tabel Ruangan, Model & Seeder           ✅
        ↓
 #16 CRUD Ruangan Superadmin
        ↓

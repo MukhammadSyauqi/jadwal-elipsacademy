@@ -15,7 +15,7 @@ use Tests\TestCase;
 class DatabaseSetupTest extends TestCase
 {
     /**
-     * Test that all 5 required tables exist in database.
+     * Test that all required database tables exist.
      */
     public function test_all_five_tables_exist(): void
     {
@@ -24,6 +24,7 @@ class DatabaseSetupTest extends TestCase
         $this->assertTrue(Schema::hasTable('program'));
         $this->assertTrue(Schema::hasTable('tentor'));
         $this->assertTrue(Schema::hasTable('jadwal'));
+        $this->assertTrue(Schema::hasTable('ruangan'));
     }
 
     /**
@@ -31,15 +32,16 @@ class DatabaseSetupTest extends TestCase
      */
     public function test_table_columns_match_specification(): void
     {
-        $this->assertTrue(Schema::hasColumns('users', ['id', 'nama', 'email', 'password', 'role', 'created_at', 'updated_at']));
+        $this->assertTrue(Schema::hasColumns('users', ['id', 'nama', 'email', 'password', 'role', 'cabang_id', 'created_at', 'updated_at']));
         $this->assertTrue(Schema::hasColumns('cabang', ['id', 'nama_cabang', 'alamat', 'status', 'created_at', 'updated_at']));
         $this->assertTrue(Schema::hasColumns('program', ['id', 'nama_program', 'kategori', 'status', 'created_at', 'updated_at']));
         $this->assertTrue(Schema::hasColumns('tentor', ['id', 'nama', 'no_hp', 'keahlian', 'status', 'created_at', 'updated_at']));
         $this->assertTrue(Schema::hasColumns('jadwal', [
             'id', 'cabang_id', 'program_id', 'tentor_id', 'nama_kelas',
             'jenis_kelas', 'tanggal', 'jam_mulai', 'jam_selesai',
-            'ruangan', 'pertemuan', 'status', 'catatan', 'created_at', 'updated_at'
+            'ruangan', 'ruangan_id', 'pertemuan', 'status', 'catatan', 'created_at', 'updated_at'
         ]));
+        $this->assertTrue(Schema::hasColumns('ruangan', ['id', 'cabang_id', 'nama_ruangan', 'kapasitas', 'status', 'created_at', 'updated_at']));
     }
 
     /**

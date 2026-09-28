@@ -16,6 +16,7 @@ class Jadwal extends Model
         'cabang_id',
         'program_id',
         'tentor_id',
+        'ruangan_id',
         'nama_kelas',
         'jenis_kelas',
         'mode_kelas',
@@ -38,6 +39,7 @@ class Jadwal extends Model
         return [
             'tanggal' => 'date',
             'pertemuan' => 'integer',
+            'ruangan_id' => 'integer',
         ];
     }
 
@@ -47,6 +49,14 @@ class Jadwal extends Model
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
+    }
+
+    /**
+     * Get the ruangan model associated with this jadwal.
+     */
+    public function ruanganRef(): BelongsTo
+    {
+        return $this->belongsTo(Ruangan::class, 'ruangan_id');
     }
 
     /**
