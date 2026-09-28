@@ -117,6 +117,13 @@
                     <span>Cabang</span>
                 </a>
 
+                <a href="{{ route('superadmin.ruangan.index') }}" 
+                   id="nav-superadmin-ruangan"
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
+                    <span class="material-symbols-outlined text-[20px]">meeting_room</span>
+                    <span>Ruangan</span>
+                </a>
+
                 <a href="{{ route('superadmin.program.index') }}" 
                    id="nav-superadmin-program"
                    class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
@@ -628,6 +635,15 @@
                                 <span class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-indigo-600 text-[18px]">apartment</span>
                                     <span>Master Cabang</span>
+                                </span>
+                                <span class="material-symbols-outlined text-ink-subtle text-[16px]">chevron_right</span>
+                            </a>
+
+                            <a href="{{ route('superadmin.ruangan.index') }}" 
+                               class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-xs font-semibold text-ink-body transition-colors">
+                                <span class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-teal-600 text-[18px]">meeting_room</span>
+                                    <span>Master Ruangan</span>
                                 </span>
                                 <span class="material-symbols-outlined text-ink-subtle text-[16px]">chevron_right</span>
                             </a>

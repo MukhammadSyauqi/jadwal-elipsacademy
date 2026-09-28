@@ -7,6 +7,7 @@ use App\Http\Controllers\SuperadminCabangController;
 use App\Http\Controllers\SuperadminDashboardController;
 use App\Http\Controllers\SuperadminJadwalController;
 use App\Http\Controllers\SuperadminProgramController;
+use App\Http\Controllers\SuperadminRuanganController;
 use App\Http\Controllers\SuperadminTentorController;
 use App\Http\Controllers\SuperadminUserController;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/superadmin/cabang/{cabang}', [SuperadminCabangController::class, 'update'])->name('superadmin.cabang.update');
         Route::post('/superadmin/cabang/{cabang}/toggle-status', [SuperadminCabangController::class, 'toggleStatus'])->name('superadmin.cabang.toggle-status');
         Route::delete('/superadmin/cabang/{cabang}', [SuperadminCabangController::class, 'destroy'])->name('superadmin.cabang.destroy');
+
+        // Master Data: Ruangan
+        Route::get('/superadmin/ruangan', [SuperadminRuanganController::class, 'index'])->name('superadmin.ruangan.index');
+        Route::post('/superadmin/ruangan', [SuperadminRuanganController::class, 'store'])->name('superadmin.ruangan.store');
+        Route::put('/superadmin/ruangan/{ruangan}', [SuperadminRuanganController::class, 'update'])->name('superadmin.ruangan.update');
+        Route::post('/superadmin/ruangan/{ruangan}/toggle-status', [SuperadminRuanganController::class, 'toggleStatus'])->name('superadmin.ruangan.toggle-status');
+        Route::delete('/superadmin/ruangan/{ruangan}', [SuperadminRuanganController::class, 'destroy'])->name('superadmin.ruangan.destroy');
 
         // Master Data: Program Kursus
         Route::get('/superadmin/program', [SuperadminProgramController::class, 'index'])->name('superadmin.program.index');

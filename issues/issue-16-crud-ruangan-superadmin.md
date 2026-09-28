@@ -81,14 +81,14 @@ File: `resources/views/superadmin/dashboard.blade.php` (dan layout terkait)
 
 ## Acceptance Criteria
 
-- [ ] Halaman `/superadmin/ruangan` bisa diakses dan menampilkan semua ruangan
-- [ ] Metrics cards menampilkan total, aktif, nonaktif dengan angka yang benar
-- [ ] Filter per cabang berfungsi — memfilter tabel ruangan
-- [ ] Search berfungsi — bisa cari berdasarkan nama ruangan
-- [ ] Tambah ruangan berhasil dengan validasi (nama unik per cabang)
-- [ ] Edit ruangan berhasil (nama, kapasitas, status)
-- [ ] Toggle status aktif/nonaktif berfungsi
-- [ ] Hapus ruangan yang tidak dipakai jadwal berhasil
-- [ ] Hapus ruangan yang masih dipakai jadwal menampilkan error
-- [ ] Menu "Ruangan" muncul di sidebar superadmin
-- [ ] UI konsisten dengan halaman Master Data lainnya (Cabang, Program, Tentor)
+- [x] Halaman `/superadmin/ruangan` bisa diakses dan menampilkan semua ruangan
+- [x] Metrics cards menampilkan total, aktif, nonaktif dengan angka yang benar
+- [x] Filter per cabang berfungsi — memfilter tabel ruangan
+- [x] Search berfungsi — bisa cari berdasarkan nama ruangan
+- [x] Tambah ruangan berhasil dengan validasi (nama unik per cabang)
+- [x] Edit ruangan berhasil (nama, kapasitas, status)
+- [x] Toggle status aktif/nonaktif berfungsi
+- [x] Hapus ruangan yang tidak dipakai jadwal berhasil
+- [x] Hapus ruangan yang masih dipakai jadwal menampilkan error
+- [x] Menu "Ruangan" muncul di sidebar superadmin
+- [x] UI konsisten dengan halaman Master Data lainnya (Cabang, Program, Tentor)
