@@ -88,11 +88,11 @@ Menjadi:
 
 ## Acceptance Criteria
 
-- [ ] Filter ruangan muncul di admin dashboard (sejajar dengan filter lain)
-- [ ] Filter ruangan berfungsi — menyaring jadwal per ruangan
-- [ ] Opsi "Semua Ruangan" menampilkan semua jadwal (tanpa filter ruangan)
-- [ ] Nama ruangan tampil di card jadwal (bukan string hardcoded lama)
-- [ ] Menu "Ruangan" muncul di sidebar superadmin di semua halaman
-- [ ] Menu "Ruangan" memiliki active state yang benar saat berada di halaman ruangan
-- [ ] Admin **tidak** memiliki menu CRUD ruangan terpisah
-- [ ] Tidak ada regression — filter sesi, cabang, search tetap berfungsi
+- [x] Filter ruangan muncul di admin dashboard (sejajar dengan filter lain)
+- [x] Filter ruangan berfungsi — menyaring jadwal per ruangan
+- [x] Opsi "Semua Ruangan" menampilkan semua jadwal (tanpa filter ruangan)
+- [x] Nama ruangan tampil di card jadwal (bukan string hardcoded lama)
+- [x] Menu "Ruangan" muncul di sidebar superadmin di semua halaman
+- [x] Menu "Ruangan" memiliki active state yang benar saat berada di halaman ruangan
+- [x] Admin **tidak** memiliki menu CRUD ruangan terpisah
+- [x] Tidak ada regression — filter sesi, cabang, search tetap berfungsi

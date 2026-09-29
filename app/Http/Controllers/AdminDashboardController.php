@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cabang;
 use App\Models\Jadwal;
+use App\Models\Ruangan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -31,6 +32,23 @@ class AdminDashboardController extends Controller
                 : null;
         }
 
+        // Ruangan handling for filter dropdown
+        if ($selectedCabang) {
+            $ruangans = Ruangan::where('cabang_id', $selectedCabang->id)
+                ->where('status', 'aktif')
+                ->orderBy('nama_ruangan')
+                ->get();
+        } elseif ($user && $user->cabang_id !== null) {
+            $ruangans = Ruangan::where('cabang_id', $user->cabang_id)
+                ->where('status', 'aktif')
+                ->orderBy('nama_ruangan')
+                ->get();
+        } else {
+            $ruangans = Ruangan::where('status', 'aktif')
+                ->orderBy('nama_ruangan')
+                ->get();
+        }
+
         // 2. Date handling
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
@@ -50,7 +68,7 @@ class AdminDashboardController extends Controller
         $isTomorrow = ($selectedDate === $tomorrowDate);
 
         // 3. Base schedules for the selected date & optional branch filter
-        $baseJadwalQuery = Jadwal::with(['cabang', 'program', 'tentor'])
+        $baseJadwalQuery = Jadwal::with(['cabang', 'program', 'tentor', 'ruanganRef'])
             ->when($selectedCabang, fn($q) => $q->where('cabang_id', $selectedCabang->id))
             ->where('tanggal', $selectedDate);
 
@@ -80,11 +98,23 @@ class AdminDashboardController extends Controller
             'malam' => $allDayJadwal->filter(fn($j) => $j->sesi === 'malam')->count(),
         ];
 
-        // 4. Apply Filters (Session & Search) to schedule list
+        // 4. Apply Filters (Ruangan, Session & Search) to schedule list
         $sesi = strtolower(trim($request->query('sesi', 'semua')));
         $search = trim($request->query('q', ''));
+        $selectedRuanganId = $request->query('ruangan_id');
 
         $query = clone $baseJadwalQuery;
+
+        if (!empty($selectedRuanganId) && $selectedRuanganId !== 'semua') {
+            $selectedRuanganObj = $ruangans->firstWhere('id', (int) $selectedRuanganId);
+            $ruanganNama = $selectedRuanganObj?->nama_ruangan;
+            $query->where(function ($q) use ($selectedRuanganId, $ruanganNama) {
+                $q->where('ruangan_id', $selectedRuanganId);
+                if ($ruanganNama) {
+                    $q->orWhere('ruangan', $ruanganNama);
+                }
+            });
+        }
 
         if ($sesi && $sesi !== 'semua') {
             if ($sesi === 'pagi') {
@@ -102,6 +132,7 @@ class AdminDashboardController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama_kelas', 'like', "%{$search}%")
                     ->orWhere('ruangan', 'like', "%{$search}%")
+                    ->orWhereHas('ruanganRef', fn($r) => $r->where('nama_ruangan', 'like', "%{$search}%"))
                     ->orWhereHas('tentor', fn($t) => $t->where('nama', 'like', "%{$search}%"))
                     ->orWhereHas('program', fn($p) => $p->where('nama_program', 'like', "%{$search}%"))
                     ->orWhereHas('cabang', fn($c) => $c->where('nama_cabang', 'like', "%{$search}%"));
@@ -114,6 +145,8 @@ class AdminDashboardController extends Controller
             'user' => $user,
             'cabangs' => $cabangs,
             'selectedCabang' => $selectedCabang,
+            'ruangans' => $ruangans,
+            'selectedRuanganId' => $selectedRuanganId,
             'selectedDate' => $selectedDate,
             'formattedDate' => $formattedDate,
             'isToday' => $isToday,

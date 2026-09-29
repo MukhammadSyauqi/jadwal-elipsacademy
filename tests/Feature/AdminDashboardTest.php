@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Cabang;
 use App\Models\Jadwal;
 use App\Models\Program;
+use App\Models\Ruangan;
 use App\Models\Tentor;
 use App\Models\User;
 use Carbon\Carbon;
@@ -520,6 +521,220 @@ class AdminDashboardTest extends TestCase
         // Cleanup
         $jadwalBuduran->delete();
         $jadwalCandi->delete();
+    }
+
+    public function test_admin_dashboard_shows_ruangan_dropdown_and_semua_ruangan(): void
+    {
+        $admin = $this->getAdminUser();
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard', ['cabang_id' => 1]));
+        $response->assertStatus(200);
+        $response->assertSee('Semua Ruangan');
+        $response->assertSee('Ruang 1');
+    }
+
+    public function test_admin_dashboard_filters_schedules_by_ruangan_id(): void
+    {
+        $admin = $this->getAdminUser();
+        $today = Carbon::today()->toDateString();
+
+        $ruangA = Ruangan::create([
+            'cabang_id' => 1,
+            'nama_ruangan' => 'Ruang Alfa Filter Test',
+            'kapasitas' => 15,
+            'status' => 'aktif',
+        ]);
+        $ruangB = Ruangan::create([
+            'cabang_id' => 1,
+            'nama_ruangan' => 'Ruang Beta Filter Test',
+            'kapasitas' => 25,
+            'status' => 'aktif',
+        ]);
+
+        try {
+            $jadwalA = Jadwal::create([
+                'cabang_id' => 1,
+                'ruangan_id' => $ruangA->id,
+                'program_id' => 1,
+                'tentor_id' => 1,
+                'nama_kelas' => 'KELAS-RUANG-ALFA',
+                'jenis_kelas' => 'private',
+                'mode_kelas' => 'offline',
+                'tanggal' => $today,
+                'jam_mulai' => '08:00',
+                'jam_selesai' => '09:30',
+                'ruangan' => $ruangA->nama_ruangan,
+                'catatan' => 'Catatan Khusus Sesi Alfa',
+                'pertemuan' => 1,
+                'status' => 'terjadwal',
+            ]);
+
+            $jadwalB = Jadwal::create([
+                'cabang_id' => 1,
+                'ruangan_id' => $ruangB->id,
+                'program_id' => 1,
+                'tentor_id' => 2,
+                'nama_kelas' => 'KELAS-RUANG-BETA',
+                'jenis_kelas' => 'rombel',
+                'mode_kelas' => 'offline',
+                'tanggal' => $today,
+                'jam_mulai' => '10:00',
+                'jam_selesai' => '11:30',
+                'ruangan' => $ruangB->nama_ruangan,
+                'catatan' => 'Catatan Khusus Sesi Beta',
+                'pertemuan' => 1,
+                'status' => 'terjadwal',
+            ]);
+
+            // 1. Filter by Ruang A
+            $responseA = $this->actingAs($admin)->get(route('admin.dashboard', [
+                'cabang_id' => 1,
+                'tanggal' => $today,
+                'ruangan_id' => $ruangA->id,
+            ]));
+            $responseA->assertStatus(200);
+            $responseA->assertSee('Catatan Khusus Sesi Alfa');
+            $responseA->assertDontSee('Catatan Khusus Sesi Beta');
+            $responseA->assertSee(route('admin.jadwal.show', $jadwalA->id));
+            $responseA->assertDontSee(route('admin.jadwal.show', $jadwalB->id));
+            $responseA->assertSee('Ruang Alfa Filter Test');
+
+            // 2. Filter by Ruang B
+            $responseB = $this->actingAs($admin)->get(route('admin.dashboard', [
+                'cabang_id' => 1,
+                'tanggal' => $today,
+                'ruangan_id' => $ruangB->id,
+            ]));
+            $responseB->assertStatus(200);
+            $responseB->assertSee('Catatan Khusus Sesi Beta');
+            $responseB->assertDontSee('Catatan Khusus Sesi Alfa');
+            $responseB->assertSee(route('admin.jadwal.show', $jadwalB->id));
+            $responseB->assertDontSee(route('admin.jadwal.show', $jadwalA->id));
+
+            // 3. Filter "semua" or empty displays both
+            $responseAll = $this->actingAs($admin)->get(route('admin.dashboard', [
+                'cabang_id' => 1,
+                'tanggal' => $today,
+                'ruangan_id' => '',
+            ]));
+            $responseAll->assertStatus(200);
+            $responseAll->assertSee('Catatan Khusus Sesi Alfa');
+            $responseAll->assertSee('Catatan Khusus Sesi Beta');
+            $responseAll->assertSee(route('admin.jadwal.show', $jadwalA->id));
+            $responseAll->assertSee(route('admin.jadwal.show', $jadwalB->id));
+        } finally {
+            if (isset($jadwalA)) $jadwalA->delete();
+            if (isset($jadwalB)) $jadwalB->delete();
+            $ruangA->delete();
+            $ruangB->delete();
+        }
+    }
+
+    public function test_admin_dashboard_card_displays_ruangan_name_from_relation_and_legacy_fallback(): void
+    {
+        $admin = $this->getAdminUser();
+        $today = Carbon::today()->toDateString();
+
+        $ruangRelasi = Ruangan::create([
+            'cabang_id' => 1,
+            'nama_ruangan' => 'Ruang Laboratorium Cerdas',
+            'kapasitas' => 10,
+            'status' => 'aktif',
+        ]);
+
+        try {
+            // Schedule with relation
+            $jadwalWithRel = Jadwal::create([
+                'cabang_id' => 1,
+                'ruangan_id' => $ruangRelasi->id,
+                'program_id' => 1,
+                'tentor_id' => 1,
+                'nama_kelas' => 'KELAS-RELASI-ROOM',
+                'jenis_kelas' => 'private',
+                'mode_kelas' => 'offline',
+                'tanggal' => $today,
+                'jam_mulai' => '13:00',
+                'jam_selesai' => '14:30',
+                'ruangan' => 'Old Room String',
+                'pertemuan' => 1,
+                'status' => 'terjadwal',
+            ]);
+
+            // Schedule with only legacy string
+            $jadwalLegacy = Jadwal::create([
+                'cabang_id' => 1,
+                'ruangan_id' => null,
+                'program_id' => 1,
+                'tentor_id' => 1,
+                'nama_kelas' => 'KELAS-LEGACY-ROOM',
+                'jenis_kelas' => 'private',
+                'mode_kelas' => 'offline',
+                'tanggal' => $today,
+                'jam_mulai' => '15:00',
+                'jam_selesai' => '16:30',
+                'ruangan' => 'Ruang Warisan Lama',
+                'pertemuan' => 1,
+                'status' => 'terjadwal',
+            ]);
+
+            $response = $this->actingAs($admin)->get(route('admin.dashboard', [
+                'cabang_id' => 1,
+                'tanggal' => $today,
+            ]));
+
+            $response->assertStatus(200);
+            $response->assertSee('Ruang Laboratorium Cerdas');
+            $response->assertSee('Ruang Warisan Lama');
+        } finally {
+            if (isset($jadwalWithRel)) $jadwalWithRel->delete();
+            if (isset($jadwalLegacy)) $jadwalLegacy->delete();
+            $ruangRelasi->delete();
+        }
+    }
+
+    public function test_superadmin_views_have_ruangan_in_sidebar_navigation_in_correct_order(): void
+    {
+        $superadmin = $this->getSuperadminUser();
+
+        $routes = [
+            'superadmin.dashboard',
+            'superadmin.cabang.index',
+            'superadmin.jadwal.index',
+            'superadmin.program.index',
+            'superadmin.tentor.index',
+            'superadmin.user.index',
+            'superadmin.ruangan.index',
+        ];
+
+        foreach ($routes as $routeName) {
+            $response = $this->actingAs($superadmin)->get(route($routeName));
+            $response->assertStatus(200);
+            $response->assertSee('id="nav-superadmin-ruangan"', false);
+            $response->assertSee('Ruangan');
+
+            // Verify order: Tentor appears before Ruangan in sidebar nav
+            $content = $response->getContent();
+            $posTentor = strpos($content, 'id="nav-superadmin-tentor"');
+            $posRuangan = strpos($content, 'id="nav-superadmin-ruangan"');
+            $this->assertNotFalse($posTentor, "Tentor nav must exist in $routeName");
+            $this->assertNotFalse($posRuangan, "Ruangan nav must exist in $routeName");
+            $this->assertTrue($posTentor < $posRuangan, "Tentor must precede Ruangan in $routeName sidebar");
+        }
+    }
+
+    public function test_ruangan_nav_is_active_on_superadmin_ruangan_index(): void
+    {
+        $superadmin = $this->getSuperadminUser();
+
+        $response = $this->actingAs($superadmin)->get(route('superadmin.ruangan.index'));
+        $response->assertStatus(200);
+        $content = $response->getContent();
+
+        // The ruangan link must contain active class
+        $this->assertMatchesRegularExpression(
+            '/id="nav-superadmin-ruangan"[^>]*class="[^"]*bg-primary-container[^"]*"/',
+            $content
+        );
     }
 }
 

@@ -178,6 +178,9 @@
                             @if($selectedCabang)
                                 <input type="hidden" name="cabang_id" value="{{ $selectedCabang->id }}">
                             @endif
+                            @if(!empty($selectedRuanganId) && $selectedRuanganId !== 'semua')
+                                <input type="hidden" name="ruangan_id" value="{{ $selectedRuanganId }}">
+                            @endif
                             @if($sesi && $sesi !== 'semua')
                                 <input type="hidden" name="sesi" value="{{ $sesi }}">
                             @endif
@@ -256,9 +259,9 @@
                 </div>
             </div>
 
-            <!-- 4. Filter Cabang, Sesi & Pencarian -->
+            <!-- 4. Filter Cabang, Ruangan, Sesi & Pencarian -->
             <div class="bg-canvas-pure rounded-xl p-3 sm:p-4 shadow-xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 border border-hairline">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 flex-wrap">
                     <!-- Cabang Dropdown Filter -->
                     <form method="GET" action="{{ route('admin.dashboard') }}" class="inline-flex items-center shrink-0">
                         <input type="hidden" name="tanggal" value="{{ $selectedDate }}">
@@ -277,6 +280,32 @@
                                 @foreach($cabangs as $c)
                                     <option value="{{ $c->id }}" {{ $selectedCabang && $selectedCabang->id === $c->id ? 'selected' : '' }}>
                                         Cabang {{ $c->nama_cabang }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="material-symbols-outlined absolute right-2 text-ink-subtle text-sm pointer-events-none">expand_more</span>
+                        </div>
+                    </form>
+
+                    <!-- Ruangan Dropdown Filter -->
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="inline-flex items-center shrink-0">
+                        @if($selectedCabang)
+                            <input type="hidden" name="cabang_id" value="{{ $selectedCabang->id }}">
+                        @endif
+                        <input type="hidden" name="tanggal" value="{{ $selectedDate }}">
+                        @if($sesi && $sesi !== 'semua')
+                            <input type="hidden" name="sesi" value="{{ $sesi }}">
+                        @endif
+                        @if(!empty($q))
+                            <input type="hidden" name="q" value="{{ $q }}">
+                        @endif
+                        <div class="relative w-full sm:w-auto inline-flex items-center">
+                            <span class="material-symbols-outlined absolute left-2.5 text-teal-600 text-base pointer-events-none">meeting_room</span>
+                            <select name="ruangan_id" onchange="this.form.submit()" class="w-full sm:w-auto pl-8 pr-7 py-1.5 bg-surface-pearl hover:bg-surface-container rounded-full text-xs font-semibold text-ink-body border border-hairline focus:outline-none focus:border-brand-orange cursor-pointer appearance-none transition-all">
+                                <option value="">Semua Ruangan</option>
+                                @foreach($ruangans as $r)
+                                    <option value="{{ $r->id }}" {{ (!empty($selectedRuanganId) && (string)$selectedRuanganId === (string)$r->id) ? 'selected' : '' }}>
+                                        {{ $r->nama_ruangan }}
                                     </option>
                                 @endforeach
                             </select>
@@ -312,6 +341,9 @@
                     @if($selectedCabang)
                         <input type="hidden" name="cabang_id" value="{{ $selectedCabang->id }}">
                     @endif
+                    @if(!empty($selectedRuanganId) && $selectedRuanganId !== 'semua')
+                        <input type="hidden" name="ruangan_id" value="{{ $selectedRuanganId }}">
+                    @endif
                     <input type="hidden" name="tanggal" value="{{ $selectedDate }}">
                     @if($sesi && $sesi !== 'semua')
                         <input type="hidden" name="sesi" value="{{ $sesi }}">
@@ -334,18 +366,32 @@
                 </form>
             </div>
 
-            <!-- Active Filter Indicators if Search, Sesi, or Cabang is active -->
-            @if(!empty($q) || ($sesi && $sesi !== 'semua') || $selectedCabang)
+            <!-- Active Filter Indicators if Search, Sesi, Cabang, or Ruangan is active -->
+            @if(!empty($q) || ($sesi && $sesi !== 'semua') || $selectedCabang || (!empty($selectedRuanganId) && $selectedRuanganId !== 'semua'))
                 <div class="flex items-center gap-2 text-xs text-ink-muted px-1 flex-wrap">
                     <span>Filter aktif:</span>
                     @if($selectedCabang)
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-orange-50 text-secondary border border-amber-200 font-semibold">
                             <span class="material-symbols-outlined text-[13px] text-primary">location_on</span>
                             Cabang: {{ $selectedCabang->nama_cabang }}
-                            <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['cabang_id' => null])) }}" class="hover:text-amber-900" title="Hapus filter cabang">
+                            <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['cabang_id' => null, 'ruangan_id' => null])) }}" class="hover:text-amber-900" title="Hapus filter cabang">
                                 <span class="material-symbols-outlined text-xs">close</span>
                             </a>
                         </span>
+                    @endif
+                    @if(!empty($selectedRuanganId) && $selectedRuanganId !== 'semua')
+                        @php
+                            $activeRuangan = $ruangans->firstWhere('id', (int) $selectedRuanganId);
+                        @endphp
+                        @if($activeRuangan)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-semibold">
+                                <span class="material-symbols-outlined text-[13px] text-teal-600">meeting_room</span>
+                                Ruangan: {{ $activeRuangan->nama_ruangan }}
+                                <a href="{{ route('admin.dashboard', array_merge(request()->query(), ['ruangan_id' => null])) }}" class="hover:text-teal-900" title="Hapus filter ruangan">
+                                    <span class="material-symbols-outlined text-xs">close</span>
+                                </a>
+                            </span>
+                        @endif
                     @endif
                     @if(!empty($q))
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
@@ -460,7 +506,7 @@
                                     <!-- Ruangan -->
                                     <span class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm text-ink-subtle">meeting_room</span>
-                                        <span>{{ $jadwal->ruangan ?? 'Ruang Belum Ditentukan' }}</span>
+                                        <span>{{ $jadwal->ruanganRef->nama_ruangan ?? $jadwal->ruangan ?? 'Ruang Belum Ditentukan' }}</span>
                                     </span>
                                 </div>
                             </div>

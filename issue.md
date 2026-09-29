@@ -323,7 +323,7 @@
        ↓
 #17 Jadwal Form Ruangan Dinamis + Popup      ✅
        ↓
-#18 Filter Ruangan Dashboard + Navigasi
+#18 Filter Ruangan Dashboard + Navigasi       ✅
 ```
 
 > **Catatan:** Issue #14 dan #15 bisa dikerjakan paralel (tidak ada dependency satu sama lain). Issue #16, #17, #18 tergantung pada #14 dan #15.
