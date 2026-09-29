@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
         // CRUD Jadwal
         Route::get('/admin/jadwal/create', [AdminJadwalController::class, 'create'])->name('admin.jadwal.create');
         Route::post('/admin/jadwal', [AdminJadwalController::class, 'store'])->name('admin.jadwal.store');
+        Route::post('/admin/jadwal/check-room-conflict', [AdminJadwalController::class, 'checkRoomConflict'])->name('admin.jadwal.check-room-conflict');
+        Route::get('/api/ruangan', [AdminJadwalController::class, 'getRuanganByCabang'])->name('api.ruangan.by-cabang');
         Route::get('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'show'])->name('admin.jadwal.show');
         Route::get('/admin/jadwal/{jadwal}/edit', [AdminJadwalController::class, 'edit'])->name('admin.jadwal.edit');
         Route::put('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'update'])->name('admin.jadwal.update');

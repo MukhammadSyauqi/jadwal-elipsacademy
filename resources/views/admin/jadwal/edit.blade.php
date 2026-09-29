@@ -164,6 +164,8 @@
                 <form action="{{ route('admin.jadwal.update', $jadwal->id) }}" method="POST" class="space-y-5" id="formUbahJadwal">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="force_room" id="inputForceRoom" value="0">
+                    <input type="hidden" name="ruangan" id="inputRuangan" value="{{ old('ruangan', $jadwal->ruangan) }}">
 
                     <!-- 1. Cabang & Program Kursus -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -377,18 +379,27 @@
                                 Ruangan <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
-                                <select name="ruangan" 
+                                <select name="ruangan_id" 
                                         id="selectRuangan" 
-                                        class="w-full h-11 pl-3.5 pr-9 rounded-xl bg-[#F5F5F7] border @error('ruangan') border-red-500 @else border-transparent @enderror text-[#1D1D1F] text-sm focus:bg-white focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all appearance-none cursor-pointer" 
+                                        class="w-full h-11 pl-3.5 pr-9 rounded-xl bg-[#F5F5F7] border @if($errors->has('ruangan_id') || $errors->has('ruangan')) border-red-500 @else border-transparent @endif text-[#1D1D1F] text-sm focus:bg-white focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all appearance-none cursor-pointer" 
                                         required>
-                                    @foreach($defaultRuangan as $r)
-                                        <option value="{{ $r }}" {{ old('ruangan', $jadwal->ruangan) === $r ? 'selected' : '' }}>{{ $r }}</option>
+                                    @foreach($ruangans as $r)
+                                        <option value="{{ $r->id }}" 
+                                                data-nama="{{ $r->nama_ruangan }}" 
+                                                data-kapasitas="{{ $r->kapasitas }}" 
+                                                {{ (old('ruangan_id', $jadwal->ruangan_id) == $r->id || old('ruangan', $jadwal->ruangan) === $r->nama_ruangan) ? 'selected' : '' }}>
+                                            {{ $r->nama_ruangan }} (Kapasitas: {{ $r->kapasitas ?? '-' }})
+                                        </option>
                                     @endforeach
                                 </select>
                                 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle pointer-events-none text-[20px]">expand_more</span>
                             </div>
-                            @error('ruangan')
+                            @error('ruangan_id')
                                 <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
+                            @else
+                                @error('ruangan')
+                                    <p class="text-[11px] text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
                             @enderror
                         </div>
 
@@ -607,36 +618,143 @@
                 inputPertemuan.addEventListener('input', updateKodeKelasAuto);
             }
 
-            // Dynamic room options based on branch selection
+            // Dynamic room options based on branch selection via AJAX
             const selectCabang = document.getElementById('selectCabang');
             const selectRuangan = document.getElementById('selectRuangan');
-            const branchRoomsMap = {
-                'candi': ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'],
-                'gubeng': ['Ruang 1', 'Ruang 2', 'Lab Komputer A'],
-                'buduran': ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'],
-            };
+            const inputRuangan = document.getElementById('inputRuangan');
+
+            function syncRuanganName() {
+                if (selectRuangan && inputRuangan) {
+                    const opt = selectRuangan.options[selectRuangan.selectedIndex];
+                    if (opt && opt.dataset && opt.dataset.nama) {
+                        inputRuangan.value = opt.dataset.nama;
+                    }
+                }
+            }
+
+            if (selectRuangan) {
+                selectRuangan.addEventListener('change', syncRuanganName);
+                syncRuanganName();
+            }
 
             if (selectCabang && selectRuangan) {
                 selectCabang.addEventListener('change', () => {
-                    const selectedText = selectCabang.options[selectCabang.selectedIndex]?.textContent.toLowerCase() || '';
-                    let rooms = branchRoomsMap['buduran'];
-                    if (selectedText.includes('candi')) {
-                        rooms = branchRoomsMap['candi'];
-                    } else if (selectedText.includes('gubeng')) {
-                        rooms = branchRoomsMap['gubeng'];
+                    const cabangId = selectCabang.value;
+                    if (cabangId) {
+                        selectRuangan.innerHTML = '<option value="" disabled selected>Memuat ruangan...</option>';
+                        fetch(`/api/ruangan?cabang_id=${encodeURIComponent(cabangId)}&include_id={{ $jadwal->ruangan_id ?? "" }}`)
+                            .then(res => res.json())
+                            .then(rooms => {
+                                selectRuangan.innerHTML = '<option value="" disabled selected>Pilih Ruangan...</option>';
+                                rooms.forEach(r => {
+                                    const opt = document.createElement('option');
+                                    opt.value = r.id;
+                                    opt.dataset.nama = r.nama_ruangan;
+                                    opt.dataset.kapasitas = r.kapasitas || '-';
+                                    opt.textContent = `${r.nama_ruangan} (Kapasitas: ${r.kapasitas || '-'})`;
+                                    selectRuangan.appendChild(opt);
+                                });
+                                inputRuangan.value = '';
+                            })
+                            .catch(err => {
+                                console.error('Gagal memuat ruangan:', err);
+                                selectRuangan.innerHTML = '<option value="" disabled selected>Gagal memuat ruangan</option>';
+                            });
                     }
-
-                    const currentVal = selectRuangan.value;
-                    selectRuangan.innerHTML = '<option value="" disabled selected>Pilih Ruangan...</option>';
-                    rooms.forEach(r => {
-                        const opt = document.createElement('option');
-                        opt.value = r;
-                        opt.textContent = r;
-                        if (r === currentVal) opt.selected = true;
-                        selectRuangan.appendChild(opt);
-                    });
                 });
             }
+
+            // Pre-submit Room Conflict Detection via AJAX
+            const form = document.getElementById('formUbahJadwal');
+            const inputForceRoom = document.getElementById('inputForceRoom');
+            const inputJamMulai = document.getElementById('inputJamMulai');
+            const inputJamSelesai = document.getElementById('inputJamSelesai');
+            const selectStatus = document.getElementById('selectStatus');
+            const modalKonflik = document.getElementById('modalKonflikRuangan');
+            const boxKonflik = document.getElementById('konflikDetailsBox');
+            const questionKonflik = document.getElementById('konflikQuestionText');
+            const btnBatalKonflik = document.getElementById('btnBatalKonflik');
+            const btnLanjutkanKonflik = document.getElementById('btnLanjutkanKonflik');
+
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    if (inputForceRoom.value === '1') {
+                        return; // Proceed with submission
+                    }
+
+                    // If status is dibatalkan, no need to check conflict
+                    if (selectStatus && selectStatus.value === 'dibatalkan') {
+                        return;
+                    }
+
+                    const cabangId = selectCabang ? selectCabang.value : '{{ $jadwal->cabang_id }}';
+                    const ruanganId = selectRuangan ? selectRuangan.value : '';
+                    const tanggal = inputTanggal ? inputTanggal.value : '';
+                    const jamMulai = inputJamMulai ? inputJamMulai.value : '';
+                    const jamSelesai = inputJamSelesai ? inputJamSelesai.value : '';
+
+                    if (!cabangId || !ruanganId || !tanggal || !jamMulai || !jamSelesai) {
+                        return; // Let standard HTML5 validation highlight missing fields
+                    }
+
+                    e.preventDefault();
+
+                    try {
+                        const response = await fetch('{{ route("admin.jadwal.check-room-conflict") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                cabang_id: cabangId,
+                                ruangan_id: ruanganId,
+                                tanggal: tanggal,
+                                jam_mulai: jamMulai,
+                                jam_selesai: jamSelesai,
+                                exclude_id: {{ $jadwal->id }}
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (data.has_conflict && data.conflicts && data.conflicts.length > 0) {
+                            let html = '';
+                            const ruanganNama = selectRuangan.options[selectRuangan.selectedIndex]?.dataset.nama || 'Ruangan';
+                            data.conflicts.forEach(c => {
+                                html += `
+                                    <div class="border-b border-amber-200/60 pb-2 mb-2 last:border-0 last:pb-0 last:mb-0">
+                                        <p class="font-semibold text-amber-950">
+                                            Ruangan <strong>${c.ruangan}</strong> sudah dipakai pada jam <strong>${c.jam}</strong> oleh kelas <strong>${c.nama_kelas}</strong> (Program: ${c.program})
+                                        </p>
+                                        <p class="text-[11px] text-amber-800 mt-0.5">Tentor: ${c.tentor}</p>
+                                    </div>
+                                `;
+                            });
+                            boxKonflik.innerHTML = html;
+                            questionKonflik.innerHTML = `Apakah Anda yakin ingin memperbarui jadwal pada jam <strong>${jamMulai} - ${jamSelesai}</strong> di <strong>${ruanganNama}</strong>?`;
+
+                            modalKonflik.classList.remove('hidden');
+                            modalKonflik.classList.add('flex');
+                        } else {
+                            form.submit();
+                        }
+                    } catch (err) {
+                        console.error('Error checking conflict:', err);
+                        form.submit();
+                    }
+                });
+            }
+
+            btnBatalKonflik?.addEventListener('click', () => {
+                modalKonflik.classList.add('hidden');
+                modalKonflik.classList.remove('flex');
+            });
+
+            btnLanjutkanKonflik?.addEventListener('click', () => {
+                inputForceRoom.value = '1';
+                form.submit();
+            });
 
             const btnOpen = document.getElementById('btnOpenBatalModal');
             const btnClose = document.getElementById('btnCloseBatalModal');
@@ -663,5 +781,42 @@
             }
         })();
     </script>
+
+    <!-- Modal Konfirmasi Konflik Ruangan (Soft Warning) -->
+    <div id="modalKonflikRuangan" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-left shadow-2xl border border-hairline space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[24px]">warning</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-[#1D1D1F]">Ruangan Sudah Digunakan</h3>
+                    <p class="text-xs text-ink-muted">Terdeteksi jadwal kelas lain pada waktu yang sama</p>
+                </div>
+            </div>
+
+            <div id="konflikDetailsBox" class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 space-y-2">
+                <!-- Isi detail konflik di-inject secara dinamis -->
+            </div>
+
+            <p class="text-xs text-ink-muted leading-relaxed" id="konflikQuestionText">
+                Apakah Anda yakin ingin tetap memperbarui jadwal pada jam dan ruangan tersebut?
+            </p>
+
+            <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-hairline">
+                <button type="button" 
+                        id="btnBatalKonflik" 
+                        class="px-4 py-2 rounded-full text-xs font-semibold text-ink-muted hover:text-ink-body hover:bg-gray-100 transition-all cursor-pointer">
+                    Batal
+                </button>
+                <button type="button" 
+                        id="btnLanjutkanKonflik" 
+                        class="px-5 py-2 rounded-full bg-amber-600 hover:bg-amber-700 active:scale-95 text-white text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">priority_high</span>
+                    <span>Ya, Lanjutkan</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

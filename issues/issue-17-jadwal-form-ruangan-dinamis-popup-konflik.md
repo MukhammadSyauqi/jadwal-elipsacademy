@@ -136,14 +136,14 @@ Pisahkan menjadi 2 method terpisah:
 
 ## Acceptance Criteria
 
-- [ ] Dropdown ruangan di form create/edit diambil dari database
-- [ ] Saat cabang berubah, dropdown ruangan ter-reload otomatis via AJAX
-- [ ] Konflik tentor tetap hard block (validation error, tidak bisa di-override)
-- [ ] Konflik ruangan menampilkan popup konfirmasi dengan detail jadwal yang konflik
-- [ ] User bisa klik "Ya, Lanjutkan" untuk force-override konflik ruangan
-- [ ] Catatan audit `[OVERRIDE]` otomatis ditambahkan saat force-override
-- [ ] Catatan `[OVERRIDE]` tidak terlihat oleh admin di halaman detail
-- [ ] Catatan `[OVERRIDE]` terlihat oleh superadmin di halaman detail sebagai log audit
-- [ ] Form edit mengirim `exclude_id` agar tidak conflict dengan jadwal yang sedang diedit
-- [ ] API `/api/ruangan?cabang_id=X` mengembalikan data ruangan aktif yang benar
-- [ ] Tidak ada regression — validasi lain tetap berfungsi normal
+- [x] Dropdown ruangan di form create/edit diambil dari database
+- [x] Saat cabang berubah, dropdown ruangan ter-reload otomatis via AJAX
+- [x] Konflik tentor tetap hard block (validation error, tidak bisa di-override)
+- [x] Konflik ruangan menampilkan popup konfirmasi dengan detail jadwal yang konflik
+- [x] User bisa klik "Ya, Lanjutkan" untuk force-override konflik ruangan
+- [x] Catatan audit `[OVERRIDE]` otomatis ditambahkan saat force-override
+- [x] Catatan `[OVERRIDE]` tidak terlihat oleh admin di halaman detail
+- [x] Catatan `[OVERRIDE]` terlihat oleh superadmin di halaman detail sebagai log audit
+- [x] Form edit mengirim `exclude_id` agar tidak conflict dengan jadwal yang sedang diedit
+- [x] API `/api/ruangan?cabang_id=X` mengembalikan data ruangan aktif yang benar
+- [x] Tidak ada regression — validasi lain tetap berfungsi normal

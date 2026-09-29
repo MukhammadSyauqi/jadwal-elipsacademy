@@ -225,7 +225,7 @@
                         <div class="space-y-3 pl-7">
                             <div>
                                 <span class="block text-[11px] font-semibold text-ink-subtle uppercase tracking-wider">Ruangan Kelas</span>
-                                <span class="text-sm font-bold text-ink-body">{{ $jadwal->ruangan ?? 'Ruang Kelas' }}</span>
+                                <span class="text-sm font-bold text-ink-body">{{ $jadwal->ruanganRef->nama_ruangan ?? $jadwal->ruangan ?? 'Ruang Kelas' }}</span>
                             </div>
                             <div>
                                 <span class="block text-[11px] font-semibold text-ink-subtle uppercase tracking-wider">Lokasi Cabang</span>
@@ -258,15 +258,53 @@
                     </div>
                 </div>
 
-                <!-- Kartu Catatan Sesi -->
+                <!-- Kartu Catatan Sesi & Audit Log -->
+                @php
+                    $catatanRaw = $jadwal->catatan ?? '';
+                    $isSuperadmin = auth()->user()?->role === 'superadmin';
+                    $hasOverride = str_contains($catatanRaw, '[OVERRIDE]');
+
+                    $overrideNote = '';
+                    $filteredCatatan = $catatanRaw;
+
+                    if ($hasOverride) {
+                        $lines = explode("\n", $catatanRaw);
+                        $overrideLines = [];
+                        $regularLines = [];
+
+                        foreach ($lines as $line) {
+                            if (str_starts_with(trim($line), '[OVERRIDE]')) {
+                                $overrideLines[] = trim($line);
+                            } else {
+                                $regularLines[] = $line;
+                            }
+                        }
+
+                        $overrideNote = implode("\n", $overrideLines);
+                        $filteredCatatan = trim(implode("\n", $regularLines));
+                    }
+                @endphp
+
+                @if($isSuperadmin && $hasOverride)
+                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3 shadow-xs" id="auditLogOverride">
+                        <span class="material-symbols-outlined text-amber-600 text-[20px] shrink-0 mt-0.5">verified_user</span>
+                        <div class="space-y-1">
+                            <div class="font-bold text-[11px] uppercase tracking-wider text-amber-800">Catatan Audit Superadmin: Force-Override Konflik Ruangan</div>
+                            <p class="leading-relaxed font-mono text-[11px]">{{ $overrideNote }}</p>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="space-y-2">
                     <div class="flex items-center gap-2 text-ink-body font-semibold text-xs uppercase tracking-wider">
                         <span class="material-symbols-outlined text-[18px] text-ink-subtle">edit_note</span>
                         <span>Catatan Sesi &amp; Materi Pertemuan</span>
                     </div>
                     <div class="bg-surface-pearl rounded-xl p-4 sm:p-5 text-sm text-ink-body leading-relaxed border border-hairline">
-                        @if(!empty($jadwal->catatan))
-                            {{ $jadwal->catatan }}
+                        @if(!empty($filteredCatatan))
+                            {{ $filteredCatatan }}
+                        @elseif($isSuperadmin && $hasOverride)
+                            <span class="text-ink-subtle italic">Hanya terdapat catatan audit sistem (force-override) di atas.</span>
                         @else
                             <span class="text-ink-subtle italic">Tidak ada catatan tambahan untuk pertemuan ini.</span>
                         @endif

@@ -437,7 +437,7 @@ class AdminDashboardTest extends TestCase
         $createResponse->assertSee('Cabang Gubeng');
         $createResponse->assertSee('Ruang 1');
         $createResponse->assertSee('Ruang 2');
-        $createResponse->assertSee('Lab Komputer A');
+        $createResponse->assertSee('Ruang 3');
     }
 
     public function test_buduran_admin_user_can_access_dashboard_and_create_page(): void

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Cabang;
 use App\Models\Jadwal;
 use App\Models\Program;
+use App\Models\Ruangan;
 use App\Models\Tentor;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -37,14 +39,13 @@ class AdminJadwalController extends Controller
 
         $selectedDate = $request->query('tanggal', Carbon::today()->toDateString());
 
-        // Default room options based on branch
-        if ($selectedCabang && stripos($selectedCabang->nama_cabang, 'Candi') !== false) {
-            $defaultRuangan = ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'];
-        } elseif ($selectedCabang && stripos($selectedCabang->nama_cabang, 'Gubeng') !== false) {
-            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A'];
-        } else {
-            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'];
-        }
+        // Ambil ruangan aktif dari database berdasarkan cabang yang dipilih
+        $ruangans = $selectedCabang
+            ? Ruangan::where('cabang_id', $selectedCabang->id)
+                ->where('status', 'aktif')
+                ->orderBy('nama_ruangan')
+                ->get()
+            : collect();
 
         return view('admin.jadwal.create', [
             'user' => $user,
@@ -53,7 +54,8 @@ class AdminJadwalController extends Controller
             'tentors' => $tentors,
             'selectedCabang' => $selectedCabang,
             'selectedDate' => $selectedDate,
-            'defaultRuangan' => $defaultRuangan,
+            'ruangans' => $ruangans,
+            'defaultRuangan' => $ruangans->pluck('nama_ruangan')->toArray(),
         ]);
     }
 
@@ -83,6 +85,21 @@ class AdminJadwalController extends Controller
             }
         }
 
+        // Sinkronisasi ruangan_id dan nama ruangan (text)
+        if ($request->filled('ruangan_id')) {
+            $ruanganObj = Ruangan::find($request->input('ruangan_id'));
+            if ($ruanganObj && empty($request->input('ruangan'))) {
+                $request->merge(['ruangan' => $ruanganObj->nama_ruangan]);
+            }
+        } elseif ($request->filled('ruangan') && $request->filled('cabang_id')) {
+            $ruanganObj = Ruangan::where('cabang_id', $request->input('cabang_id'))
+                ->where('nama_ruangan', $request->input('ruangan'))
+                ->first();
+            if ($ruanganObj) {
+                $request->merge(['ruangan_id' => $ruanganObj->id]);
+            }
+        }
+
         $validated = $request->validate([
             'cabang_id' => ['required', Rule::exists('cabang', 'id')->where('status', 'aktif')],
             'program_id' => ['required', Rule::exists('program', 'id')->where('status', 'aktif')],
@@ -93,7 +110,8 @@ class AdminJadwalController extends Controller
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'ruangan' => 'required|string|max:100',
+            'ruangan_id' => ['required_without:ruangan', 'nullable', Rule::exists('ruangan', 'id')],
+            'ruangan' => ['required_without:ruangan_id', 'nullable', 'string', 'max:100'],
             'pertemuan' => 'required|integer|min:1|max:100',
             'catatan' => 'nullable|string|max:1000',
         ], [
@@ -107,12 +125,28 @@ class AdminJadwalController extends Controller
             'tanggal.required' => 'Tanggal pelaksanaan wajib diisi.',
             'jam_mulai.required' => 'Jam mulai wajib diisi.',
             'jam_selesai.required' => 'Jam selesai wajib diisi.',
-            'ruangan.required' => 'Ruangan wajib dipilih/diisi.',
+            'ruangan_id.required_without' => 'Ruangan wajib dipilih/diisi.',
+            'ruangan.required_without' => 'Ruangan wajib dipilih/diisi.',
             'pertemuan.required' => 'Nomor pertemuan wajib diisi.',
         ]);
 
-        // Check for schedule conflicts (tentor & ruangan)
-        $this->detectConflicts($validated);
+        // 1. Cek bentrok tentor (selalu hard block)
+        $this->detectTentorConflict($validated);
+
+        // 2. Cek bentrok ruangan (soft warning dengan force_room)
+        $forceRoom = $request->boolean('force_room');
+        $conflictingRoomJadwal = $this->getRoomConflict($validated);
+
+        if ($conflictingRoomJadwal) {
+            if (!$forceRoom) {
+                $this->throwRoomConflictException($conflictingRoomJadwal, $validated['ruangan'] ?? 'Ruangan');
+            } else {
+                $jamRange = substr($conflictingRoomJadwal->jam_mulai, 0, 5) . ' - ' . substr($conflictingRoomJadwal->jam_selesai, 0, 5);
+                $auditNote = "[OVERRIDE] Dijadwalkan meskipun ada konflik ruangan dengan kelas {$conflictingRoomJadwal->nama_kelas} pada jam {$jamRange}.";
+                $userCatatan = $validated['catatan'] ?? '';
+                $validated['catatan'] = trim($auditNote . ($userCatatan ? "\n" . $userCatatan : ''));
+            }
+        }
 
         // Set default status to 'terjadwal'
         $validated['status'] = 'terjadwal';
@@ -143,7 +177,7 @@ class AdminJadwalController extends Controller
      */
     public function show(Request $request, Jadwal $jadwal): View
     {
-        $jadwal->load(['cabang', 'program', 'tentor']);
+        $jadwal->load(['cabang', 'program', 'tentor', 'ruanganRef']);
         $user = $request->user();
 
         return view('admin.jadwal.show', [
@@ -157,7 +191,7 @@ class AdminJadwalController extends Controller
      */
     public function edit(Request $request, Jadwal $jadwal): View
     {
-        $jadwal->load(['cabang', 'program', 'tentor']);
+        $jadwal->load(['cabang', 'program', 'tentor', 'ruanganRef']);
         $user = $request->user();
 
         // Guard: admin cannot edit schedules of other branches
@@ -185,15 +219,23 @@ class AdminJadwalController extends Controller
             ->orderBy('nama')
             ->get();
 
-        if ($jadwal->cabang && stripos($jadwal->cabang->nama_cabang, 'Candi') !== false) {
-            $defaultRuangan = ['Ruang A Candi', 'Lab Multimedia Candi', 'Lab IT Candi'];
-        } elseif ($jadwal->cabang && stripos($jadwal->cabang->nama_cabang, 'Gubeng') !== false) {
-            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A'];
-        } else {
-            $defaultRuangan = ['Ruang 1', 'Ruang 2', 'Lab Komputer A', 'Lab Komputer B', 'Studio Desain'];
-        }
-        if (!in_array($jadwal->ruangan, $defaultRuangan) && !empty($jadwal->ruangan)) {
-            $defaultRuangan[] = $jadwal->ruangan;
+        // Ambil ruangan dari database: status aktif ATAU ruangan yang sedang digunakan jadwal ini
+        $ruangans = Ruangan::where('cabang_id', $jadwal->cabang_id)
+            ->where(function ($q) use ($jadwal) {
+                $q->where('status', 'aktif');
+                if ($jadwal->ruangan_id) {
+                    $q->orWhere('id', $jadwal->ruangan_id);
+                }
+            })
+            ->orderBy('nama_ruangan')
+            ->get();
+
+        // Jika ruangan_id null tetapi ada nama ruangan text di record lama, cocokkan bila ada
+        if (!$jadwal->ruangan_id && !empty($jadwal->ruangan)) {
+            $matched = $ruangans->firstWhere('nama_ruangan', $jadwal->ruangan);
+            if ($matched) {
+                $jadwal->ruangan_id = $matched->id;
+            }
         }
 
         return view('admin.jadwal.edit', [
@@ -202,7 +244,8 @@ class AdminJadwalController extends Controller
             'cabangs' => $cabangs,
             'programs' => $programs,
             'tentors' => $tentors,
-            'defaultRuangan' => $defaultRuangan,
+            'ruangans' => $ruangans,
+            'defaultRuangan' => $ruangans->pluck('nama_ruangan')->toArray(),
         ]);
     }
 
@@ -238,6 +281,21 @@ class AdminJadwalController extends Controller
             }
         }
 
+        // Sinkronisasi ruangan_id dan nama ruangan (text)
+        if ($request->filled('ruangan_id')) {
+            $ruanganObj = Ruangan::find($request->input('ruangan_id'));
+            if ($ruanganObj && empty($request->input('ruangan'))) {
+                $request->merge(['ruangan' => $ruanganObj->nama_ruangan]);
+            }
+        } elseif ($request->filled('ruangan') && $request->filled('cabang_id')) {
+            $ruanganObj = Ruangan::where('cabang_id', $request->input('cabang_id'))
+                ->where('nama_ruangan', $request->input('ruangan'))
+                ->first();
+            if ($ruanganObj) {
+                $request->merge(['ruangan_id' => $ruanganObj->id]);
+            }
+        }
+
         $validated = $request->validate([
             'cabang_id' => [
                 'required',
@@ -263,7 +321,14 @@ class AdminJadwalController extends Controller
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'ruangan' => 'required|string|max:100',
+            'ruangan_id' => [
+                'required_without:ruangan',
+                'nullable',
+                Rule::exists('ruangan', 'id')->where(function ($query) use ($jadwal) {
+                    $query->where('status', 'aktif')->orWhere('id', $jadwal->ruangan_id);
+                }),
+            ],
+            'ruangan' => ['required_without:ruangan_id', 'nullable', 'string', 'max:100'],
             'pertemuan' => 'required|integer|min:1|max:100',
             'status' => 'required|in:terjadwal,selesai,dibatalkan',
             'catatan' => 'nullable|string|max:1000',
@@ -278,14 +343,33 @@ class AdminJadwalController extends Controller
             'tanggal.required' => 'Tanggal pelaksanaan wajib diisi.',
             'jam_mulai.required' => 'Jam mulai wajib diisi.',
             'jam_selesai.required' => 'Jam selesai wajib diisi.',
-            'ruangan.required' => 'Ruangan wajib dipilih/diisi.',
+            'ruangan_id.required_without' => 'Ruangan wajib dipilih/diisi.',
+            'ruangan.required_without' => 'Ruangan wajib dipilih/diisi.',
             'pertemuan.required' => 'Nomor pertemuan wajib diisi.',
             'status.required' => 'Status jadwal wajib dipilih.',
         ]);
 
         // Only detect conflicts if schedule is not being set to 'dibatalkan'
         if ($validated['status'] !== 'dibatalkan') {
-            $this->detectConflicts($validated, $jadwal->id);
+            // 1. Cek bentrok tentor (selalu hard block)
+            $this->detectTentorConflict($validated, $jadwal->id);
+
+            // 2. Cek bentrok ruangan (soft warning dengan force_room)
+            $forceRoom = $request->boolean('force_room');
+            $conflictingRoomJadwal = $this->getRoomConflict($validated, $jadwal->id);
+
+            if ($conflictingRoomJadwal) {
+                if (!$forceRoom) {
+                    $this->throwRoomConflictException($conflictingRoomJadwal, $validated['ruangan'] ?? 'Ruangan');
+                } else {
+                    $jamRange = substr($conflictingRoomJadwal->jam_mulai, 0, 5) . ' - ' . substr($conflictingRoomJadwal->jam_selesai, 0, 5);
+                    $auditNote = "[OVERRIDE] Dijadwalkan meskipun ada konflik ruangan dengan kelas {$conflictingRoomJadwal->nama_kelas} pada jam {$jamRange}.";
+                    $userCatatan = $validated['catatan'] ?? '';
+                    if (!str_contains($userCatatan, '[OVERRIDE]')) {
+                        $validated['catatan'] = trim($auditNote . ($userCatatan ? "\n" . $userCatatan : ''));
+                    }
+                }
+            }
         }
 
         $jadwal->update($validated);
@@ -342,24 +426,111 @@ class AdminJadwalController extends Controller
     }
 
     /**
-     * Detect tentor and room schedule conflicts.
-     *
-     * Overlap formula (PRD 25.1):
-     * start_A < end_B AND end_A > start_B on the same date.
-     * Only schedules with status != 'dibatalkan' cause conflicts.
+     * Check if a room has any schedule conflicts at the requested time.
+     * Endpoint: POST /admin/jadwal/check-room-conflict
+     */
+    public function checkRoomConflict(Request $request): JsonResponse
+    {
+        $request->validate([
+            'cabang_id' => 'required',
+            'tanggal' => 'required|date',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ]);
+
+        $cabangId = $request->input('cabang_id');
+        $ruanganId = $request->input('ruangan_id');
+        $ruanganName = $request->input('ruangan');
+        $tanggal = $request->input('tanggal');
+        $jamMulai = $request->input('jam_mulai');
+        $jamSelesai = $request->input('jam_selesai');
+        $excludeId = $request->input('exclude_id');
+
+        if ($ruanganId && empty($ruanganName)) {
+            $rObj = Ruangan::find($ruanganId);
+            $ruanganName = $rObj?->nama_ruangan;
+        }
+
+        if (strlen($jamMulai) === 5) $jamMulai .= ':00';
+        if (strlen($jamSelesai) === 5) $jamSelesai .= ':00';
+
+        $conflicts = Jadwal::with(['program', 'tentor', 'ruanganRef'])
+            ->where('tanggal', $tanggal)
+            ->where('cabang_id', $cabangId)
+            ->where('status', '!=', 'dibatalkan')
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->where(function ($q) use ($ruanganId, $ruanganName) {
+                if ($ruanganId) {
+                    $q->where('ruangan_id', $ruanganId);
+                    if ($ruanganName) {
+                        $q->orWhere('ruangan', $ruanganName);
+                    }
+                } else {
+                    $q->where('ruangan', $ruanganName);
+                }
+            })
+            ->where(function ($q) use ($jamMulai, $jamSelesai) {
+                $q->where('jam_mulai', '<', $jamSelesai)
+                  ->where('jam_selesai', '>', $jamMulai);
+            })
+            ->get();
+
+        $conflictList = $conflicts->map(function ($j) {
+            $jamRange = substr($j->jam_mulai, 0, 5) . ' - ' . substr($j->jam_selesai, 0, 5);
+            return [
+                'id' => $j->id,
+                'nama_kelas' => $j->nama_kelas,
+                'program' => $j->program->nama_program ?? 'Program',
+                'jam' => $jamRange,
+                'tentor' => $j->tentor->nama ?? 'Tentor',
+                'ruangan' => $j->ruanganRef->nama_ruangan ?? $j->ruangan ?? 'Ruangan',
+            ];
+        });
+
+        return response()->json([
+            'has_conflict' => $conflicts->isNotEmpty(),
+            'conflicts' => $conflictList,
+        ]);
+    }
+
+    /**
+     * Get active rooms for a given branch.
+     * Endpoint: GET /api/ruangan?cabang_id=X
+     */
+    public function getRuanganByCabang(Request $request): JsonResponse
+    {
+        $cabangId = $request->query('cabang_id');
+        $includeId = $request->query('include_id');
+
+        if (!$cabangId) {
+            return response()->json([]);
+        }
+
+        $ruangans = Ruangan::where('cabang_id', $cabangId)
+            ->where(function ($q) use ($includeId) {
+                $q->where('status', 'aktif');
+                if ($includeId) {
+                    $q->orWhere('id', $includeId);
+                }
+            })
+            ->orderBy('nama_ruangan')
+            ->get(['id', 'cabang_id', 'nama_ruangan', 'kapasitas', 'status']);
+
+        return response()->json($ruangans);
+    }
+
+    /**
+     * Detect tentor conflict. Always hard block.
      *
      * @throws ValidationException
      */
-    protected function detectConflicts(array $data, ?int $excludeId = null): void
+    protected function detectTentorConflict(array $data, ?int $excludeId = null): void
     {
         $tanggal = $data['tanggal'];
         $jamMulai = strlen($data['jam_mulai']) === 5 ? $data['jam_mulai'] . ':00' : $data['jam_mulai'];
         $jamSelesai = strlen($data['jam_selesai']) === 5 ? $data['jam_selesai'] . ':00' : $data['jam_selesai'];
         $tentorId = $data['tentor_id'];
-        $cabangId = $data['cabang_id'];
-        $ruangan = $data['ruangan'];
 
-        // 1. Tentor Conflict (PRD 25.2)
         $tentorConflict = Jadwal::with('tentor')
             ->where('tanggal', $tanggal)
             ->where('tentor_id', $tentorId)
@@ -379,25 +550,71 @@ class AdminJadwalController extends Controller
                 'tentor_id' => "Conflict Detected: Tentor {$tentorName} sudah memiliki jadwal lain pada waktu tersebut ({$tentorConflict->nama_kelas}, {$jamRange} WIB).",
             ]);
         }
+    }
 
-        // 2. Room Conflict (PRD 25.3)
-        $ruanganConflict = Jadwal::where('tanggal', $tanggal)
+    /**
+     * Get conflicting room schedule if any.
+     */
+    protected function getRoomConflict(array $data, ?int $excludeId = null): ?Jadwal
+    {
+        $tanggal = $data['tanggal'];
+        $jamMulai = strlen($data['jam_mulai']) === 5 ? $data['jam_mulai'] . ':00' : $data['jam_mulai'];
+        $jamSelesai = strlen($data['jam_selesai']) === 5 ? $data['jam_selesai'] . ':00' : $data['jam_selesai'];
+        $cabangId = $data['cabang_id'];
+        $ruanganId = $data['ruangan_id'] ?? null;
+        $ruanganName = $data['ruangan'] ?? null;
+
+        if (!$ruanganId && !$ruanganName) {
+            return null;
+        }
+
+        return Jadwal::with(['program', 'tentor', 'ruanganRef'])
+            ->where('tanggal', $tanggal)
             ->where('cabang_id', $cabangId)
-            ->where('ruangan', $ruangan)
             ->where('status', '!=', 'dibatalkan')
             ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->where(function ($q) use ($ruanganId, $ruanganName) {
+                if ($ruanganId) {
+                    $q->where('ruangan_id', $ruanganId);
+                    if ($ruanganName) {
+                        $q->orWhere('ruangan', $ruanganName);
+                    }
+                } else {
+                    $q->where('ruangan', $ruanganName);
+                }
+            })
             ->where(function ($q) use ($jamMulai, $jamSelesai) {
                 $q->where('jam_mulai', '<', $jamSelesai)
                   ->where('jam_selesai', '>', $jamMulai);
             })
             ->first();
+    }
 
-        if ($ruanganConflict) {
-            $jamRange = substr($ruanganConflict->jam_mulai, 0, 5) . ' - ' . substr($ruanganConflict->jam_selesai, 0, 5);
+    /**
+     * Throw validation exception for room conflict.
+     *
+     * @throws ValidationException
+     */
+    protected function throwRoomConflictException(Jadwal $conflict, string $ruanganName): void
+    {
+        $jamRange = substr($conflict->jam_mulai, 0, 5) . ' - ' . substr($conflict->jam_selesai, 0, 5);
+        $message = "Conflict Detected: {$ruanganName} sudah digunakan untuk kelas lain pada waktu tersebut ({$conflict->nama_kelas}, {$jamRange} WIB).";
 
-            throw ValidationException::withMessages([
-                'ruangan' => "Conflict Detected: {$ruangan} sudah digunakan untuk kelas lain pada waktu tersebut ({$ruanganConflict->nama_kelas}, {$jamRange} WIB).",
-            ]);
+        throw ValidationException::withMessages([
+            'ruangan' => $message,
+            'ruangan_id' => $message,
+        ]);
+    }
+
+    /**
+     * Backwards-compatible detectConflicts method.
+     */
+    protected function detectConflicts(array $data, ?int $excludeId = null): void
+    {
+        $this->detectTentorConflict($data, $excludeId);
+        $conflict = $this->getRoomConflict($data, $excludeId);
+        if ($conflict) {
+            $this->throwRoomConflictException($conflict, $data['ruangan'] ?? 'Ruangan');
         }
     }
 }
