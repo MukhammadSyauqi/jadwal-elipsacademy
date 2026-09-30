@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminJadwalController;
+use App\Http\Controllers\AdminRekapController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SuperadminCabangController;
 use App\Http\Controllers\SuperadminDashboardController;
 use App\Http\Controllers\SuperadminJadwalController;
 use App\Http\Controllers\SuperadminProgramController;
+use App\Http\Controllers\SuperadminRekapController;
 use App\Http\Controllers\SuperadminRuanganController;
 use App\Http\Controllers\SuperadminSettingController;
 use App\Http\Controllers\SuperadminTentorController;
@@ -50,12 +52,21 @@ Route::middleware('auth')->group(function () {
         Route::put('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'update'])->name('admin.jadwal.update');
         Route::post('/admin/jadwal/{jadwal}/batal', [AdminJadwalController::class, 'batal'])->name('admin.jadwal.batal');
         Route::delete('/admin/jadwal/{jadwal}', [AdminJadwalController::class, 'destroy'])->name('admin.jadwal.destroy');
+
+        // Rekapitulasi Jadwal Bulanan
+        Route::get('/admin/rekap', [AdminRekapController::class, 'index'])->name('admin.rekap.index');
+        Route::get('/admin/rekap/export-excel', [AdminRekapController::class, 'exportExcel'])->name('admin.rekap.export-excel');
     });
 
     // Only Superadmin can access superadmin area
     Route::middleware('role:superadmin')->group(function () {
         Route::get('/superadmin/dashboard', [SuperadminDashboardController::class, 'index'])->name('superadmin.dashboard');
         Route::get('/superadmin/jadwal', [SuperadminJadwalController::class, 'index'])->name('superadmin.jadwal.index');
+
+        // Rekapitulasi Jadwal
+        Route::get('/superadmin/rekap', [SuperadminRekapController::class, 'index'])->name('superadmin.rekap.index');
+        Route::get('/superadmin/rekap/export-excel', [SuperadminRekapController::class, 'exportExcel'])->name('superadmin.rekap.export-excel');
+        Route::get('/superadmin/rekap/export-pdf', [SuperadminRekapController::class, 'exportPdf'])->name('superadmin.rekap.export-pdf');
 
         // Master Data: Cabang
         Route::get('/superadmin/cabang', [SuperadminCabangController::class, 'index'])->name('superadmin.cabang.index');

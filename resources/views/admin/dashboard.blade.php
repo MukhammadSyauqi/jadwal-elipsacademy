@@ -199,6 +199,15 @@
                         </form>
                     </div>
 
+                    <!-- Rekap Bulanan Button -->
+                    <a href="{{ route('admin.rekap.index') }}" 
+                       id="btnRekapBulanan"
+                       class="px-3.5 py-2 rounded-full bg-surface-pearl hover:bg-surface-container-low text-ink-body font-semibold text-xs sm:text-sm flex items-center gap-1.5 border border-hairline shadow-2xs active:scale-95 transition-all"
+                       title="Rekapitulasi Jadwal Bulanan">
+                        <span class="material-symbols-outlined text-base text-primary">assessment</span>
+                        <span>Rekap Bulanan</span>
+                    </a>
+
                     <!-- Tambah Jadwal Button -->
                     <a href="{{ route('admin.jadwal.create', array_filter(['cabang_id' => $selectedCabang?->id, 'tanggal' => $selectedDate])) }}" 
                        id="btnTambahJadwal"

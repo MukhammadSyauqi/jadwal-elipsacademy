@@ -110,6 +110,13 @@
                     <span>Jadwal Kelas</span>
                 </a>
 
+                <a href="{{ route('superadmin.rekap.index') }}" 
+                   id="nav-superadmin-rekap"
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
+                    <span class="material-symbols-outlined text-[20px]">assessment</span>
+                    <span>Rekap Jadwal</span>
+                </a>
+
                 <a href="{{ route('superadmin.cabang.index') }}" 
                    id="nav-superadmin-cabang"
                    class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
