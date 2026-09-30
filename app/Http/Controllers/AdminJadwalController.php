@@ -6,6 +6,7 @@ use App\Models\Cabang;
 use App\Models\Jadwal;
 use App\Models\Program;
 use App\Models\Ruangan;
+use App\Models\Setting;
 use App\Models\Tentor;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -180,9 +181,13 @@ class AdminJadwalController extends Controller
         $jadwal->load(['cabang', 'program', 'tentor', 'ruanganRef']);
         $user = $request->user();
 
+        // Generate WhatsApp link for tentor reminder
+        $waLink = $this->generateWhatsAppLink($jadwal);
+
         return view('admin.jadwal.show', [
             'user' => $user,
             'jadwal' => $jadwal,
+            'waLink' => $waLink,
         ]);
     }
 
@@ -616,5 +621,42 @@ class AdminJadwalController extends Controller
         if ($conflict) {
             $this->throwRoomConflictException($conflict, $data['ruangan'] ?? 'Ruangan');
         }
+    }
+
+    /**
+     * Generate a WhatsApp wa.me link with the reminder message for a given jadwal.
+     */
+    private function generateWhatsAppLink(Jadwal $jadwal): string
+    {
+        $template = Setting::get('wa_template',
+            "Selamat {sesi} kak\nIzin Mengingatkan kak, besok hari {hari} Tanggal {tanggal} ada kelas {program} pada pukul {jam} di Elips Academy {cabang}. Terimakasih🙏"
+        );
+
+        // Determine session greeting based on current time
+        $hour = (int) now()->format('H');
+        if ($hour < 12) $sesi = 'Pagi';
+        elseif ($hour < 15) $sesi = 'Siang';
+        elseif ($hour < 18) $sesi = 'Sore';
+        else $sesi = 'Malam';
+
+        $replacements = [
+            '{sesi}'    => $sesi,
+            '{hari}'    => Carbon::parse($jadwal->tanggal)->locale('id')->isoFormat('dddd'),
+            '{tanggal}' => Carbon::parse($jadwal->tanggal)->format('d/m/Y'),
+            '{jam}'     => substr($jadwal->jam_mulai, 0, 5),
+            '{cabang}'  => $jadwal->cabang->nama_cabang ?? 'Cabang',
+            '{tentor}'  => $jadwal->tentor->nama ?? 'Tentor',
+            '{program}' => $jadwal->program->nama_program ?? 'Program',
+        ];
+
+        $message = str_replace(array_keys($replacements), array_values($replacements), $template);
+
+        // Format phone number: 08xx → 628xx
+        $phone = preg_replace('/[^0-9]/', '', $jadwal->tentor->no_hp ?? '');
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
     }
 }

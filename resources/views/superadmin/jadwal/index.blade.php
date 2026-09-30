@@ -144,6 +144,13 @@
                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                     <span>Akun Pengguna</span>
                 </a>
+
+                <a href="{{ route('superadmin.setting.index') }}" 
+                   id="nav-superadmin-setting"
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface-container-low hover:text-ink-body transition-all">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                    <span>Pengaturan</span>
+                </a>
             </nav>
         </div>
 

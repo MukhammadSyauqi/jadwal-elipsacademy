@@ -250,10 +250,15 @@
                             </div>
                         </div>
                         @if($jadwal->tentor && $jadwal->tentor->no_hp)
-                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-hairline text-xs font-semibold text-ink-body shadow-2xs">
-                                <span class="material-symbols-outlined text-[16px] text-emerald-600">call</span>
+                            <a href="{{ $waLink }}"
+                               target="_blank" rel="noopener"
+                               id="btnWhatsAppTentor"
+                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold text-emerald-700 shadow-2xs transition-all"
+                               title="Kirim pesan WhatsApp ke tentor">
+                                <span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
                                 <span>{{ $jadwal->tentor->no_hp }}</span>
-                            </div>
+                                <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                            </a>
                         @endif
                     </div>
                 </div>

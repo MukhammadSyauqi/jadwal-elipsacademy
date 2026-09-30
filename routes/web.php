@@ -8,6 +8,7 @@ use App\Http\Controllers\SuperadminDashboardController;
 use App\Http\Controllers\SuperadminJadwalController;
 use App\Http\Controllers\SuperadminProgramController;
 use App\Http\Controllers\SuperadminRuanganController;
+use App\Http\Controllers\SuperadminSettingController;
 use App\Http\Controllers\SuperadminTentorController;
 use App\Http\Controllers\SuperadminUserController;
 use Illuminate\Support\Facades\Auth;
@@ -90,5 +91,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/superadmin/user/{user}', [SuperadminUserController::class, 'update'])->name('superadmin.user.update');
         Route::post('/superadmin/user/{user}/reset-password', [SuperadminUserController::class, 'resetPassword'])->name('superadmin.user.reset-password');
         Route::delete('/superadmin/user/{user}', [SuperadminUserController::class, 'destroy'])->name('superadmin.user.destroy');
+
+        // Pengaturan (Settings)
+        Route::get('/superadmin/setting', [SuperadminSettingController::class, 'index'])->name('superadmin.setting.index');
+        Route::put('/superadmin/setting/wa-template', [SuperadminSettingController::class, 'updateWaTemplate'])->name('superadmin.setting.update-wa-template');
     });
 });
